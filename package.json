@@ -24,6 +24,9 @@
   "bugs": {
     "url": "https://github.com/CyrusNG/capacitor-plugin-easyads/issues"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
+  },
   "keywords": [
     "capacitor",
     "plugin",
