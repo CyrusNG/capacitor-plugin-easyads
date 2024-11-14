@@ -18,7 +18,6 @@ import com.capacitorjs.plugins.easyads.custom.CustomActivity;
 import com.capacitorjs.plugins.easyads.utils.BaseCallBack;
 import com.capacitorjs.plugins.easyads.utils.Constant;
 import com.capacitorjs.plugins.easyads.utils.NormalSetting;
-import com.capacitorjs.plugins.easyads.utils.UserPrivacyDialog;
 import com.bytedance.sdk.openadsdk.TTAdSdk;
 import com.kwad.sdk.api.KsAdSDK;
 import com.qq.e.comm.managers.status.SDKStatus;
@@ -46,26 +45,6 @@ public class MainActivity extends BaseActivity {
 
         TextView title = findViewById(R.id.tv_title);
         title.setText("EasyAds-简单聚合 急速变现");
-
-
-        boolean hasPri = getSharedPreferences(Constant.SP_NAME, Context.MODE_PRIVATE).getBoolean(Constant.SP_AGREE_PRIVACY, false);
-
-        /**
-         * 注意！：由于工信部对设备权限等隐私权限要求愈加严格，强烈推荐APP提前申请好权限，且用户同意隐私政策后再加载广告
-         */
-        if (!hasPri) {
-            UserPrivacyDialog dialog = new UserPrivacyDialog(this);
-            dialog.callBack = new BaseCallBack() {
-                @Override
-                public void call() {
-                    //一定要用户授权同意隐私协议后，再申领必要权限
-                    if (Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT < 29) {
-                        checkAndRequestPermission();
-                    }
-                }
-            };
-            dialog.show();
-        }
 
         version.setText("版本号：EasyAds聚合SDK：v" + EasyAds.getVersion() +
                 "\n穿山甲：v" + TTAdSdk.getAdManager().getSDKVersion() +

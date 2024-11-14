@@ -1,15 +1,9 @@
 package com.capacitorjs.plugins.easyads;
 
 import android.app.Activity;
-import android.content.Context;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.capacitorjs.plugins.easyads.utils.DialogLogcat;
-import com.capacitorjs.plugins.easyads.utils.NormalSetting;
-import com.squareup.seismic.ShakeDetector;
 
 public class BaseActivity extends Activity {
 
@@ -17,17 +11,6 @@ public class BaseActivity extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        ShakeDetector shakeDetector = new ShakeDetector(new ShakeDetector.Listener() {
-            @Override
-            public void hearShake() {
-                if (NormalSetting.getInstance().showLogcat && isRunning()) {
-                    new DialogLogcat(BaseActivity.this).show();
-                }
-            }
-        });
-        SensorManager sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
-        shakeDetector.start(sensorManager);
     }
 
     public boolean isRunning() {
