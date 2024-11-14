@@ -9,11 +9,6 @@ buildscript {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://maven.aliyun.com/repository/public" }             //国内maven镜像
-        maven { url "https://jitpack.io" }                                     //EasyAds依赖
-        maven { url "https://artifact.bytedance.com/repository/pangle" }       //GroMoreSDK依赖
-        maven { url "https://developer.huawei.com/repo/" }                     //HuaweiAdsSDK依赖
-        maven { url uri(project(":capacitor-plugin-easyads").file("repo")) }   //此插件自带仓库
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:8.2.1'
@@ -50,14 +45,6 @@ android {
 repositories {
     google()
     mavenCentral()
-    maven { url "https://maven.aliyun.com/repository/public" }             //国内maven镜像
-    maven { url "https://jitpack.io" }                                     //EasyAds依赖
-    maven { url "https://artifact.bytedance.com/repository/pangle" }       //GroMoreSDK依赖
-    maven { url "https://developer.huawei.com/repo/" }                     //HuaweiAdsSDK依赖
-    maven { url uri(project(":capacitor-plugin-easyads").file("repo")) }   //此插件自带仓库
-    flatDir {
-        dirs 'src/main/libs', 'libs'
-    }
 }
 
 dependencies {
@@ -81,7 +68,7 @@ dependencies {
     implementation "com.pangle.cn:mediation-sdk:6.4.1.5"                           //穿山甲广告SDK（建议）
 
     // GroMore官方提供的依赖
-    //implementation "com.pangle.cn:mediation-test-tools:6.5.0.2"               //groMore 测试工具，仅在测试阶段使用，请勿带到线上
+    //implementation "com.pangle.cn:mediation-test-tools:6.5.0.2"                  //groMore 测试工具，仅在测试阶段使用，请勿带到线上
     //implementation "com.pangle.cn:mediation-baidu-adapter:9.37.1"
     //implementation "com.pangle.cn:mediation-gdt-adapter:4.603.1473.1"
     //implementation "com.pangle.cn:mediation-ks-adapter:3.3.69.1"
