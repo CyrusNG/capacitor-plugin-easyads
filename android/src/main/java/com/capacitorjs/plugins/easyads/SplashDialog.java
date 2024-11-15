@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;

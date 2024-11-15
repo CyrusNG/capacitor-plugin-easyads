@@ -1,7 +1,7 @@
 package com.capacitorjs.plugins.easyads;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.easyads.core.full.EasyAdFullScreenVideo;
