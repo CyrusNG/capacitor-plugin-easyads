@@ -35,3 +35,13 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 </docgen-api>
+
+
+## 问题与解决
+* 构建成功，但打开APP闪退报错：`java.lang.RuntimeException: Unable to get provider com.bytedance.sdk.openadsdk.TTFileProvider: java.lang.ClassNotFoundException: Didn't find class "com.bytedance.sdk.openadsdk.TTFileProvider"`？
+
+根项目的gradle.properties添加：
+```
+# Automatically convert third-party libraries to use AndroidX
+android.enableJetifier=true
+```
