@@ -39,8 +39,8 @@ public class DrawActivity extends BaseActivity {
     private static final int TYPE_COMMON_ITEM = 1;
     private static final int TYPE_AD_ITEM = 2;
 
-    private int[] imgs = {R.mipmap.video11, R.mipmap.video12, R.mipmap.video13, R.mipmap.video14, R.mipmap.img_video_2};
-    private int[] videos = {R.raw.video11, R.raw.video12, R.raw.video13, R.raw.video14, R.raw.video_2};
+    private int[] imgs = {}; //R.mipmap.video11, R.mipmap.video12, R.mipmap.video13, R.mipmap.video14, R.mipmap.img_video_2
+    private int[] videos = {}; //R.raw.video11, R.raw.video12, R.raw.video13, R.raw.video14, R.raw.video_2
 
     private ViewPagerLayoutManager mLayoutManager;
     private DrawRecyclerAdapter mRecyclerAdapter;
