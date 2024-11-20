@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.content.Context;
 import android.media.MediaPlayer;
@@ -21,6 +21,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.VideoView;
 
+import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.draw.FullScreenVideoView;
 import com.capacitorjs.plugins.easyads.draw.OnViewPagerListener;
 import com.capacitorjs.plugins.easyads.draw.ViewPagerLayoutManager;
@@ -266,8 +268,10 @@ public class DrawActivity extends BaseActivity {
                     holder.videoLayout.addView(view);
 
                 } else if (item.type == TYPE_AD_ITEM && item.ad != null) {
+                    // 获取配置
+                    String configJson = getIntent().getStringExtra("config");
                     //请求并展示draw信息流广告
-                    item.ad.loadDraw("draw_config.json",holder.videoLayout);
+                    item.ad.loadDraw(configJson, holder.videoLayout);
                 }
             }
 

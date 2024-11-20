@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
+import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.R;
 
 public class SplashDialog extends Dialog {
     LinearLayout logo;
@@ -27,7 +30,11 @@ public class SplashDialog extends Dialog {
 
         logo = findViewById(R.id.ll_logo);
 
-        new EasyADController(context).loadSplash("splash_config.json", adContainer, logo, false, new EasyADController.SplashCallBack() {
+
+        // 获取配置
+        String configJson = context.getIntent().getStringExtra("config");
+
+        new EasyADController(context).loadSplash(configJson, adContainer, logo, false, new EasyADController.SplashCallBack() {
             @Override
             public void jumpMain() {
                 dismiss();

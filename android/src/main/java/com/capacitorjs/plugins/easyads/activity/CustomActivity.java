@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.custom;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import androidx.annotation.Nullable;
 import android.view.View;
 
 import com.capacitorjs.plugins.easyads.R;
-import com.capacitorjs.plugins.easyads.SplashActivity;
 import com.capacitorjs.plugins.easyads.utils.Constant;
 
 public class CustomActivity extends Activity {

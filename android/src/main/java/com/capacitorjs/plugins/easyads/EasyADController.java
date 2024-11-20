@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.easyads.EasyAdsConstant;
 import com.easyads.core.EasyAdBaseAdspot;
 import com.easyads.core.banner.EasyAdBanner;
 import com.easyads.core.banner.EABannerListener;
@@ -28,8 +27,8 @@ import com.easyads.core.splash.EASplashListener;
 import com.easyads.model.EasyAdError;
 import com.easyads.utils.EALog;
 import com.easyads.utils.ScreenUtil;
-import com.capacitorjs.plugins.easyads.custom.HuaWeiSplashAdapter;
-import com.capacitorjs.plugins.easyads.custom.XiaoMiSplashAdapter;
+import com.capacitorjs.plugins.easyads.adapter.HuaWeiSplashAdapter;
+import com.capacitorjs.plugins.easyads.adapter.XiaoMiSplashAdapter;
 import com.hjq.toast.ToastUtils;
 
 import java.io.BufferedReader;
@@ -67,7 +66,7 @@ public class EasyADController {
      * @param singleActivity 是否为单独activity中展示开屏广告
      * @param callBack       跳转回调，在回调中进行跳转主页或其他操作
      */
-    public void loadSplash(String jsonFileName, final ViewGroup adContainer, final ViewGroup logoContainer, boolean singleActivity, final SplashCallBack callBack) {
+    public void loadSplash(String configJson, final ViewGroup adContainer, final ViewGroup logoContainer, boolean singleActivity, final SplashCallBack callBack) {
         //必须：设置开屏核心回调事件的监听器。
         EASplashListener listener = new EASplashListener() {
 
@@ -121,7 +120,7 @@ public class EasyADController {
             easySplash.addCustomSupplier("hw", new HuaWeiSplashAdapter(new SoftReference<>(mActivity), easySplash));
         }
         //必须：设置策略信息
-        easySplash.setData(getJson(mActivity, jsonFileName));
+        easySplash.setData(configJson);
         //必须：请求并展示广告
         easySplash.loadAndShow();
         logAndToast(mActivity, "广告请求中");
@@ -140,7 +139,7 @@ public class EasyADController {
      *
      * @param adContainer banner广告的承载布局
      */
-    public void loadBanner(String jsonFileName, ViewGroup adContainer) {
+    public void loadBanner(String configJson, ViewGroup adContainer) {
         //必须：核心事件监听回调
         EABannerListener listener = new EABannerListener() {
             @Override
@@ -178,7 +177,7 @@ public class EasyADController {
         //如果高度传入0代表自适应高度
         easyAdBanner.setCsjExpressSize(adWidth, adHeight);
         //必须：设置策略信息
-        easyAdBanner.setData(getJson(mActivity, jsonFileName));
+        easyAdBanner.setData(configJson);
         //必须：请求并展示广告
         easyAdBanner.loadAndShow();
         logAndToast(mActivity, "广告请求中");
@@ -192,7 +191,7 @@ public class EasyADController {
      * <p>
      * 注意！！！：穿山甲默认为"新插屏广告"
      */
-    public EasyAdInterstitial initInterstitial(String jsonFileName) {
+    public EasyAdInterstitial initInterstitial(String configJson) {
         //必须：核心事件监听回调
         EAInterstitialListener listener = new EAInterstitialListener() {
 
@@ -229,7 +228,7 @@ public class EasyADController {
         //注意：穿山甲默认为"新插屏广告"，如果要使用旧版请打开这条设置
 //        easyInterstitial.setCsjNew(false);
         //必须：设置策略信息
-        easyInterstitial.setData(getJson(mActivity, jsonFileName));
+        easyInterstitial.setData(configJson);
         return easyInterstitial;
     }
 
@@ -237,7 +236,7 @@ public class EasyADController {
      * 加载并展示激励视频广告。
      * 也可以选择性先提前加载，然后在合适的时机再调用展示方法
      */
-    public EasyAdRewardVideo initReward(String jsonFileName) {
+    public EasyAdRewardVideo initReward(String configJson) {
         //必须：核心事件监听回调
         EARewardVideoListener listener = new EARewardVideoListener() {
             @Override
@@ -297,7 +296,7 @@ public class EasyADController {
         EasyAdRewardVideo easyRewardVideo = new EasyAdRewardVideo(mActivity, listener);
         baseAD = easyRewardVideo;
         //必须：设置策略信息
-        easyRewardVideo.setData(getJson(mActivity, jsonFileName));
+        easyRewardVideo.setData(configJson);
         return easyRewardVideo;
     }
 
@@ -305,7 +304,7 @@ public class EasyADController {
      * 初始化获取展示全屏视频的广告对象。
      * 也可以选择先提前加载，然后在合适的时机再调用展示方法
      */
-    public EasyAdFullScreenVideo initFullVideo(String jsonFileName) {
+    public EasyAdFullScreenVideo initFullVideo(String configJson) {
 
         //推荐：核心事件监听回调
         EAFullScreenVideoListener listener = new EAFullScreenVideoListener() {
@@ -356,7 +355,7 @@ public class EasyADController {
         EasyAdFullScreenVideo easyFullScreenVideo = new EasyAdFullScreenVideo(mActivity, listener);
         baseAD = easyFullScreenVideo;
         //必须：设置策略信息
-        easyFullScreenVideo.setData(getJson(mActivity, jsonFileName));
+        easyFullScreenVideo.setData(configJson);
 
         return easyFullScreenVideo;
     }
@@ -369,7 +368,7 @@ public class EasyADController {
      *
      * @param adContainer 广告的承载布局
      */
-    public void loadNativeExpress(String jsonFileName, ViewGroup adContainer) {
+    public void loadNativeExpress(String configJson, ViewGroup adContainer) {
 
         if (hasNativeShow) {//同一位置广告，已展示过不再重复发起请求
             EALog.d("loadNativeExpress hasNativeShow");
@@ -438,7 +437,7 @@ public class EasyADController {
         baseAD = easyNativeExpress;
         easyNativeExpress.setAdContainer(adContainer);
         //必须：设置策略信息
-        easyNativeExpress.setData(getJson(mActivity, jsonFileName));
+        easyNativeExpress.setData(configJson);
         //必须：请求并展示广告
         easyNativeExpress.loadAndShow();
         logAndToast(mActivity, "广告请求中");
@@ -446,7 +445,7 @@ public class EasyADController {
 
     public EasyAdDraw easyAdDraw;
 
-    public void loadDraw(String jsonFileName, ViewGroup adContainer) {
+    public void loadDraw(String configJson, ViewGroup adContainer) {
 
         EADrawListener listener = new EADrawListener() {
             @Override
@@ -484,7 +483,7 @@ public class EasyADController {
         baseAD = easyAdDraw;
         easyAdDraw.setAdContainer(adContainer);
         //必须：设置策略信息
-        easyAdDraw.setData(getJson(mActivity, jsonFileName));
+        easyAdDraw.setData(configJson);
         //必须：请求并展示广告
         easyAdDraw.loadAndShow();
         logAndToast(mActivity, "广告请求中");

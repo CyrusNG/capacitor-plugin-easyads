@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -8,6 +8,9 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.ConfigModel;
 import com.capacitorjs.plugins.easyads.utils.Constant;
 
 
@@ -34,18 +37,20 @@ public class SplashActivity extends BaseActivity {
 
         //初始化广告处理封装类
         EasyADController ad = new EasyADController(this);
-        String jsonName = "splash_config.json";
 
         //自定义渠道部分设置，不需要的可以不添加
-        ad.cusHuaWei = getIntent().getBooleanExtra(Constant.CUS_HW, false);
-        ad.cusXiaoMi = getIntent().getBooleanExtra(Constant.CUS_XM, false);
-        if (ad.cusHuaWei || ad.cusXiaoMi) { //使用包含自定义渠道的配置
-            jsonName = "splash_cus_config.json";
-        }
+        // ad.cusHuaWei = getIntent().getBooleanExtra(Constant.CUS_HW, false);
+        // ad.cusXiaoMi = getIntent().getBooleanExtra(Constant.CUS_XM, false);
+        // if (ad.cusHuaWei || ad.cusXiaoMi) { //使用包含自定义渠道的配置
+        //     jsonName = "splash_cus_config.json";
+        // }
+
+        //获取配置
+        String configJson = getIntent().getStringExtra("config");
         /**
          * 加载广告
          */
-        ad.loadSplash(jsonName, adContainer, logo, true, new EasyADController.SplashCallBack() {
+        ad.loadSplash(configJson, adContainer, logo, true, new EasyADController.SplashCallBack() {
             @Override
             public void jumpMain() {
                 goToMainActivity();

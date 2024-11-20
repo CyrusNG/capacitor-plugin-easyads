@@ -1,8 +1,11 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
+
+import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.R;
 
 public class BannerActivity extends BaseActivity {
     RelativeLayout rl;
@@ -16,14 +19,18 @@ public class BannerActivity extends BaseActivity {
 
         //初始化广告处理封装类
         ad = new EasyADController(this);
+        // 获取配置
+        String configJson = getIntent().getStringExtra("config");
         //加载banner
-        ad.loadBanner("banner_config.json", rl);
+        ad.loadBanner(configJson, rl);
     }
 
     public void loadBanner(View view) {
-        if (ad != null) {
+        if (ad != null) { 
+            // 获取配置
+            String configJson = getIntent().getStringExtra("config");
             ad.destroy();
-            ad.loadBanner("banner_config.json", rl);
+            ad.loadBanner(configJson, rl);
         }
     }
 }

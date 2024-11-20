@@ -1,8 +1,10 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.os.Bundle;
 import android.view.View;
 
+import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.R;
 import com.easyads.core.reward.EasyAdRewardVideo;
 
 public class RewardVideoActivity extends BaseActivity {
@@ -16,7 +18,9 @@ public class RewardVideoActivity extends BaseActivity {
     }
 
     public void onLoad(View view) {
-        rewardVideo = new EasyADController(this).initReward("reward_config.json");
+        // 获取配置
+        String configJson = getIntent().getStringExtra("config");
+        rewardVideo = new EasyADController(this).initReward(configJson);
         rewardVideo.loadOnly();
 
     }
@@ -30,6 +34,8 @@ public class RewardVideoActivity extends BaseActivity {
     }
 
     public void loadAndShow(View view) {
-        new EasyADController(this).initReward("reward_config.json").loadAndShow();
+        // 获取配置
+        String configJson = getIntent().getStringExtra("config");
+        new EasyADController(this).initReward(configJson).loadAndShow();
     }
 }

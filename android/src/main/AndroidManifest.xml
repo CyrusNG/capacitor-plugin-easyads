@@ -45,16 +45,16 @@
 <!--            </intent-filter>-->
 <!--        </activity>-->
 
-        <activity android:name="com.capacitorjs.plugins.easyads.SplashActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.NativeExpressActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.RewardVideoActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.BannerActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.FullScreenVideoActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.InterstitialActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
-        <activity android:name="com.capacitorjs.plugins.easyads.SplashToMainActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.NativeExpressRecyclerViewActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.DrawActivity" android:configChanges="keyboard|orientation|screenSize" />
-        <activity android:name="com.capacitorjs.plugins.easyads.custom.CustomActivity" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.SplashActivity" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.NativeExpressActivity" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.RewardVideoActivity" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.BannerActivity" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.FullScreenVideoActivity" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.InterstitialActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.SplashToMainActivity" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.NativeExpressRecyclerViewActivity" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.DrawActivity" android:configChanges="keyboard|orientation|screenSize" />
+        <activity android:name="com.capacitorjs.plugins.easyads.activity.CustomActivity" />
 
         <!-- 小米广告SDK需要 -->
 <!--        <provider-->

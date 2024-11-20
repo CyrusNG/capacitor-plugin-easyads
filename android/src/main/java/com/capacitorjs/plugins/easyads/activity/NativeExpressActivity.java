@@ -1,8 +1,11 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.R;
 
 public class NativeExpressActivity extends BaseActivity {
     private FrameLayout container;
@@ -12,11 +15,12 @@ public class NativeExpressActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_native_express);
         container = findViewById(R.id.native_express_container);
-
-        new EasyADController(this).loadNativeExpress("native_config.json",container);
+        String configJson = getIntent().getStringExtra("config");
+        new EasyADController(this).loadNativeExpress(configJson,container);
     }
 
     public void loadNEAD(View view) {
-        new EasyADController(this).loadNativeExpress("native_config.json",container);
+        String configJson = getIntent().getStringExtra("config");
+        new EasyADController(this).loadNativeExpress(configJson,container);
     }
 }

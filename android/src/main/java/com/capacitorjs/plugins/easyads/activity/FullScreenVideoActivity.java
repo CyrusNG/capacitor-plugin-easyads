@@ -1,9 +1,11 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import android.view.View;
 
+import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.R;
 import com.easyads.core.full.EasyAdFullScreenVideo;
 
 public class FullScreenVideoActivity extends BaseActivity {
@@ -17,7 +19,9 @@ public class FullScreenVideoActivity extends BaseActivity {
 
 
     public void loadFull(View view) {
-        fullScreenVideo = new EasyADController(this).initFullVideo("full_config.json");
+        // 获取配置
+        String configJson = getIntent().getStringExtra("config");
+        fullScreenVideo = new EasyADController(this).initFullVideo(configJson);
         fullScreenVideo.loadOnly();
 
     }
@@ -31,6 +35,8 @@ public class FullScreenVideoActivity extends BaseActivity {
     }
 
     public void loadAndShowFull(View view) {
-        new EasyADController(this).initFullVideo("full_config.json").loadAndShow();
+        // 获取配置
+        String configJson = getIntent().getStringExtra("config");
+        new EasyADController(this).initFullVideo(configJson).loadAndShow();
     }
 }

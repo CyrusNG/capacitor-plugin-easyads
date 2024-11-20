@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.custom;
+package com.capacitorjs.plugins.easyads.adapter;
 
 import android.app.Activity;
 import android.os.Handler;

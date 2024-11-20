@@ -1,8 +1,9 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 
+import com.capacitorjs.plugins.easyads.R;
 import com.easyads.utils.EASplashPlusManager;
 
 public class SplashToMainActivity extends BaseActivity {

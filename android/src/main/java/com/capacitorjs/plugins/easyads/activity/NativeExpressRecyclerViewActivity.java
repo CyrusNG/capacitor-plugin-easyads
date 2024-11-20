@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+
+import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -99,9 +102,11 @@ public class NativeExpressRecyclerViewActivity extends BaseActivity {
         public void onBindViewHolder(final CustomViewHolder customViewHolder, final int position) {
             int type = getItemViewType(position);
             if (TYPE_AD == type) {
+                // 获取配置
+                String configJson = mActivity.getIntent().getStringExtra("config");
                 //核心步骤3：如果是广告布局，执行广告加载
                 EasyADController ad = mData.get(position).ad;
-                ad.loadNativeExpress("native_config.json", customViewHolder.container);
+                ad.loadNativeExpress(configJson, customViewHolder.container);
             } else {
                 customViewHolder.title.setText(mData.get(position).getTitle());
             }
