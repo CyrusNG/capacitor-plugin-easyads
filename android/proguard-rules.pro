@@ -106,3 +106,7 @@
 #-keep class android.support.v4.** { *; }
 #-dontwarn com.mbridge.**
 #-keep class **.R$* { public static final int mbridge*; }
+
+# auto-parcel-gson 依赖
+-keep class **.AutoParcelGson_*
+-keepnames @auto.parcelgson.AutoParcelGson class *
