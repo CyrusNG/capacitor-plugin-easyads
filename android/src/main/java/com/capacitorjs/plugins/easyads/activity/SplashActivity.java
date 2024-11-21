@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
-import com.capacitorjs.plugins.easyads.model.ConfigModel;
+import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.Constant;
 
 
@@ -46,11 +46,11 @@ public class SplashActivity extends BaseActivity {
         // }
 
         //获取配置
-        String configJson = getIntent().getStringExtra("config");
+        SettingModel setting = getIntent().getParcelableExtra("setting");
         /**
          * 加载广告
          */
-        ad.loadSplash(configJson, adContainer, logo, true, new EasyADController.SplashCallBack() {
+        ad.loadSplash(setting.toJson(), adContainer, logo, true, new EasyADController.SplashCallBack() {
             @Override
             public void jumpMain() {
                 goToMainActivity();

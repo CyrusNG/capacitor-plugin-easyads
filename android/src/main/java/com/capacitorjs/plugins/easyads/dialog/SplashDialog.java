@@ -11,13 +11,14 @@ import android.widget.LinearLayout;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.SettingModel;
 
 public class SplashDialog extends Dialog {
     LinearLayout logo;
     FrameLayout adContainer;
 
 
-    public SplashDialog(@NonNull final Activity context) {
+    public SplashDialog(@NonNull final Activity context, SettingModel setting) {
         super(context);
         setContentView(R.layout.activity_splash_custom_logo);
         //设置window背景，默认的背景会有Padding值，不能全屏。当然不一定要是透明，你可以设置其他背景，替换默认的背景即可。
@@ -30,11 +31,7 @@ public class SplashDialog extends Dialog {
 
         logo = findViewById(R.id.ll_logo);
 
-
-        // 获取配置
-        String configJson = context.getIntent().getStringExtra("config");
-
-        new EasyADController(context).loadSplash(configJson, adContainer, logo, false, new EasyADController.SplashCallBack() {
+        new EasyADController(context).loadSplash(setting.toJson(), adContainer, logo, false, new EasyADController.SplashCallBack() {
             @Override
             public void jumpMain() {
                 dismiss();

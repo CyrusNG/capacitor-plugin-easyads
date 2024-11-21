@@ -6,6 +6,7 @@ import android.widget.RelativeLayout;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.SettingModel;
 
 public class BannerActivity extends BaseActivity {
     RelativeLayout rl;
@@ -20,17 +21,17 @@ public class BannerActivity extends BaseActivity {
         //初始化广告处理封装类
         ad = new EasyADController(this);
         // 获取配置
-        String configJson = getIntent().getStringExtra("config");
+        SettingModel setting = getIntent().getParcelableExtra("setting");
         //加载banner
-        ad.loadBanner(configJson, rl);
+        ad.loadBanner(setting.toJson(), rl);
     }
 
     public void loadBanner(View view) {
         if (ad != null) { 
             // 获取配置
-            String configJson = getIntent().getStringExtra("config");
+            SettingModel setting = getIntent().getParcelableExtra("setting");
             ad.destroy();
-            ad.loadBanner(configJson, rl);
+            ad.loadBanner(setting.toJson(), rl);
         }
     }
 }

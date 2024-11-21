@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.SettingModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,10 +104,10 @@ public class NativeExpressRecyclerViewActivity extends BaseActivity {
             int type = getItemViewType(position);
             if (TYPE_AD == type) {
                 // 获取配置
-                String configJson = mActivity.getIntent().getStringExtra("config");
+                SettingModel setting = mActivity.getIntent().getParcelableExtra("setting");
                 //核心步骤3：如果是广告布局，执行广告加载
                 EasyADController ad = mData.get(position).ad;
-                ad.loadNativeExpress(configJson, customViewHolder.container);
+                ad.loadNativeExpress(setting.toJson(), customViewHolder.container);
             } else {
                 customViewHolder.title.setText(mData.get(position).getTitle());
             }

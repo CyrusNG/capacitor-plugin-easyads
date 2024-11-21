@@ -1,19 +1,21 @@
 export interface EasyAdsPlugin {
-  init(): Promise<Result>;
-  splash(mode: string, config: Config): Promise<Result>;
-  banner(config: Config): Promise<Result>;
-  nativeExpress(config: Config): Promise<Result>;
-  rewardVideo(config: Config): Promise<Result>;
-  nativeExpressRecyclerView(config: Config): Promise<Result>;
-  interstitial(config: Config): Promise<Result>;
-  fullVideo(config: Config): Promise<Result>;
-  draw(config: Config): Promise<Result>;
-  customChannel(config: Config): Promise<Result>;
+  init(config: Config): Promise<Result>;
+  splash(mode: string): Promise<Result>;
+  banner(name: string): Promise<Result>;
+  nativeExpress(name: string): Promise<Result>;
+  rewardVideo(name: string): Promise<Result>;
+  nativeExpressRecyclerView(name: string): Promise<Result>;
+  interstitial(name: string): Promise<Result>;
+  fullVideo(name: string): Promise<Result>;
+  draw(name: string): Promise<Result>;
+  customChannel(name: string): Promise<Result>;
 }
 
 export interface Config {
   rules: Array<{ tag: string, sort: Array<number>, percent: number }>, 
-  suppliers: Array<{ tag: string, adspotId: string, appId: string, index: number }>
+  apps: Array<{ tag: string, appId: string, index: number }>, 
+  adspots: Array<{ tag: string, targets: Array<string> }>,
+
 }
 
 export interface Result {

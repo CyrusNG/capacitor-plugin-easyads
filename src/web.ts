@@ -4,47 +4,47 @@ import type { EasyAdsPlugin, Config, Result } from './definitions';
 
 export class EasyAdsWeb extends WebPlugin implements EasyAdsPlugin {
 
-  async init(): Promise<Result> {
+  async init(config: Config): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async splash(mode: string, config: Config): Promise<Result> {
+  async splash(mode: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async banner(config: Config): Promise<Result> {
+  async banner(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async nativeExpress(config: Config): Promise<Result> {
+  async nativeExpress(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async rewardVideo(config: Config): Promise<Result> {
+  async rewardVideo(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async nativeExpressRecyclerView(config: Config): Promise<Result> {
+  async nativeExpressRecyclerView(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async interstitial(config: Config): Promise<Result> {
+  async interstitial(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async fullVideo(config: Config): Promise<Result> {
+  async fullVideo(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async splashDialog(config: Config): Promise<Result> {
+  async splashDialog(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async draw(config: Config): Promise<Result> {
+  async draw(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 
-  async customChannel(config: Config): Promise<Result> {
+  async customChannel(name: string): Promise<Result> {
     throw this.unimplemented('Not implemented on web.');
   }
 

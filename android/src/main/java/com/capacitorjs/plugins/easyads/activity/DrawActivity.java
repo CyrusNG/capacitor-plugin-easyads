@@ -23,6 +23,7 @@ import android.widget.VideoView;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.draw.FullScreenVideoView;
 import com.capacitorjs.plugins.easyads.draw.OnViewPagerListener;
 import com.capacitorjs.plugins.easyads.draw.ViewPagerLayoutManager;
@@ -269,9 +270,9 @@ public class DrawActivity extends BaseActivity {
 
                 } else if (item.type == TYPE_AD_ITEM && item.ad != null) {
                     // 获取配置
-                    String configJson = getIntent().getStringExtra("config");
+                    SettingModel setting = getIntent().getParcelableExtra("setting");
                     //请求并展示draw信息流广告
-                    item.ad.loadDraw(configJson, holder.videoLayout);
+                    item.ad.loadDraw(setting.toJson(), holder.videoLayout);
                 }
             }
 

@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.easyads.core.reward.EasyAdRewardVideo;
 
 public class RewardVideoActivity extends BaseActivity {
@@ -17,10 +18,10 @@ public class RewardVideoActivity extends BaseActivity {
 
     }
 
-    public void onLoad(View view) {
+    public void onLoad(View view) { 
         // 获取配置
-        String configJson = getIntent().getStringExtra("config");
-        rewardVideo = new EasyADController(this).initReward(configJson);
+        SettingModel setting = getIntent().getParcelableExtra("setting");
+        rewardVideo = new EasyADController(this).initReward(setting.toJson());
         rewardVideo.loadOnly();
 
     }
@@ -35,7 +36,7 @@ public class RewardVideoActivity extends BaseActivity {
 
     public void loadAndShow(View view) {
         // 获取配置
-        String configJson = getIntent().getStringExtra("config");
-        new EasyADController(this).initReward(configJson).loadAndShow();
+        SettingModel setting = getIntent().getParcelableExtra("setting");
+        new EasyADController(this).initReward(setting.toJson()).loadAndShow();
     }
 }

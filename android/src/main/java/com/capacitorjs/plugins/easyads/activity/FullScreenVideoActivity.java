@@ -6,6 +6,7 @@ import android.view.View;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.easyads.core.full.EasyAdFullScreenVideo;
 
 public class FullScreenVideoActivity extends BaseActivity {
@@ -20,8 +21,8 @@ public class FullScreenVideoActivity extends BaseActivity {
 
     public void loadFull(View view) {
         // 获取配置
-        String configJson = getIntent().getStringExtra("config");
-        fullScreenVideo = new EasyADController(this).initFullVideo(configJson);
+        SettingModel setting = getIntent().getParcelableExtra("setting");
+        fullScreenVideo = new EasyADController(this).initFullVideo(setting.toJson());
         fullScreenVideo.loadOnly();
 
     }
@@ -36,7 +37,7 @@ public class FullScreenVideoActivity extends BaseActivity {
 
     public void loadAndShowFull(View view) {
         // 获取配置
-        String configJson = getIntent().getStringExtra("config");
-        new EasyADController(this).initFullVideo(configJson).loadAndShow();
+        SettingModel setting = getIntent().getParcelableExtra("setting");
+        new EasyADController(this).initFullVideo(setting.toJson()).loadAndShow();
     }
 }

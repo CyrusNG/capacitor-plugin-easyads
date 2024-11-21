@@ -5,6 +5,7 @@ import android.view.View;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.easyads.core.inter.EasyAdInterstitial;
 
 public class InterstitialActivity extends BaseActivity {
@@ -19,8 +20,8 @@ public class InterstitialActivity extends BaseActivity {
 
     public void loadAd(View view) {
         // 获取配置
-        String configJson = getIntent().getStringExtra("config");
-        interstitialAD = new EasyADController(this).initInterstitial(configJson);
+        SettingModel setting = getIntent().getParcelableExtra("setting");
+        interstitialAD = new EasyADController(this).initInterstitial(setting.toJson());
         interstitialAD.loadOnly();
     }
 
@@ -34,7 +35,7 @@ public class InterstitialActivity extends BaseActivity {
 
     public void loadAndShowAd(View view) {
         // 获取配置
-        String configJson = getIntent().getStringExtra("config");
-        new EasyADController(this).initInterstitial(configJson).loadAndShow();
+        SettingModel setting = getIntent().getParcelableExtra("setting");
+        new EasyADController(this).initInterstitial(setting.toJson()).loadAndShow();
     }
 }
