@@ -64,7 +64,6 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
 
     // 以下部分为广告SDK
-    implementation "com.github.bayescom:EasyAds-Android:1.2.1"                     //EasyAdsSDK（必须）
     implementation "com.pangle.cn:mediation-sdk:6.1.2.5"                           //穿山甲广告SDK（建议）
 
     // GroMore官方提供的依赖
