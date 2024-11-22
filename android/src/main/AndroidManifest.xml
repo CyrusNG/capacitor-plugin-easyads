@@ -56,17 +56,6 @@
         <activity android:name="com.capacitorjs.plugins.easyads.activity.DrawActivity" android:configChanges="keyboard|orientation|screenSize" />
         <activity android:name="com.capacitorjs.plugins.easyads.activity.CustomActivity" />
 
-        <!-- 小米广告SDK需要 -->
-<!--        <provider-->
-<!--            android:name="androidx.core.content.FileProvider"-->
-<!--            android:authorities="${applicationId}.fileprovider"-->
-<!--            android:exported="false"-->
-<!--            android:grantUriPermissions="true">-->
-<!--            <meta-data-->
-<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-<!--                android:resource="@xml/xm_file_paths"/>-->
-<!--        </provider>-->
-
         <!-- 穿山甲广告SDK Provider -->
         <provider
             android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
@@ -92,6 +81,17 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/ea_ylh_file_path" />
         </provider>
+
+        <!-- 小米广告SDK Provider -->
+       <!-- <provider
+           android:name="androidx.core.content.FileProvider"
+           android:authorities="${applicationId}.fileprovider"
+           android:exported="false"
+           android:grantUriPermissions="true">
+           <meta-data
+               android:name="android.support.FILE_PROVIDER_PATHS"
+               android:resource="@xml/xm_file_paths"/>
+       </provider> -->
 
     </application>
 
