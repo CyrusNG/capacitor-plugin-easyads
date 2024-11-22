@@ -16,28 +16,20 @@ import com.capacitorjs.plugins.easyads.activity.SplashActivity;
 import com.capacitorjs.plugins.easyads.activity.CustomActivity;
 import com.capacitorjs.plugins.easyads.dialog.SplashDialog;
 import com.capacitorjs.plugins.easyads.model.ConfigModel;
-import com.capacitorjs.plugins.easyads.model.RuleModel;
-import com.capacitorjs.plugins.easyads.model.AdspotModel;
-import com.capacitorjs.plugins.easyads.model.AppModel;
+import com.capacitorjs.plugins.easyads.model.ResultModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.easyads.core.BuildConfig;
 import com.easyads.model.EALogLevel;
-import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.google.gson.Gson;
 import com.hjq.toast.ToastUtils;
 import com.easyads.EasyAds;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @CapacitorPlugin(name = "EasyAds")
 public class EasyAdsPlugin extends Plugin {
@@ -209,8 +201,8 @@ public class EasyAdsPlugin extends Plugin {
     private void onStartActivityCallback(PluginCall call, ActivityResult result) {
         if (call == null) return;
         try {
-            String jsonInString = new Gson().toJson(result);
-            JSObject data = new JSObject(jsonInString);
+            ResultModel resultModel = ResultModel.create("SUCCESS", null, null);
+            JSObject data = new JSObject(resultModel.toJson());
             call.resolve(data);
         } catch (JSONException e) {
             call.reject(e.getMessage(), "JSONException", e);
