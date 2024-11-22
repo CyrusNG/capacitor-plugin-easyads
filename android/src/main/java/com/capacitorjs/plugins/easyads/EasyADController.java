@@ -69,60 +69,31 @@ public class EasyADController {
     public void loadSplash(String configJson, final ViewGroup adContainer, final ViewGroup logoContainer, boolean singleActivity, final SplashCallBack callBack) {
         //必须：设置开屏核心回调事件的监听器。
         EASplashListener listener = new EASplashListener() {
-
             @Override
-            public void onAdClose() {
-                if (callBack != null)
-                    callBack.jumpMain();
-
-                logAndToast(mActivity, "广告关闭");
-            }
-
+            public void onAdClose() { if (callBack != null) callBack.jumpMain(); logAndToast(mActivity, "广告关闭"); }
             @Override
-            public void onAdSucceed() {
-                logAndToast(mActivity, "广告加载成功");
-                if (logoContainer != null)
-                    logoContainer.setVisibility(View.VISIBLE);
-
-            }
-
+            public void onAdSucceed() { if (logoContainer != null) logoContainer.setVisibility(View.VISIBLE); logAndToast(mActivity, "广告加载成功"); }
             @Override
-            public void onAdExposure() {
-                //设置开屏父布局背景色为白色
-                if (adContainer != null)
-                    adContainer.setBackgroundColor(Color.WHITE);
-
-
-                logAndToast(mActivity, "广告展示成功");
-            }
-
+            public void onAdExposure() { if (adContainer != null) adContainer.setBackgroundColor(Color.WHITE); logAndToast(mActivity, "广告展示成功"); }  //设置开屏父布局背景色为白色
             @Override
-            public void onAdFailed(EasyAdError error) {
-                logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-            }
-
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); }
             @Override
-            public void onAdClicked() {
-                logAndToast(mActivity, "广告点击");
-            }
-
-
+            public void onAdClicked() { logAndToast(mActivity, "广告点击"); }
         };
+        //初始化广告实例
         EasyAdSplash easySplash = new EasyAdSplash(mActivity, adContainer, listener);
-        baseAD = easySplash;
         //注意：如果开屏页是fragment或者dialog实现，这里需要置为false。默认为true，代表开屏和首页为两个不同的activity
         easySplash.setShowInSingleActivity(singleActivity);
-        if (cusXiaoMi) {
-            //注意：此处自定义渠道的tag，一定要和setData()中配置的tag一致。
-            easySplash.addCustomSupplier("xm", new XiaoMiSplashAdapter(new SoftReference<>(mActivity), easySplash));
-        }
-        if (cusHuaWei) {
-            easySplash.addCustomSupplier("hw", new HuaWeiSplashAdapter(new SoftReference<>(mActivity), easySplash));
-        }
+        //注意：此处自定义渠道的tag，一定要和setData()中配置的tag一致。
+        if (cusXiaoMi) easySplash.addCustomSupplier("xm", new XiaoMiSplashAdapter(new SoftReference<>(mActivity), easySplash));
+        if (cusHuaWei) easySplash.addCustomSupplier("hw", new HuaWeiSplashAdapter(new SoftReference<>(mActivity), easySplash));
         //必须：设置策略信息
         easySplash.setData(configJson);
         //必须：请求并展示广告
         easySplash.loadAndShow();
+        //记录广告实例
+        this.baseAD = easySplash;
+        //展示提示
         logAndToast(mActivity, "广告请求中");
     }
 
@@ -146,31 +117,23 @@ public class EasyADController {
             public void onAdClose() {
                 logAndToast(mActivity, "广告关闭");
             }
-
             @Override
             public void onAdExposure() {
                 logAndToast(mActivity, "广告展现");
             }
-
             @Override
-            public void onAdFailed(EasyAdError error) {
-                logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-            }
-
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); }
             @Override
             public void onAdClicked() {
                 logAndToast(mActivity, "广告点击");
             }
-
-
             @Override
             public void onAdSucceed() {
                 logAndToast(mActivity, "广告加载成功");
             }
-
         };
+        //初始化广告实例
         EasyAdBanner easyAdBanner = new EasyAdBanner(mActivity, adContainer, listener);
-        baseAD = easyAdBanner;
         //如果集成穿山甲，这里必须配置，建议尺寸要和穿山甲后台中的"代码位尺寸"宽高比例一致，值单位为dp，这里示例使用的广告位宽高比为640：100。
         int adWidth = ScreenUtil.px2dip(mActivity, ScreenUtil.getScreenWidth(mActivity));
         int adHeight = (int) (((double) adWidth / (double) 640) * 100);
@@ -180,6 +143,9 @@ public class EasyADController {
         easyAdBanner.setData(configJson);
         //必须：请求并展示广告
         easyAdBanner.loadAndShow();
+        //记录广告实例
+        this.baseAD = easyAdBanner;
+        //展示提示
         logAndToast(mActivity, "广告请求中");
     }
 
@@ -194,7 +160,6 @@ public class EasyADController {
     public EasyAdInterstitial initInterstitial(String configJson) {
         //必须：核心事件监听回调
         EAInterstitialListener listener = new EAInterstitialListener() {
-
             @Override
             public void onAdSucceed() {
                 logAndToast(mActivity, "广告就绪");
@@ -204,31 +169,26 @@ public class EasyADController {
             public void onAdClose() {
                 logAndToast(mActivity, "广告关闭");
             }
-
-
             @Override
             public void onAdExposure() {
                 logAndToast(mActivity, "广告展示");
             }
-
             @Override
-            public void onAdFailed(EasyAdError error) {
-                logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-            }
-
-
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); }
             @Override
             public void onAdClicked() {
                 logAndToast(mActivity, "广告点击");
             }
         };
-        //初始化
+        //初始化广告实例
         EasyAdInterstitial easyInterstitial = new EasyAdInterstitial(mActivity, listener);
-        baseAD = easyInterstitial;
         //注意：穿山甲默认为"新插屏广告"，如果要使用旧版请打开这条设置
-//        easyInterstitial.setCsjNew(false);
+        //easyInterstitial.setCsjNew(false);
         //必须：设置策略信息
         easyInterstitial.setData(configJson);
+        //记录广告实例
+        this.baseAD = easyInterstitial;
+        //返回实例
         return easyInterstitial;
     }
 
@@ -243,60 +203,40 @@ public class EasyADController {
             public void onAdSucceed() {
                 logAndToast(mActivity, "广告加载成功");
             }
-
-
             @Override
             public void onAdExposure() {
                 logAndToast(mActivity, "广告展示");
             }
-
             @Override
-            public void onAdFailed(EasyAdError error) {
-                logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-            }
-
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); }
             @Override
             public void onAdClicked() {
                 logAndToast(mActivity, "广告点击");
             }
-
-
             @Override
             public void onVideoCached() {
                 logAndToast(mActivity, "广告缓存成功");
             }
-
             @Override
             public void onVideoComplete() {
                 logAndToast(mActivity, "视频播放完毕");
             }
-
             @Override
-            public void onVideoSkip() {
-
-            }
-
+            public void onVideoSkip() { logAndToast(mActivity, "跳过视频播放"); }
             @Override
-            public void onAdClose() {
-                logAndToast(mActivity, "广告关闭");
-            }
-
+            public void onAdClose() { logAndToast(mActivity, "广告关闭"); }
             @Override
-            public void onAdReward() {
-                logAndToast(mActivity, "激励发放");
-            }
-
+            public void onAdReward() { logAndToast(mActivity, "激励发放"); }
             @Override
-            public void onRewardServerInf(EARewardServerCallBackInf inf) {
-                //优量汇和穿山甲支持回调服务端激励验证信息，详见RewardServerCallBackInf中字段信息
-                logAndToast(mActivity, "onRewardServerInf" + inf);
-            }
+            public void onRewardServerInf(EARewardServerCallBackInf inf) { logAndToast(mActivity, "onRewardServerInf" + inf); } //优量汇和穿山甲支持回调服务端激励验证信息，详见RewardServerCallBackInf中字段信息
         };
         //初始化，注意需要时再初始化，不要复用。
         EasyAdRewardVideo easyRewardVideo = new EasyAdRewardVideo(mActivity, listener);
-        baseAD = easyRewardVideo;
         //必须：设置策略信息
         easyRewardVideo.setData(configJson);
+        //记录广告实例
+        this.baseAD = easyRewardVideo;
+        //返回实例
         return easyRewardVideo;
     }
 
@@ -309,43 +249,27 @@ public class EasyADController {
         //推荐：核心事件监听回调
         EAFullScreenVideoListener listener = new EAFullScreenVideoListener() {
             @Override
-            public void onAdSucceed() {
-                logAndToast(mActivity, "广告加载成功");
-
-            }
-
+            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); }
             @Override
             public void onAdClose() {
                 logAndToast(mActivity, "广告关闭");
             }
-
             @Override
             public void onVideoComplete() {
                 logAndToast(mActivity, "视频播放结束");
             }
-
             @Override
             public void onVideoSkipped() {
                 logAndToast(mActivity, "跳过视频");
             }
-
             @Override
-            public void onVideoCached() {
-                //广告缓存成功，可以在此记录状态，但要注意：不一定所有的广告会返回该回调
-                logAndToast(mActivity, "广告缓存成功");
-            }
-
+            public void onVideoCached() { logAndToast(mActivity, "广告缓存成功"); } //广告缓存成功，可以在此记录状态，但要注意：不一定所有的广告会返回该回调
             @Override
             public void onAdExposure() {
                 logAndToast(mActivity, "广告展示");
             }
-
             @Override
-            public void onAdFailed(EasyAdError error) {
-                logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-            }
-
-
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); }
             @Override
             public void onAdClicked() {
                 logAndToast(mActivity, "广告点击");
@@ -353,10 +277,11 @@ public class EasyADController {
         };
         //初始化
         EasyAdFullScreenVideo easyFullScreenVideo = new EasyAdFullScreenVideo(mActivity, listener);
-        baseAD = easyFullScreenVideo;
         //必须：设置策略信息
         easyFullScreenVideo.setData(configJson);
-
+        //记录广告实例
+        this.baseAD = easyFullScreenVideo;
+        //返回实例
         return easyFullScreenVideo;
     }
 
@@ -369,63 +294,32 @@ public class EasyADController {
      * @param adContainer 广告的承载布局
      */
     public void loadNativeExpress(String configJson, ViewGroup adContainer) {
+        //同一位置广告，已展示过不再重复发起请求
+        if (hasNativeShow) { EALog.d("loadNativeExpress hasNativeShow"); return; }
 
-        if (hasNativeShow) {//同一位置广告，已展示过不再重复发起请求
-            EALog.d("loadNativeExpress hasNativeShow");
-            return;
-        }
+        //同一位置广告，正在请求中，不再重复请求
+        if (isNativeLoading) { EALog.d("loadNativeExpress isNativeLoading"); return; }
 
-        if (isNativeLoading) {//同一位置广告，正在请求中，不再重复请求
-            EALog.d("loadNativeExpress isNativeLoading");
-            return;
-        }
         isNativeLoading = true;
 
-        if (adContainer.getChildCount() > 0) {
-            adContainer.removeAllViews();
-        }
-
+        if (adContainer.getChildCount() > 0) { adContainer.removeAllViews(); }
 
         //推荐：核心事件监听回调
         EANativeExpressListener listener = new EANativeExpressListener() {
             @Override
-            public void onAdSucceed() {
-                logAndToast(mActivity, "广告加载成功");
-
-            }
-
+            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); }
             @Override
-            public void onAdRenderSuccess() {
-                logAndToast(mActivity, "广告渲染成功");
-
-            }
-
-
+            public void onAdRenderSuccess() { logAndToast(mActivity, "广告渲染成功"); }
             @Override
             public void onAdClose() {
                 logAndToast(mActivity, "广告关闭");
             }
-
             @Override
-            public void onAdExposure() {
-                hasNativeShow = true;
-                isNativeLoading = false;
-                logAndToast(mActivity, "广告展示");
-            }
-
+            public void onAdExposure() { hasNativeShow = true; isNativeLoading = false; logAndToast(mActivity, "广告展示"); }
             @Override
-            public void onAdFailed(EasyAdError error) {
-                isNativeLoading = false;
-                logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-            }
-
-
+            public void onAdFailed(EasyAdError error) { isNativeLoading = false; logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); }
             @Override
-            public void onAdRenderFailed() {
-                isNativeLoading = false;
-                logAndToast(mActivity, "广告渲染失败");
-            }
-
+            public void onAdRenderFailed() { isNativeLoading = false; logAndToast(mActivity, "广告渲染失败"); }
             @Override
             public void onAdClicked() {
                 logAndToast(mActivity, "广告点击");
@@ -434,12 +328,15 @@ public class EasyADController {
         };
         //初始化
         final EasyAdNativeExpress easyNativeExpress = new EasyAdNativeExpress(mActivity, listener);
-        baseAD = easyNativeExpress;
+        //配置Container
         easyNativeExpress.setAdContainer(adContainer);
         //必须：设置策略信息
         easyNativeExpress.setData(configJson);
         //必须：请求并展示广告
         easyNativeExpress.loadAndShow();
+        //记录广告实例
+        this.baseAD = easyNativeExpress;
+        //展示提示
         logAndToast(mActivity, "广告请求中");
     }
 
@@ -449,43 +346,27 @@ public class EasyADController {
 
         EADrawListener listener = new EADrawListener() {
             @Override
-            public void onAdSucceed() {
-                if (easyAdDraw != null) {
-                    easyAdDraw.show();
-                }
-                logAndToast(mActivity, "广告加载成功");
-
-            }
-
+            public void onAdSucceed() { if (easyAdDraw != null) easyAdDraw.show(); logAndToast(mActivity, "广告加载成功"); }
             @Override
-            public void onAdExposure() {
-                logAndToast(mActivity, "广告展示");
-
-            }
-
+            public void onAdExposure() { logAndToast(mActivity, "广告展示"); }
             @Override
-            public void onAdClicked() {
-                logAndToast(mActivity, "广告点击");
-
-            }
-
+            public void onAdClicked() { logAndToast(mActivity, "广告点击"); }
             @Override
-            public void onAdClose() { //此位置不存在广告关闭动作，当前回调不会触发
-                logAndToast(mActivity, "广告关闭");
-            }
-
+            public void onAdClose() {  logAndToast(mActivity, "广告关闭"); } //此位置不存在广告关闭动作，当前回调不会触发
             @Override
-            public void onAdFailed(EasyAdError error) {
-                logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-            }
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); }
         };
+        //初始化实例
         easyAdDraw = new EasyAdDraw(mActivity, listener);
-        baseAD = easyAdDraw;
+        //配置Container
         easyAdDraw.setAdContainer(adContainer);
         //必须：设置策略信息
         easyAdDraw.setData(configJson);
         //必须：请求并展示广告
         easyAdDraw.loadAndShow();
+        //记录广告实例
+        this.baseAD = easyAdDraw;
+        //展示提示
         logAndToast(mActivity, "广告请求中");
     }
 
@@ -511,21 +392,21 @@ public class EasyADController {
         ToastUtils.debugShow(msg);
     }
 
-    /**
-     * 获取存放在assets下面的广告json文件内容，建议APP端有条件的话，通过后端下发json配置内容
-     */
-    public static String getJson(Context context, String fileName) {
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            AssetManager assetManager = context.getAssets();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(assetManager.open(fileName)));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-        return stringBuilder.toString();
-    }
+//    /**
+//     * 获取存放在assets下面的广告json文件内容，建议APP端有条件的话，通过后端下发json配置内容
+//     */
+//    public static String getJson(Context context, String fileName) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        try {
+//            AssetManager assetManager = context.getAssets();
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(assetManager.open(fileName)));
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                stringBuilder.append(line);
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+//        return stringBuilder.toString();
+//    }
 }
