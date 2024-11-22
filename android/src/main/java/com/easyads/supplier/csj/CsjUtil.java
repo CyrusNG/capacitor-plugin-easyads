@@ -103,6 +103,7 @@ public class CsjUtil implements EASplashPlusManager.ZoomCall {
             EALog.high("[CsjUtil.initCsj] supportMultiProcess = " + supportMP + " directDownloadNetworkType = " + Arrays.toString(directDownloadNetworkType));
 
             final TTAdConfig config = new TTAdConfig.Builder()
+                    .useMediation(true) //使用GroMore必须设成true
                     .appId(resultAppID)
                     .useTextureView(true) //使用TextureView控件播放视频,默认为SurfaceView,当有SurfaceView冲突的场景，可以使用TextureView
                     .appName("")//
