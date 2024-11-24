@@ -52,9 +52,7 @@ public class SplashActivity extends BaseActivity {
          */
         ad.loadSplash(setting.toJson(), adContainer, logo, true, new EasyADController.SplashCallBack() {
             @Override
-            public void jumpMain() {
-                goToMainActivity();
-            }
+            public void jumpMain() { goToMainActivity(); }
         });
     }
 

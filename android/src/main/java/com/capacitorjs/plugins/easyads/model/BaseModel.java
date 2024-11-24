@@ -9,11 +9,10 @@ import com.google.gson.GsonBuilder;
 import auto.parcelgson.gson.AutoParcelGsonTypeAdapterFactory;
 
 public class BaseModel {
+
   protected static final Gson gson = new GsonBuilder().registerTypeAdapterFactory(new AutoParcelGsonTypeAdapterFactory()).create();
 
-  public String toJson() {
-    return gson.toJson(this);
-  }
+  public String toJson() { return gson.toJson(this); }
 }
 
 
