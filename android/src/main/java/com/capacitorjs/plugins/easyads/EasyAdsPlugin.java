@@ -73,7 +73,7 @@ public class EasyAdsPlugin extends Plugin {
             case "dialog":
             default:
                 Activity activity = getActivity();
-                new SplashDialog(activity, setting).show();
+                activity.runOnUiThread(() -> new SplashDialog(activity, setting).show());
         }
     }
 
