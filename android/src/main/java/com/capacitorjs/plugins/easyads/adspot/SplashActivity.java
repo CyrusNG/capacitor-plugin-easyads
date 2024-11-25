@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.activity;
+package com.capacitorjs.plugins.easyads.adspot;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
-import com.capacitorjs.plugins.easyads.utils.Constant;
 
 
 public class SplashActivity extends BaseActivity {

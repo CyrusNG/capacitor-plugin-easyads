@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.dialog;
+package com.capacitorjs.plugins.easyads.adspot;
 
 import android.app.Activity;
 import android.app.Dialog;

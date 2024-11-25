@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.view;
+package com.capacitorjs.plugins.easyads.adspot;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

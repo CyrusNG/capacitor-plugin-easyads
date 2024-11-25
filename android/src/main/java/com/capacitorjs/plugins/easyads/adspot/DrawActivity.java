@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.activity;
+package com.capacitorjs.plugins.easyads.adspot;
 
 import android.content.Context;
 import android.media.MediaPlayer;
