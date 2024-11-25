@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.easyads.EasyAdsManger;
 import com.easyads.core.banner.EABannerSetting;
 import com.easyads.custom.EABannerCustomAdapter;
@@ -95,7 +96,11 @@ public class CsjBannerAdapter extends EABannerCustomAdapter implements TTAdNativ
                         ViewGroup adContainer = setting.getContainer();
                         if (adContainer != null) {
                             adContainer.removeAllViews();
-                            adContainer.addView(view);
+                            if(view != null) {
+                                adContainer.addView(view);
+                            } else {
+                                adContainer.addView(ad.getExpressAdView());
+                            }
                         }
                     }
                 }
