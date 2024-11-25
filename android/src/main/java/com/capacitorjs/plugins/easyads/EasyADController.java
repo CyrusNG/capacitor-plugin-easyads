@@ -35,6 +35,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.ref.SoftReference;
 
+
+
+
 /**
  * 进一步封装了使用 EasyAds 的广告加载逻辑，方便代码中调用，也为了尽量广告处理代码独立。
  * EasyAds不会进行任何的采集和上报处理，如果有统计需求，APP开发者可以在对应的时间回调内进行统一上报处理。
@@ -47,6 +50,12 @@ public class EasyADController {
     public boolean cusXiaoMi = false;
     //华为渠道是否需要添加为自定义渠道
     public boolean cusHuaWei = false;
+
+
+    /**
+     * 开屏跳转回调
+     */
+    public interface Callback { void run(); }
 
     /**
      * 初始化广告处理类
@@ -66,11 +75,11 @@ public class EasyADController {
      * @param singleActivity 是否为单独activity中展示开屏广告
      * @param callBack       跳转回调，在回调中进行跳转主页或其他操作
      */
-    public void loadSplash(String configJson, final ViewGroup adContainer, final ViewGroup logoContainer, boolean singleActivity, final SplashCallBack callBack) {
+    public void loadSplash(String configJson, final ViewGroup adContainer, final ViewGroup logoContainer, boolean singleActivity, final Callback callBack) {
         //必须：设置开屏核心回调事件的监听器。
         EASplashListener listener = new EASplashListener() {
             @Override
-            public void onAdClose() { if (callBack != null) callBack.jumpMain(); logAndToast(mActivity, "广告关闭"); }
+            public void onAdClose() { if (callBack != null) callBack.run(); logAndToast(mActivity, "广告关闭"); }
             @Override
             public void onAdSucceed() { if (logoContainer != null) logoContainer.setVisibility(View.VISIBLE); logAndToast(mActivity, "广告加载成功"); }
             @Override
@@ -97,20 +106,12 @@ public class EasyADController {
         logAndToast(mActivity, "广告请求中");
     }
 
-
-    /**
-     * 开屏跳转回调
-     */
-    public interface SplashCallBack {
-        void jumpMain();
-    }
-
     /**
      * 加载并展示banner广告
      *
      * @param adContainer banner广告的承载布局
      */
-    public void loadBanner(String configJson, ViewGroup adContainer) {
+    public void loadBanner(String configJson, ViewGroup adContainer, final Callback callBack) {
         //必须：核心事件监听回调
         EABannerListener listener = new EABannerListener() {
             @Override
@@ -128,15 +129,13 @@ public class EasyADController {
                 logAndToast(mActivity, "广告点击");
             }
             @Override
-            public void onAdSucceed() {
-                logAndToast(mActivity, "广告加载成功");
-            }
+            public void onAdSucceed() { if (callBack != null) callBack.run(); logAndToast(mActivity, "广告加载成功"); }
         };
         //初始化广告实例
         EasyAdBanner easyAdBanner = new EasyAdBanner(mActivity, adContainer, listener);
         //如果集成穿山甲，这里必须配置，建议尺寸要和穿山甲后台中的"代码位尺寸"宽高比例一致，值单位为dp，这里示例使用的广告位宽高比为640：100。
         int adWidth = ScreenUtil.px2dip(mActivity, ScreenUtil.getScreenWidth(mActivity));
-        int adHeight = (int) (((double) adWidth / (double) 640) * 100);
+        int adHeight = (int) (((double) adWidth / (double) 320) * 50);
         //如果高度传入0代表自适应高度
         easyAdBanner.setCsjExpressSize(adWidth, adHeight);
         //必须：设置策略信息

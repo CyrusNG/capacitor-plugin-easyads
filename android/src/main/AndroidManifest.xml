@@ -48,7 +48,6 @@
         <activity android:name="com.capacitorjs.plugins.easyads.activity.SplashActivity" />
         <activity android:name="com.capacitorjs.plugins.easyads.activity.NativeExpressActivity" />
         <activity android:name="com.capacitorjs.plugins.easyads.activity.RewardVideoActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.activity.BannerActivity" />
         <activity android:name="com.capacitorjs.plugins.easyads.activity.FullScreenVideoActivity" />
         <activity android:name="com.capacitorjs.plugins.easyads.activity.InterstitialActivity" android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity android:name="com.capacitorjs.plugins.easyads.activity.SplashToMainActivity" />

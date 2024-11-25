@@ -5,7 +5,6 @@ import android.content.Intent;
 
 import androidx.activity.result.ActivityResult;
 
-import com.capacitorjs.plugins.easyads.activity.BannerActivity;
 import com.capacitorjs.plugins.easyads.activity.DrawActivity;
 import com.capacitorjs.plugins.easyads.activity.FullScreenVideoActivity;
 import com.capacitorjs.plugins.easyads.activity.InterstitialActivity;
@@ -18,6 +17,7 @@ import com.capacitorjs.plugins.easyads.dialog.SplashDialog;
 import com.capacitorjs.plugins.easyads.model.ConfigModel;
 import com.capacitorjs.plugins.easyads.model.ResultModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
+import com.capacitorjs.plugins.easyads.view.BannerRelativeLayout;
 import com.easyads.core.BuildConfig;
 import com.easyads.model.EALogLevel;
 import com.getcapacitor.JSObject;
@@ -59,10 +59,11 @@ public class EasyAdsPlugin extends Plugin {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
         //获取参数
+        String name = call.getString("name");
         String mode = call.getString("mode", "dialog");
         //将配置转换成EasyADController需要的格式
         // TODO: check setting format
-        SettingModel setting = SettingModel.create(this.config, "splash");
+        SettingModel setting = SettingModel.create(this.config, name);
         //选择模式
         switch (mode) {
             case "page":
@@ -85,11 +86,9 @@ public class EasyAdsPlugin extends Plugin {
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), BannerActivity.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
+        //初始化BannerView
+        Activity activity = getActivity();
+        activity.runOnUiThread(() -> new BannerRelativeLayout(activity, setting).loadBanner());
     }
 
     @PluginMethod

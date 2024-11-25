@@ -31,11 +31,6 @@ public class SplashDialog extends Dialog {
 
         logo = findViewById(R.id.ll_logo);
 
-        new EasyADController(context).loadSplash(setting.toJson(), adContainer, logo, false, new EasyADController.SplashCallBack() {
-            @Override
-            public void jumpMain() {
-                dismiss();
-            }
-        });
+        new EasyADController(context).loadSplash(setting.toJson(), adContainer, logo, false, () -> dismiss());
     }
 }
