@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.adspot;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -26,13 +26,10 @@ public class SplashActivity extends BaseActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
-        setContentView(R.layout.activity_splash_custom_logo);
-        adContainer = findViewById(R.id.splash_container);
+        if (actionBar != null) actionBar.hide();
 
-        logo = findViewById(R.id.ll_logo);
+        setContentView(R.layout.activity_splash_custom_logo);
+
 
         //初始化广告处理封装类
         EasyADController ad = new EasyADController(this);
@@ -44,8 +41,10 @@ public class SplashActivity extends BaseActivity {
         //     jsonName = "splash_cus_config.json";
         // }
 
-        //获取配置
+        //获取参数
         SettingModel setting = getIntent().getParcelableExtra("setting");
+        adContainer = findViewById(R.id.splash_container);
+        logo = findViewById(R.id.ll_logo);
         /**
          * 加载广告
          */

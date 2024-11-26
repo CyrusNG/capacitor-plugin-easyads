@@ -13,13 +13,13 @@ import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 
 @SuppressLint("ViewConstructor")
-public class BannerRelativeLayout extends RelativeLayout {
+public class BannerAdspot extends RelativeLayout {
     Activity context;
     SettingModel setting;
     ViewGroup appRootViewGroup;
     EasyADController ad;
 
-    public BannerRelativeLayout(@NonNull final Activity context, SettingModel setting) {
+    public BannerAdspot(@NonNull final Activity context, SettingModel setting) {
         super(context);
         //保存当前activity
         this.context = context;
@@ -32,9 +32,9 @@ public class BannerRelativeLayout extends RelativeLayout {
     }
 
 
-    public void loadBanner() {
+    public void load() {
         //先销毁广告（如有）
-        this.destroyBanner();
+        this.destroy();
         //找到banner_layout
         RelativeLayout adContainer = this.findViewById(R.id.banner_layout);
         //初始化广告处理封装类
@@ -45,7 +45,7 @@ public class BannerRelativeLayout extends RelativeLayout {
         //this.bannerView = LayoutInflater.from(context).inflate(R.layout.activity_banner, rootViewGroup, true);
     }
 
-    public void destroyBanner() {
+    public void destroy() {
         //销毁广告
         if (this.ad != null) this.ad.destroy();
         //删除view

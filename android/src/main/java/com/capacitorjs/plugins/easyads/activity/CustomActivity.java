@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.adspot;
+package com.capacitorjs.plugins.easyads.activity;
 
 import android.app.Activity;
 import android.content.Intent;

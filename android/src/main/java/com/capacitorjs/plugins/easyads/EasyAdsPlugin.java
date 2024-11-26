@@ -5,19 +5,19 @@ import android.content.Intent;
 
 import androidx.activity.result.ActivityResult;
 
-import com.capacitorjs.plugins.easyads.adspot.DrawActivity;
-import com.capacitorjs.plugins.easyads.adspot.FullScreenVideoActivity;
-import com.capacitorjs.plugins.easyads.adspot.InterstitialActivity;
-import com.capacitorjs.plugins.easyads.adspot.NativeExpressActivity;
-import com.capacitorjs.plugins.easyads.adspot.NativeExpressRecyclerViewActivity;
-import com.capacitorjs.plugins.easyads.adspot.RewardVideoActivity;
-import com.capacitorjs.plugins.easyads.adspot.SplashActivity;
-import com.capacitorjs.plugins.easyads.adspot.CustomActivity;
-import com.capacitorjs.plugins.easyads.adspot.SplashDialog;
+import com.capacitorjs.plugins.easyads.activity.DrawActivity;
+import com.capacitorjs.plugins.easyads.adspot.FullScreenVideoAdspot;
+import com.capacitorjs.plugins.easyads.adspot.InterstitialAdspot;
+import com.capacitorjs.plugins.easyads.activity.NativeExpressActivity;
+import com.capacitorjs.plugins.easyads.activity.NativeExpressRecyclerViewActivity;
+import com.capacitorjs.plugins.easyads.adspot.RewardVideoAdspot;
+import com.capacitorjs.plugins.easyads.activity.SplashActivity;
+import com.capacitorjs.plugins.easyads.activity.CustomActivity;
+import com.capacitorjs.plugins.easyads.adspot.SplashAdspot;
 import com.capacitorjs.plugins.easyads.model.ConfigModel;
 import com.capacitorjs.plugins.easyads.model.ResultModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
-import com.capacitorjs.plugins.easyads.adspot.BannerRelativeLayout;
+import com.capacitorjs.plugins.easyads.adspot.BannerAdspot;
 import com.easyads.core.BuildConfig;
 import com.easyads.model.EALogLevel;
 import com.getcapacitor.JSObject;
@@ -74,7 +74,7 @@ public class EasyAdsPlugin extends Plugin {
             case "dialog":
             default:
                 Activity activity = getActivity();
-                activity.runOnUiThread(() -> new SplashDialog(activity, setting).show());
+                activity.runOnUiThread(() -> new SplashAdspot(activity, setting).show());
         }
     }
 
@@ -86,9 +86,50 @@ public class EasyAdsPlugin extends Plugin {
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
-        //初始化BannerView
+        //加载Banner广告
         Activity activity = getActivity();
-        activity.runOnUiThread(() -> new BannerRelativeLayout(activity, setting).loadBanner());
+        activity.runOnUiThread(() -> new BannerAdspot(activity, setting).load());
+    }
+
+    @PluginMethod
+    public void interstitial(PluginCall call) {
+        //检查初始化状态
+        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //获取参数
+        String name = call.getString("name");
+        //将配置转换成EasyADController需要的格式
+        SettingModel setting = SettingModel.create(this.config, name);
+        //加载插屏广告
+        Activity activity = getActivity();
+        activity.runOnUiThread(() -> new InterstitialAdspot(activity, setting).load());
+    }
+
+    @PluginMethod
+    public void rewardVideo(PluginCall call) {
+        //检查初始化状态
+        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //获取参数
+        String name = call.getString("name");
+        //将配置转换成EasyADController需要的格式
+        SettingModel setting = SettingModel.create(this.config, name);
+        //加载激励视频广告
+        Activity activity = getActivity();
+        activity.runOnUiThread(() -> new RewardVideoAdspot(activity, setting).load());
+    }
+
+    @PluginMethod
+    public void fullVideo(PluginCall call) {
+        //检查初始化状态
+        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //获取参数
+        String name = call.getString("name");
+        //将配置转换成EasyADController需要的格式
+        SettingModel setting = SettingModel.create(this.config, name);
+        //加入参数到Intent
+        Intent intent = new Intent(getContext(), FullScreenVideoAdspot.class);
+        intent.putExtra("setting", setting);
+        //打开Activity
+        startActivityForResult(call, intent, "onStartActivityCallback");
     }
 
     @PluginMethod
@@ -107,21 +148,6 @@ public class EasyAdsPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void rewardVideo(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), RewardVideoActivity.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
-    }
-
-    @PluginMethod
     public void nativeExpressRecyclerView(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
@@ -131,36 +157,6 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加入参数到Intent
         Intent intent = new Intent(getContext(), NativeExpressRecyclerViewActivity.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
-    }
-
-    @PluginMethod
-    public void interstitial(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), InterstitialActivity.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
-    }
-
-    @PluginMethod
-    public void fullVideo(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), FullScreenVideoActivity.class);
         intent.putExtra("setting", setting);
         //打开Activity
         startActivityForResult(call, intent, "onStartActivityCallback");

@@ -13,12 +13,12 @@ import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 
-public class SplashDialog extends Dialog {
+public class SplashAdspot extends Dialog {
     LinearLayout logo;
     FrameLayout adContainer;
 
 
-    public SplashDialog(@NonNull final Activity context, SettingModel setting) {
+    public SplashAdspot(@NonNull final Activity context, SettingModel setting) {
         super(context);
         setContentView(R.layout.activity_splash_custom_logo);
         //设置window背景，默认的背景会有Padding值，不能全屏。当然不一定要是透明，你可以设置其他背景，替换默认的背景即可。
