@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="loadNEAD"
-        android:text="重新加载" />
-
     <FrameLayout
         android:id="@+id/native_express_container"
         android:layout_width="match_parent"

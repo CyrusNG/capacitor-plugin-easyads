@@ -22,13 +22,12 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         //全屏设置
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         ActionBar actionBar = getActionBar();
         if (actionBar != null) actionBar.hide();
 
-        setContentView(R.layout.activity_splash_custom_logo);
+        setContentView(R.layout.adspot_splash);
 
 
         //初始化广告处理封装类

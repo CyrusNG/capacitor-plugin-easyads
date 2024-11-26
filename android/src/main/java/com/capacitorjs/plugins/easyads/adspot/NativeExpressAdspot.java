@@ -2,33 +2,32 @@ package com.capacitorjs.plugins.easyads.adspot;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-
-import androidx.annotation.NonNull;
-
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+
+import androidx.annotation.NonNull;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 
 @SuppressLint("ViewConstructor")
-public class BannerAdspot extends RelativeLayout {
+public class NativeExpressAdspot extends RelativeLayout {
     Activity context;
     SettingModel setting;
-    ViewGroup appRootViewGroup;
+    ViewGroup nativeContainer;
     EasyADController ad;
 
-    public BannerAdspot(@NonNull final Activity context, SettingModel setting) {
+    public NativeExpressAdspot(@NonNull final Activity context, SettingModel setting, ViewGroup nativeContainer) {
         super(context);
         //保存当前activity
         this.context = context;
         //保存当前setting
         this.setting = setting;
+        //保存广告位
+        this.nativeContainer = nativeContainer;
         //加载layout
-        inflate(getContext(), R.layout.adspot_banner, this);
-        //获取当前activity的根ViewGroup
-        this.appRootViewGroup = (ViewGroup) ((ViewGroup) this.context.findViewById(android.R.id.content)).getChildAt(0);
+        inflate(getContext(), R.layout.adspot_native_express, this);
     }
 
 
@@ -36,20 +35,21 @@ public class BannerAdspot extends RelativeLayout {
         //先销毁广告（如有）
         this.destroy();
         //找到banner_layout
-        RelativeLayout adContainer = this.findViewById(R.id.banner_container);
+        RelativeLayout adContainer = this.findViewById(R.id.native_express_container);
         //初始化广告处理封装类
         this.ad = new EasyADController(this.context);
         //加载banner并在成功时在appRootViewGroup中添加此RelativeLayout
-        this.ad.loadBanner(this.setting.toJson(), adContainer, () -> this.appRootViewGroup.addView(this));
+        this.ad.loadNativeExpress(this.setting.toJson(), adContainer, () -> this.nativeContainer.addView(this));
         //把activity_banner嵌入当前activity中
-        //this.bannerView = LayoutInflater.from(context).inflate(R.layout.activity_banner, rootViewGroup, true);
+        //this.bannerView = LayoutInflater.from(context).inflate(R.layout.activity_native_express, rootViewGroup, true);
     }
 
     public void destroy() {
         //销毁广告
         if (this.ad != null) this.ad.destroy();
         //删除view
-        if (this.appRootViewGroup != null) this.appRootViewGroup.removeView(this);
+        if (this.nativeContainer != null) this.nativeContainer.removeView(this);
     }
 
 }
+

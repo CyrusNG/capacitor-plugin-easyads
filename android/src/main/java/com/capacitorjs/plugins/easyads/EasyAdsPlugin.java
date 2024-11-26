@@ -2,13 +2,14 @@ package com.capacitorjs.plugins.easyads;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.view.ViewGroup;
 
 import androidx.activity.result.ActivityResult;
 
 import com.capacitorjs.plugins.easyads.activity.DrawActivity;
 import com.capacitorjs.plugins.easyads.adspot.FullScreenVideoAdspot;
 import com.capacitorjs.plugins.easyads.adspot.InterstitialAdspot;
-import com.capacitorjs.plugins.easyads.activity.NativeExpressActivity;
+import com.capacitorjs.plugins.easyads.adspot.NativeExpressAdspot;
 import com.capacitorjs.plugins.easyads.activity.NativeExpressRecyclerViewActivity;
 import com.capacitorjs.plugins.easyads.adspot.RewardVideoAdspot;
 import com.capacitorjs.plugins.easyads.activity.SplashActivity;
@@ -60,22 +61,12 @@ public class EasyAdsPlugin extends Plugin {
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
         //获取参数
         String name = call.getString("name");
-        String mode = call.getString("mode", "dialog");
         //将配置转换成EasyADController需要的格式
         // TODO: check setting format
         SettingModel setting = SettingModel.create(this.config, name);
         //选择模式
-        switch (mode) {
-            case "page":
-                Intent intent = new Intent(getContext(), SplashActivity.class);
-                intent.putExtra("setting", setting);
-                startActivityForResult(call, intent, "onStartActivityCallback");
-                break;
-            case "dialog":
-            default:
-                Activity activity = getActivity();
-                activity.runOnUiThread(() -> new SplashAdspot(activity, setting).show());
-        }
+        Activity activity = getActivity();
+        activity.runOnUiThread(() -> new SplashAdspot(activity, setting).show());
     }
 
     @PluginMethod
@@ -125,11 +116,9 @@ public class EasyAdsPlugin extends Plugin {
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), FullScreenVideoAdspot.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
+        //加载全屏视频广告
+        Activity activity = getActivity();
+        activity.runOnUiThread(() -> new FullScreenVideoAdspot(activity, setting).load());
     }
 
     @PluginMethod
@@ -138,13 +127,13 @@ public class EasyAdsPlugin extends Plugin {
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
         //获取参数
         String name = call.getString("name");
+        Integer containerId = call.getInt("containerId");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), NativeExpressActivity.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
+        //加载原生模板广告
+        Activity activity = getActivity();
+        ViewGroup nativeContainer = (ViewGroup) activity.findViewById(containerId);
+        activity.runOnUiThread(() -> new NativeExpressAdspot(activity, setting, nativeContainer).load());
     }
 
     @PluginMethod

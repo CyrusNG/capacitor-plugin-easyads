@@ -292,7 +292,7 @@ public class EasyADController {
      *
      * @param adContainer 广告的承载布局
      */
-    public void loadNativeExpress(String configJson, ViewGroup adContainer) {
+    public void loadNativeExpress(String configJson, ViewGroup adContainer, final Callback callBack) {
         //同一位置广告，已展示过不再重复发起请求
         if (hasNativeShow) { EALog.d("loadNativeExpress hasNativeShow"); return; }
 
@@ -306,7 +306,7 @@ public class EasyADController {
         //推荐：核心事件监听回调
         EANativeExpressListener listener = new EANativeExpressListener() {
             @Override
-            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); }
+            public void onAdSucceed() { if(callBack != null) callBack.run(); logAndToast(mActivity, "广告加载成功"); }
             @Override
             public void onAdRenderSuccess() { logAndToast(mActivity, "广告渲染成功"); }
             @Override
