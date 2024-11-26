@@ -18,7 +18,7 @@ import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.easyads.model.EasyAdError;
 
-public class SplashAdspot extends Dialog {
+public class SplashAdspot extends Dialog implements BaseAdspot {
     LinearLayout logo;
     FrameLayout adContainer;
     Activity context;
@@ -43,6 +43,7 @@ public class SplashAdspot extends Dialog {
         this.logo = findViewById(R.id.ll_logo);
     }
 
+    @Override
     public void load(AdCallback pluginCallback) {
         //先销毁广告（如有）
         this.destroy();
@@ -61,9 +62,9 @@ public class SplashAdspot extends Dialog {
             public void fail(EasyAdError error) { pluginCallback.fail(error); }
         };
         this.ad.loadSplash(setting.toJsonString(), this.adContainer, this.logo, false, adspotCallback);
-
     }
 
+    @Override
     public void destroy() {
         //销毁广告
         if (this.ad != null) this.ad.destroy();

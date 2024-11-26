@@ -8,7 +8,7 @@ import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
 
-public class RewardVideoAdspot {
+public class RewardVideoAdspot implements BaseAdspot {
     Activity context;
     SettingModel setting;
     EasyADController ad;
@@ -22,12 +22,13 @@ public class RewardVideoAdspot {
         this.ad = new EasyADController(context);
     }
 
-
+    @Override
     public void load(AdCallback pluginCallback) {
         this.ad.initReward(this.setting.toJsonString(), pluginCallback).loadAndShow();
     }
 
-    public void destory() {
+    @Override
+    public void destroy() {
         //销毁广告
         if (this.ad != null) this.ad.destroy();
     }

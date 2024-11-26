@@ -14,7 +14,7 @@ import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.easyads.model.EasyAdError;
 
 @SuppressLint("ViewConstructor")
-public class NativeExpressAdspot extends RelativeLayout {
+public class NativeExpressAdspot extends RelativeLayout implements BaseAdspot {
     Activity context;
     SettingModel setting;
     ViewGroup nativeContainer;
@@ -32,7 +32,7 @@ public class NativeExpressAdspot extends RelativeLayout {
         inflate(getContext(), R.layout.adspot_native_express, this);
     }
 
-
+    @Override
     public void load(AdCallback pluginCallback) {
         //先销毁广告（如有）
         this.destroy();
@@ -58,6 +58,7 @@ public class NativeExpressAdspot extends RelativeLayout {
         //this.bannerView = LayoutInflater.from(context).inflate(R.layout.activity_native_express, rootViewGroup, true);
     }
 
+    @Override
     public void destroy() {
         //销毁广告
         if (this.ad != null) this.ad.destroy();

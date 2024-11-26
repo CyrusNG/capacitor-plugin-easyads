@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResult;
-
 import com.capacitorjs.plugins.easyads.activity.DrawActivity;
+import com.capacitorjs.plugins.easyads.adspot.BaseAdspot;
 import com.capacitorjs.plugins.easyads.adspot.FullScreenVideoAdspot;
 import com.capacitorjs.plugins.easyads.adspot.InterstitialAdspot;
 import com.capacitorjs.plugins.easyads.adspot.NativeExpressAdspot;
@@ -27,17 +26,19 @@ import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
-import com.getcapacitor.annotation.ActivityCallback;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.hjq.toast.ToastUtils;
 import com.easyads.EasyAds;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 @CapacitorPlugin(name = "EasyAds")
 public class EasyAdsPlugin extends Plugin {
 
     private ConfigModel config;
+
+    private final HashMap<String, BaseAdspot> adspotList = new HashMap<>();
 
     @PluginMethod
     public void init(PluginCall call) {
@@ -71,7 +72,11 @@ public class EasyAdsPlugin extends Plugin {
         //加载Splash广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("splash", callId, name);
-        activity.runOnUiThread(() -> new SplashAdspot(activity, setting).load(callback));
+        activity.runOnUiThread(() -> {
+            BaseAdspot ad = new SplashAdspot(activity, setting);
+            //adspotList.put(callId, ad);
+            ad.load(callback);
+        });
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
     }
@@ -89,7 +94,11 @@ public class EasyAdsPlugin extends Plugin {
         //加载Banner广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("banner", callId, name);
-        activity.runOnUiThread(() -> new BannerAdspot(activity, setting).load(callback));
+        activity.runOnUiThread(() -> {
+            BaseAdspot ad = new BannerAdspot(activity, setting);
+            adspotList.put(callId, ad);
+            ad.load(callback);
+        });
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
     }
@@ -107,7 +116,11 @@ public class EasyAdsPlugin extends Plugin {
         //加载插屏广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
-        activity.runOnUiThread(() -> new InterstitialAdspot(activity, setting).load(callback));
+        activity.runOnUiThread(() -> {
+            BaseAdspot ad = new InterstitialAdspot(activity, setting);
+            //adspotList.put(callId, ad);
+            ad.load(callback);
+        });
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
 
@@ -126,7 +139,11 @@ public class EasyAdsPlugin extends Plugin {
         //加载激励视频广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
-        activity.runOnUiThread(() -> new RewardVideoAdspot(activity, setting).load(callback));
+        activity.runOnUiThread(() -> {
+            BaseAdspot ad = new RewardVideoAdspot(activity, setting);
+            //adspotList.put(callId, ad);
+            ad.load(callback);
+        });
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
 
@@ -145,7 +162,11 @@ public class EasyAdsPlugin extends Plugin {
         //加载全屏视频广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
-        activity.runOnUiThread(() -> new FullScreenVideoAdspot(activity, setting).load(callback));
+        activity.runOnUiThread(() -> {
+            BaseAdspot ad = new FullScreenVideoAdspot(activity, setting);
+            //adspotList.put(callId, ad);
+            ad.load(callback);
+        });
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
     }
@@ -165,7 +186,11 @@ public class EasyAdsPlugin extends Plugin {
         Activity activity = getActivity();
         ViewGroup nativeContainer = (ViewGroup) activity.findViewById(containerId);
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
-        activity.runOnUiThread(() -> new NativeExpressAdspot(activity, setting, nativeContainer).load(callback));
+        activity.runOnUiThread(() -> {
+            BaseAdspot ad = new NativeExpressAdspot(activity, setting, nativeContainer);
+            adspotList.put(callId, ad);
+            ad.load(callback);
+        });
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
     }
@@ -227,10 +252,14 @@ public class EasyAdsPlugin extends Plugin {
         call.resolve(ResultModel.create(callId).toJsObject());
     }
 
-    @ActivityCallback
-    private void onStartActivityCallback(PluginCall call, ActivityResult result) {
-        if (call == null) return;
-        call.resolve(ResultModel.create("<CallID>").toJsObject());
+    @PluginMethod
+    public void destroy(PluginCall call) {
+        //获取参数
+        String callId = call.getString("callId");
+        //查找目标Adspot
+        BaseAdspot targetAdspot = this.adspotList.get(callId);
+        //销毁广告位(如有)
+        if(targetAdspot != null) getActivity().runOnUiThread(() -> targetAdspot.destroy());
     }
 
     private AdCallback createAdCallback(String type, String call, String tag) {
