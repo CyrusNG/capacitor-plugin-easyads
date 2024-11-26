@@ -23,8 +23,8 @@ public class RewardVideoAdspot {
     }
 
 
-    public void load(AdCallback callback) {
-        this.ad.initReward(this.setting.toJsonString(), callback).loadAndShow();
+    public void load(AdCallback pluginCallback) {
+        this.ad.initReward(this.setting.toJsonString(), pluginCallback).loadAndShow();
     }
 
     public void destory() {

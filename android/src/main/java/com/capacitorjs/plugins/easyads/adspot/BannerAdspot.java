@@ -12,6 +12,7 @@ import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
+import com.easyads.model.EasyAdError;
 
 @SuppressLint("ViewConstructor")
 public class BannerAdspot extends RelativeLayout {
@@ -32,8 +33,7 @@ public class BannerAdspot extends RelativeLayout {
         this.appRootViewGroup = (ViewGroup) ((ViewGroup) this.context.findViewById(android.R.id.content)).getChildAt(0);
     }
 
-
-    public void load(AdCallback callback) {
+    public void load(AdCallback pluginCallback) {
         //先销毁广告（如有）
         this.destroy();
         //找到banner_layout
@@ -41,8 +41,18 @@ public class BannerAdspot extends RelativeLayout {
         //初始化广告处理封装类
         this.ad = new EasyADController(this.context);
         //加载banner并在成功时在appRootViewGroup中添加此RelativeLayout
-        //TODO: appRootViewGroup.addView(this);
-        this.ad.loadBanner(this.setting.toJsonString(), adContainer, callback);
+        BannerAdspot self = this;
+        AdCallback adspotCallback = new AdCallback() {
+            @Override
+            public void start() { appRootViewGroup.addView(self); pluginCallback.start(); }
+            @Override
+            public void skip() { pluginCallback.skip(); }
+            @Override
+            public void end() { pluginCallback.end(); }
+            @Override
+            public void fail(EasyAdError error) { pluginCallback.fail(error); }
+        };
+        this.ad.loadBanner(this.setting.toJsonString(), adContainer, adspotCallback);
         //把activity_banner嵌入当前activity中
         //this.bannerView = LayoutInflater.from(context).inflate(R.layout.activity_banner, rootViewGroup, true);
     }

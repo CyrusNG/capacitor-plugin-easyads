@@ -72,9 +72,9 @@ public class EasyADController {
         //必须：设置开屏核心回调事件的监听器。
         EASplashListener listener = new EASplashListener() {
             @Override
-            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(logoContainer != null) logoContainer.setVisibility(View.VISIBLE); if(callBack != null) callBack.start(); }
+            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.start(); }
             @Override
-            public void onAdExposure() { logAndToast(mActivity, "广告展示成功"); adContainer.setBackgroundColor(Color.WHITE); }  //设置开屏父布局背景色为白色
+            public void onAdExposure() { logAndToast(mActivity, "广告展示成功"); }
             @Override
             public void onAdClicked() { logAndToast(mActivity, "广告点击"); }
             @Override

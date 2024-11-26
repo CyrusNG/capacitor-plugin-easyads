@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import androidx.annotation.NonNull;
+
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -14,6 +16,7 @@ import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
+import com.easyads.model.EasyAdError;
 
 public class SplashAdspot extends Dialog {
     LinearLayout logo;
@@ -40,13 +43,24 @@ public class SplashAdspot extends Dialog {
         this.logo = findViewById(R.id.ll_logo);
     }
 
-    public void load(AdCallback callback) {
+    public void load(AdCallback pluginCallback) {
         //先销毁广告（如有）
         this.destroy();
         //初始化广告处理封装类
         this.ad = new EasyADController(this.context);
         //加载广告
-        this.ad.loadSplash(setting.toJsonString(), this.adContainer, this.logo, false, callback);
+        SplashAdspot self = this;
+        AdCallback adspotCallback = new AdCallback() {
+            @Override
+            public void start() { self.show(); pluginCallback.start(); }
+            @Override
+            public void skip() { pluginCallback.skip(); }
+            @Override
+            public void end() { self.dismiss(); pluginCallback.end(); }
+            @Override
+            public void fail(EasyAdError error) { pluginCallback.fail(error); }
+        };
+        this.ad.loadSplash(setting.toJsonString(), this.adContainer, this.logo, false, adspotCallback);
 
     }
 

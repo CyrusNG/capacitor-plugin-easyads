@@ -69,7 +69,7 @@ capacitor-plugin-easyad的init()配置:
     ],
     adspots: [
       { tag: "app_splash",            targets: [ "csj-103256285", "ylh-2001447730515391", "bd-2058622", "ks-4000000042" ] },
-      { tag: "project_interstitial",  targets: [ "csj-103254878", "ylh-4080298282218338", "bd-2403633", "ks-4000000276" ] },
+      { tag: "project_interstitial",  targets: [ "csj-103260324", "ylh-4080298282218338", "bd-2403633", "ks-4000000276" ] },
       { tag: "task_banner",           targets: [ "csj-103256315", "ylh-4080052898050840", "bd-2015351"                  ] },   // 320dp x 50dp
       { tag: "report_reward_video",   targets: [ "csj-103256483", "ylh-9011264358826997", "bd-5989414", "ks-90009001"   ] }
     ]

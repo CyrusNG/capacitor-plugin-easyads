@@ -15,6 +15,7 @@ public abstract class EventModel extends BaseModel implements Parcelable {
   abstract Object error();
 
   public static EventModel create(String type, String event, String call, String tag, Object error) {
+    if(error == null) error = new Object();
     return new AutoParcelGson_EventModel(type, event, call, tag, error);
   }
 

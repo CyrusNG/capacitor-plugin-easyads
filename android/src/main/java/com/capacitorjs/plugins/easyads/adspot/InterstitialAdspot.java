@@ -23,8 +23,8 @@ public class InterstitialAdspot {
     }
 
 
-    public void load(AdCallback callback) {
-        this.ad.initInterstitial(this.setting.toJsonString(), callback).loadAndShow();
+    public void load(AdCallback pluginCallback) {
+        this.ad.initInterstitial(this.setting.toJsonString(), pluginCallback).loadAndShow();
     }
 
     public void destory() {

@@ -23,8 +23,8 @@ public class FullScreenVideoAdspot {
     }
 
 
-    public void load(AdCallback callback) {
-        this.ad.initFullVideo(this.setting.toJsonString(), callback).loadAndShow();
+    public void load(AdCallback pluginCallback) {
+        this.ad.initFullVideo(this.setting.toJsonString(), pluginCallback).loadAndShow();
     }
 
     public void destory() {
