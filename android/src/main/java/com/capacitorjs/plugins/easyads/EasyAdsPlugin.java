@@ -12,15 +12,17 @@ import com.capacitorjs.plugins.easyads.adspot.InterstitialAdspot;
 import com.capacitorjs.plugins.easyads.adspot.NativeExpressAdspot;
 import com.capacitorjs.plugins.easyads.activity.NativeExpressRecyclerViewActivity;
 import com.capacitorjs.plugins.easyads.adspot.RewardVideoAdspot;
-import com.capacitorjs.plugins.easyads.activity.SplashActivity;
 import com.capacitorjs.plugins.easyads.activity.CustomActivity;
 import com.capacitorjs.plugins.easyads.adspot.SplashAdspot;
 import com.capacitorjs.plugins.easyads.model.ConfigModel;
+import com.capacitorjs.plugins.easyads.model.EventModel;
 import com.capacitorjs.plugins.easyads.model.ResultModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.adspot.BannerAdspot;
+import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.easyads.core.BuildConfig;
 import com.easyads.model.EALogLevel;
+import com.easyads.model.EasyAdError;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
@@ -31,6 +33,8 @@ import com.hjq.toast.ToastUtils;
 import com.easyads.EasyAds;
 
 import org.json.JSONException;
+
+import java.util.UUID;
 
 @CapacitorPlugin(name = "EasyAds")
 public class EasyAdsPlugin extends Plugin {
@@ -59,72 +63,101 @@ public class EasyAdsPlugin extends Plugin {
     public void splash(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         // TODO: check setting format
         SettingModel setting = SettingModel.create(this.config, name);
-        //选择模式
+        //加载Splash广告
         Activity activity = getActivity();
-        activity.runOnUiThread(() -> new SplashAdspot(activity, setting).show());
+        AdCallback callback = this.createAdCallback("splash", callId, name);
+        activity.runOnUiThread(() -> new SplashAdspot(activity, setting).load(callback));
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
     }
 
     @PluginMethod
     public void banner(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
         //加载Banner广告
         Activity activity = getActivity();
-        activity.runOnUiThread(() -> new BannerAdspot(activity, setting).load());
+        AdCallback callback = this.createAdCallback("banner", callId, name);
+        activity.runOnUiThread(() -> new BannerAdspot(activity, setting).load(callback));
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
     }
 
     @PluginMethod
     public void interstitial(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
         //加载插屏广告
         Activity activity = getActivity();
-        activity.runOnUiThread(() -> new InterstitialAdspot(activity, setting).load());
+        AdCallback callback = this.createAdCallback("interstitial", callId, name);
+        activity.runOnUiThread(() -> new InterstitialAdspot(activity, setting).load(callback));
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+
     }
 
     @PluginMethod
     public void rewardVideo(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
         //加载激励视频广告
         Activity activity = getActivity();
-        activity.runOnUiThread(() -> new RewardVideoAdspot(activity, setting).load());
+        AdCallback callback = this.createAdCallback("interstitial", callId, name);
+        activity.runOnUiThread(() -> new RewardVideoAdspot(activity, setting).load(callback));
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+
     }
 
     @PluginMethod
     public void fullVideo(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
         //加载全屏视频广告
         Activity activity = getActivity();
-        activity.runOnUiThread(() -> new FullScreenVideoAdspot(activity, setting).load());
+        AdCallback callback = this.createAdCallback("interstitial", callId, name);
+        activity.runOnUiThread(() -> new FullScreenVideoAdspot(activity, setting).load(callback));
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
     }
 
     @PluginMethod
     public void nativeExpress(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         Integer containerId = call.getInt("containerId");
@@ -133,13 +166,18 @@ public class EasyAdsPlugin extends Plugin {
         //加载原生模板广告
         Activity activity = getActivity();
         ViewGroup nativeContainer = (ViewGroup) activity.findViewById(containerId);
-        activity.runOnUiThread(() -> new NativeExpressAdspot(activity, setting, nativeContainer).load());
+        AdCallback callback = this.createAdCallback("interstitial", callId, name);
+        activity.runOnUiThread(() -> new NativeExpressAdspot(activity, setting, nativeContainer).load(callback));
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
     }
 
     @PluginMethod
     public void nativeExpressRecyclerView(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
@@ -148,13 +186,17 @@ public class EasyAdsPlugin extends Plugin {
         Intent intent = new Intent(getContext(), NativeExpressRecyclerViewActivity.class);
         intent.putExtra("setting", setting);
         //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
+        startActivityForResult(call, intent, null);
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
     }
 
     @PluginMethod
     public void draw(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
@@ -163,13 +205,17 @@ public class EasyAdsPlugin extends Plugin {
         Intent intent = new Intent(getContext(), DrawActivity.class);
         intent.putExtra("setting", setting);
         //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
+        startActivityForResult(call, intent, null);
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
     }
 
     @PluginMethod
     public void customChannel(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
@@ -178,19 +224,37 @@ public class EasyAdsPlugin extends Plugin {
         Intent intent = new Intent(getContext(), CustomActivity.class);
         intent.putExtra("setting", setting);
         //打开Activity
-        startActivityForResult(call, intent, "onStartActivityCallback");
+        startActivityForResult(call, intent, null);
+        //返回结果
+        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
     }
 
     @ActivityCallback
     private void onStartActivityCallback(PluginCall call, ActivityResult result) {
         if (call == null) return;
         try {
-            ResultModel resultModel = ResultModel.create("SUCCESS", null, null);
-            JSObject data = new JSObject(resultModel.toJson());
+            ResultModel resultModel = ResultModel.create("SUCCESS", null);
+            JSObject data = new JSObject(resultModel.toJsonString());
             call.resolve(data);
         } catch (JSONException e) {
             call.reject(e.getMessage(), "JSONException", e);
         }
+    }
+
+    private AdCallback createAdCallback(String type, String call, String tag) {
+        return new AdCallback() {
+            @Override
+            public void start() { notifyListeners(type, EventModel.create(type, "start", call, tag, null).toJsObject()); }
+
+            @Override
+            public void skip() { notifyListeners(type, EventModel.create(type, "skip", call, tag, null).toJsObject()); }
+
+            @Override
+            public void end() { notifyListeners(type, EventModel.create(type, "end", call, tag, null).toJsObject()); }
+
+            @Override
+            public void fail(EasyAdError error) { notifyListeners(type, EventModel.create(type, "fail", call, tag, error).toJsObject()); }
+        };
     }
 
 }

@@ -9,11 +9,10 @@ import auto.parcelgson.AutoParcelGson;
 @AutoParcelGson
 public abstract class ResultModel extends BaseModel implements Parcelable {
   abstract String code();
-  abstract Object data();
-  abstract Object error();
+  abstract String call();
 
-  public static ResultModel create(String code, Object data, Object error) {
-    return new AutoParcelGson_ResultModel(code, data, error);
+  public static ResultModel create(String code, String call) {
+    return new AutoParcelGson_ResultModel(code, call);
   }
 
   public static ResultModel create(JSObject json) {

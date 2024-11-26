@@ -272,7 +272,7 @@ public class DrawActivity extends BaseActivity {
                     // 获取配置
                     SettingModel setting = getIntent().getParcelableExtra("setting");
                     //请求并展示draw信息流广告
-                    item.ad.loadDraw(setting.toJson(), holder.videoLayout);
+                    item.ad.loadDraw(setting.toJsonString(), holder.videoLayout);
                 }
             }
 

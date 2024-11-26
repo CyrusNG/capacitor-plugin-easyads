@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
+import com.capacitorjs.plugins.easyads.utils.AdCallback;
 
 @SuppressLint("ViewConstructor")
 public class NativeExpressAdspot extends RelativeLayout {
@@ -31,7 +32,7 @@ public class NativeExpressAdspot extends RelativeLayout {
     }
 
 
-    public void load() {
+    public void load(AdCallback callback) {
         //先销毁广告（如有）
         this.destroy();
         //找到banner_layout
@@ -39,7 +40,8 @@ public class NativeExpressAdspot extends RelativeLayout {
         //初始化广告处理封装类
         this.ad = new EasyADController(this.context);
         //加载banner并在成功时在appRootViewGroup中添加此RelativeLayout
-        this.ad.loadNativeExpress(this.setting.toJson(), adContainer, () -> this.nativeContainer.addView(this));
+        //TODO: this.nativeContainer.addView(this)
+        this.ad.loadNativeExpress(this.setting.toJsonString(), adContainer, callback);
         //把activity_banner嵌入当前activity中
         //this.bannerView = LayoutInflater.from(context).inflate(R.layout.activity_native_express, rootViewGroup, true);
     }

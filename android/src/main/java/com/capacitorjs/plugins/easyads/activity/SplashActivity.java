@@ -47,7 +47,7 @@ public class SplashActivity extends BaseActivity {
         /**
          * 加载广告
          */
-        ad.loadSplash(setting.toJson(), adContainer, logo, true, () -> goToMainActivity());
+        ad.loadSplash(setting.toJsonString(), adContainer, logo, true, null);
     }
 
 

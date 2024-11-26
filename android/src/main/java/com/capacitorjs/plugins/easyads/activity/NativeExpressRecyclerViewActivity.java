@@ -107,7 +107,7 @@ public class NativeExpressRecyclerViewActivity extends BaseActivity {
                 SettingModel setting = mActivity.getIntent().getParcelableExtra("setting");
                 //核心步骤3：如果是广告布局，执行广告加载
                 EasyADController ad = mData.get(position).ad;
-                ad.loadNativeExpress(setting.toJson(), customViewHolder.container, null);
+                ad.loadNativeExpress(setting.toJsonString(), customViewHolder.container, null);
             } else {
                 customViewHolder.title.setText(mData.get(position).getTitle());
             }

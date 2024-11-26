@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
+import com.capacitorjs.plugins.easyads.utils.AdCallback;
 
 public class InterstitialAdspot {
     Activity context;
@@ -22,8 +23,8 @@ public class InterstitialAdspot {
     }
 
 
-    public void load() {
-        this.ad.initInterstitial(this.setting.toJson()).loadAndShow();
+    public void load(AdCallback callback) {
+        this.ad.initInterstitial(this.setting.toJsonString(), callback).loadAndShow();
     }
 
     public void destory() {
