@@ -32,8 +32,6 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.hjq.toast.ToastUtils;
 import com.easyads.EasyAds;
 
-import org.json.JSONException;
-
 import java.util.UUID;
 
 @CapacitorPlugin(name = "EasyAds")
@@ -43,6 +41,8 @@ public class EasyAdsPlugin extends Plugin {
 
     @PluginMethod
     public void init(PluginCall call) {
+        //生成随机callId
+        String callId = UUID.randomUUID().toString();
         //获取参数
         JSObject config = call.getObject("config");
         //保存配置
@@ -54,9 +54,7 @@ public class EasyAdsPlugin extends Plugin {
         // 初始化 Toast 框架
         ToastUtils.init(getActivity().getApplication());
         // 返回 JSObject 结果
-        JSObject ret = new JSObject();
-        ret.put("result", true);
-        call.resolve(ret);
+        call.resolve(ResultModel.create(callId).toJsObject());
     }
 
     @PluginMethod
@@ -75,7 +73,7 @@ public class EasyAdsPlugin extends Plugin {
         AdCallback callback = this.createAdCallback("splash", callId, name);
         activity.runOnUiThread(() -> new SplashAdspot(activity, setting).load(callback));
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
     }
 
     @PluginMethod
@@ -93,7 +91,7 @@ public class EasyAdsPlugin extends Plugin {
         AdCallback callback = this.createAdCallback("banner", callId, name);
         activity.runOnUiThread(() -> new BannerAdspot(activity, setting).load(callback));
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
     }
 
     @PluginMethod
@@ -111,7 +109,7 @@ public class EasyAdsPlugin extends Plugin {
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
         activity.runOnUiThread(() -> new InterstitialAdspot(activity, setting).load(callback));
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
 
     }
 
@@ -130,7 +128,7 @@ public class EasyAdsPlugin extends Plugin {
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
         activity.runOnUiThread(() -> new RewardVideoAdspot(activity, setting).load(callback));
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
 
     }
 
@@ -149,7 +147,7 @@ public class EasyAdsPlugin extends Plugin {
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
         activity.runOnUiThread(() -> new FullScreenVideoAdspot(activity, setting).load(callback));
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
     }
 
     @PluginMethod
@@ -169,7 +167,7 @@ public class EasyAdsPlugin extends Plugin {
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
         activity.runOnUiThread(() -> new NativeExpressAdspot(activity, setting, nativeContainer).load(callback));
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
     }
 
     @PluginMethod
@@ -188,7 +186,7 @@ public class EasyAdsPlugin extends Plugin {
         //打开Activity
         startActivityForResult(call, intent, null);
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
     }
 
     @PluginMethod
@@ -207,7 +205,7 @@ public class EasyAdsPlugin extends Plugin {
         //打开Activity
         startActivityForResult(call, intent, null);
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
     }
 
     @PluginMethod
@@ -226,19 +224,13 @@ public class EasyAdsPlugin extends Plugin {
         //打开Activity
         startActivityForResult(call, intent, null);
         //返回结果
-        call.resolve(ResultModel.create("SUCCESS", callId).toJsObject());
+        call.resolve(ResultModel.create(callId).toJsObject());
     }
 
     @ActivityCallback
     private void onStartActivityCallback(PluginCall call, ActivityResult result) {
         if (call == null) return;
-        try {
-            ResultModel resultModel = ResultModel.create("SUCCESS", null);
-            JSObject data = new JSObject(resultModel.toJsonString());
-            call.resolve(data);
-        } catch (JSONException e) {
-            call.reject(e.getMessage(), "JSONException", e);
-        }
+        call.resolve(ResultModel.create("<CallID>").toJsObject());
     }
 
     private AdCallback createAdCallback(String type, String call, String tag) {

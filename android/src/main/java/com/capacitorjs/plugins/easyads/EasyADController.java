@@ -2,10 +2,7 @@ package com.capacitorjs.plugins.easyads;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
@@ -32,8 +29,6 @@ import com.capacitorjs.plugins.easyads.adapter.HuaWeiSplashAdapter;
 import com.capacitorjs.plugins.easyads.adapter.XiaoMiSplashAdapter;
 import com.hjq.toast.ToastUtils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.lang.ref.SoftReference;
 
 
