@@ -5,6 +5,8 @@ import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
+import android.graphics.Rect;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -59,11 +61,34 @@ public class BannerAdspot extends RelativeLayout implements BaseAdspot {
     }
 
     @Override
+    public void onViewAdded(View child) {
+        super.onViewAdded(child);
+        underlapStatusBar();
+    }
+
+    @Override
     public void destroy() {
         //销毁广告
         if (this.ad != null) this.ad.destroy();
         //删除view
         if (this.appRootViewGroup != null) this.appRootViewGroup.removeView(this);
+    }
+
+    private void underlapStatusBar() {
+        //获取状态栏高度
+        Rect rectangle = new Rect();
+        this.context.getWindow().getDecorView().getWindowVisibleDisplayFrame(rectangle);
+        int statusBarHeight = rectangle.top;
+        //// 另一种获取状态栏高度的方法
+        //int statusBarHeight = 0;
+        //final Resources resources = context.getResources();
+        //final int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        //if (resourceId > 0) { statusBarHeight = resources.getDimensionPixelSize(resourceId); }
+        //else { statusBarHeight = (int) Math.ceil((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? 24 : 25) * resources.getDisplayMetrics().density); }
+        //设置Padding避免状态栏重叠
+        LayoutParams linearParams = new LayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        linearParams.setMargins(0, statusBarHeight, 0, 0);
+        this.setLayoutParams(linearParams);
     }
 
 }
