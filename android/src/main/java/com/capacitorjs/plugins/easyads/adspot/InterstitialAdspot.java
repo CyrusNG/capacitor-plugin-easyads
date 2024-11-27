@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
+import com.easyads.model.EasyAdError;
 
 public class InterstitialAdspot implements BaseAdspot {
     Activity context;
@@ -18,13 +19,27 @@ public class InterstitialAdspot implements BaseAdspot {
         this.context = context;
         //保存当前setting
         this.setting = setting;
-        //加载layout
-        this.ad = new EasyADController(context);
     }
 
     @Override
     public void load(AdCallback pluginCallback) {
-        this.ad.initInterstitial(this.setting.toJsonString(), pluginCallback).loadAndShow();
+        //先销毁广告（如有）
+        this.destroy();
+        //初始化广告处理封装类
+        this.ad = new EasyADController(this.context);
+        //加载广告
+        InterstitialAdspot self = this;
+        AdCallback adspotCallback = new AdCallback() {
+            @Override
+            public void start() { pluginCallback.start(); }
+            @Override
+            public void skip() { pluginCallback.skip(); }
+            @Override
+            public void end() { pluginCallback.end(); }
+            @Override
+            public void fail(EasyAdError error) { pluginCallback.fail(error); }
+        };
+        this.ad.initInterstitial(this.setting.toJsonString(), adspotCallback).loadAndShow();
     }
 
     @Override
