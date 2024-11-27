@@ -99,6 +99,7 @@ public class SplashAdspot extends Dialog implements BaseAdspot {
                     View.SYSTEM_UI_FLAG_FULLSCREEN |
                     //隐藏导航栏
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    //全屏布局
                     View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
             if (Build.VERSION.SDK_INT >= 19) {
                 uiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;

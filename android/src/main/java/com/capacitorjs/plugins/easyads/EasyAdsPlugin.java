@@ -138,7 +138,7 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加载激励视频广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("interstitial", callId, name);
+        AdCallback callback = this.createAdCallback("rewardVideo", callId, name);
         activity.runOnUiThread(() -> {
             BaseAdspot ad = new RewardVideoAdspot(activity, setting);
             //adspotList.put(callId, ad);
@@ -161,7 +161,7 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加载全屏视频广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("interstitial", callId, name);
+        AdCallback callback = this.createAdCallback("fullVideo", callId, name);
         activity.runOnUiThread(() -> {
             BaseAdspot ad = new FullScreenVideoAdspot(activity, setting);
             //adspotList.put(callId, ad);
@@ -185,7 +185,7 @@ public class EasyAdsPlugin extends Plugin {
         //加载原生模板广告
         Activity activity = getActivity();
         ViewGroup nativeContainer = (ViewGroup) activity.findViewById(containerId);
-        AdCallback callback = this.createAdCallback("interstitial", callId, name);
+        AdCallback callback = this.createAdCallback("nativeExpress", callId, name);
         activity.runOnUiThread(() -> {
             BaseAdspot ad = new NativeExpressAdspot(activity, setting, nativeContainer);
             adspotList.put(callId, ad);
@@ -209,7 +209,7 @@ public class EasyAdsPlugin extends Plugin {
         Intent intent = new Intent(getContext(), NativeExpressRecyclerViewActivity.class);
         intent.putExtra("setting", setting);
         //打开Activity
-        startActivityForResult(call, intent, null);
+        getContext().startActivity(intent);
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
     }
@@ -228,7 +228,7 @@ public class EasyAdsPlugin extends Plugin {
         Intent intent = new Intent(getContext(), DrawActivity.class);
         intent.putExtra("setting", setting);
         //打开Activity
-        startActivityForResult(call, intent, null);
+        getContext().startActivity(intent);
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
     }
@@ -247,7 +247,7 @@ public class EasyAdsPlugin extends Plugin {
         Intent intent = new Intent(getContext(), CustomActivity.class);
         intent.putExtra("setting", setting);
         //打开Activity
-        startActivityForResult(call, intent, null);
+        getContext().startActivity(intent);
         //返回结果
         call.resolve(ResultModel.create(callId).toJsObject());
     }
