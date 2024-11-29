@@ -96,7 +96,7 @@ public class SplashAdspot extends Dialog implements BaseAdspot {
                     //布局位于状态栏下方
                     View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                     //全屏
-                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                    //View.SYSTEM_UI_FLAG_FULLSCREEN |
                     //隐藏导航栏
                     View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
                     //全屏布局
