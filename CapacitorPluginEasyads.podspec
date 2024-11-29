@@ -73,7 +73,7 @@ Pod::Spec.new do |s|
       ks.dependency 'ios/Sources/EasyAdsSDK/Core'
       ks.dependency 'ios/Sources/EasyAdsSDK/Adspot'
       ks.dependency 'KSAdSDK'
-      ks.source_files = 'ios/Sources/EasyAdsSDK/Adapter/Kuaishou/**/*.{h,m}'
+      ks.source_files = 'ios/Sources/EasyAdsSDK/Adapter/KS/**/*.{h,m}'
       ks.frameworks = ["Foundation", "UIKit", "MobileCoreServices", "CoreGraphics", "Security", "SystemConfiguration", "CoreTelephony", "AdSupport", "CoreData", "StoreKit", "AVFoundation", "MediaPlayer", "CoreMedia", "WebKit", "Accelerate", "CoreLocation", "AVKit", "MessageUI", "QuickLook", "AudioToolBox", "AddressBook"]
       ks.libraries =  ["z", "resolv.9", "sqlite3", "c++", "c++abi"]
   end
