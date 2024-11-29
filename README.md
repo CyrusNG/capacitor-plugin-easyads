@@ -1,6 +1,6 @@
 # capacitor-plugin-easyads
 
-A Capacitor Plugin for EasyAds
+A Capacitor Plugin for [EasyAds](https://github.com/bayescom/EasyAds)
 
 ## Install
 
