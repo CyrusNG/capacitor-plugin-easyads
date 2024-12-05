@@ -10,8 +10,8 @@
 #import "CellBuilder.h"
 #import "BYExamCellModel.h"
 
-#import <EasyAdsSDK/EasyAdNativeExpress.h>
-#import <EasyAdsSDK/EasyAdNativeExpressView.h>
+#import "EasyAdNativeExpress.h"
+#import "EasyAdNativeExpressView.h"
 #import "AdDataJsonManager.h"
 @interface DemoListFeedExpressViewController () <UITableViewDelegate, UITableViewDataSource, EasyAdNativeExpressDelegate>
 {

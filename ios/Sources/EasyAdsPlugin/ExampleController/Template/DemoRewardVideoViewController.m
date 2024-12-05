@@ -8,7 +8,7 @@
 
 #import "DemoRewardVideoViewController.h"
 
-#import <EasyAdsSDK/EasyAdRewardVideo.h>
+#import "EasyAdRewardVideo.h"
 #import "AdDataJsonManager.h"
 @interface DemoRewardVideoViewController () <EasyAdRewardVideoDelegate>
 @property (nonatomic, strong) EasyAdRewardVideo *EasyAdRewardVideo;

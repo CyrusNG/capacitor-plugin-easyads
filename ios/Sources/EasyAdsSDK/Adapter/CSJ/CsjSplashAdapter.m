@@ -153,7 +153,7 @@
     [self closeDelegate];
 }
 
-- (void)splashVideoAdDidPlayFinish:(nonnull BUSplashAd *)splashAd didFailWithError:(nonnull NSError *)error {
+- (void)splashVideoAdDidPlayFinish:(nonnull BUSplashAd *)splashAd didFailWithError:(NSError *)error {
     
 }
 
