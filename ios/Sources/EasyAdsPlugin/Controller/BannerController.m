@@ -6,7 +6,7 @@
 //  Copyright © 2019 CherryKing. All rights reserved.
 //
 
-#import "DemoBannerViewController.h"
+#import "BannerController.h"
 #import "EasyAdBanner.h"
 #import "AdDataJsonManager.h"
 @interface DemoBannerViewController () <EasyAdBannerDelegate>

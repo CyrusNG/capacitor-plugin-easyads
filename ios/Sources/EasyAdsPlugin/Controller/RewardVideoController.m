@@ -6,7 +6,7 @@
 //  Copyright © 2020 BAYESCOM. All rights reserved.
 //
 
-#import "DemoRewardVideoViewController.h"
+#import "RewardVideoController.h"
 
 #import "EasyAdRewardVideo.h"
 #import "AdDataJsonManager.h"

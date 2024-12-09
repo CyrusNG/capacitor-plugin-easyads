@@ -6,7 +6,7 @@
 //  Copyright © 2019 Bayescom. All rights reserved.
 //
 
-#import "DemoInterstitialViewController.h"
+#import "InterstitialController.h"
 #import "EasyAdInterstitial.h"
 #import "AdDataJsonManager.h"
 @interface DemoInterstitialViewController () <EasyAdInterstitialDelegate>

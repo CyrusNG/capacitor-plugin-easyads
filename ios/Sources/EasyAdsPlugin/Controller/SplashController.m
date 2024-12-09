@@ -6,7 +6,7 @@
 //  Copyright © 2019 CherryKing. All rights reserved.
 //
 
-#import "DemoSplashViewController.h"
+#import "SplashController.h"
 #import "EasyAdSplash.h"
 #import "AdDataJsonManager.h"
 @interface DemoSplashViewController () <EasyAdSplashDelegate>

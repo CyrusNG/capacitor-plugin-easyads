@@ -6,7 +6,7 @@
 //  Copyright © 2020 bayescom. All rights reserved.
 //
 
-#import "DemoFullScreenVideoController.h"
+#import "FullScreenVideoController.h"
 #import "EasyAdFullScreenVideo.h"
 #import "AdDataJsonManager.h"
 @interface DemoFullScreenVideoController () <EasyAdFullScreenVideoDelegate>
