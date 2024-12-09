@@ -1,5 +1,5 @@
 //
-//  DemoInterstitialViewController.m
+//  InterstitialController.m
 //  advancelib
 //
 //  Created by allen on 2019/12/31.
@@ -9,14 +9,14 @@
 #import "InterstitialController.h"
 #import "EasyAdInterstitial.h"
 #import "AdDataJsonManager.h"
-@interface DemoInterstitialViewController () <EasyAdInterstitialDelegate>
+@interface InterstitialController () <EasyAdInterstitialDelegate>
 @property (nonatomic, strong) EasyAdInterstitial *EasyAdInterstitial;
 @property (nonatomic) bool isAdLoaded;
 @property (nonatomic, strong) NSDictionary *dic;
 
 @end
 
-@implementation DemoInterstitialViewController
+@implementation InterstitialController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

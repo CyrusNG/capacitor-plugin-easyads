@@ -1,5 +1,5 @@
 //
-//  DemoFullScreenVideoController.m
+//  FullScreenVideoController.m
 //  EasyAdsSDKDev
 //
 //  Created by CherryKing on 2020/4/13.
@@ -9,13 +9,13 @@
 #import "FullScreenVideoController.h"
 #import "EasyAdFullScreenVideo.h"
 #import "AdDataJsonManager.h"
-@interface DemoFullScreenVideoController () <EasyAdFullScreenVideoDelegate>
+@interface FullScreenVideoController () <EasyAdFullScreenVideoDelegate>
 @property (nonatomic, strong) EasyAdFullScreenVideo *EasyAdFullScreenVideo;
 @property (nonatomic) bool isAdLoaded;
 
 @end
 
-@implementation DemoFullScreenVideoController
+@implementation FullScreenVideoController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

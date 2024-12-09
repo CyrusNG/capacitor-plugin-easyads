@@ -1,5 +1,5 @@
 //
-//  DemoSplashViewController.m
+//  SplashController.m
 //  AAA
 //
 //  Created by CherryKing on 2019/11/1.
@@ -9,11 +9,11 @@
 #import "SplashController.h"
 #import "EasyAdSplash.h"
 #import "AdDataJsonManager.h"
-@interface DemoSplashViewController () <EasyAdSplashDelegate>
+@interface SplashController () <EasyAdSplashDelegate>
 @property(strong,nonatomic) EasyAdSplash *EasyAdSplash;
 @end
 
-@implementation DemoSplashViewController
+@implementation SplashController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

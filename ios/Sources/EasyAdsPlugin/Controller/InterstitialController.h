@@ -1,5 +1,5 @@
 //
-//  DemoInterstitialViewController.h
+//  InterstitialController.h
 //  advancelib
 //
 //  Created by allen on 2019/12/31.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DemoInterstitialViewController : BaseViewController
+@interface InterstitialController : BaseViewController
 
 @end
 

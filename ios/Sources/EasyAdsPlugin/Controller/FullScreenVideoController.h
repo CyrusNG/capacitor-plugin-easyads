@@ -1,5 +1,5 @@
 //
-//  DemoFullScreenVideoController.h
+//  FullScreenVideoController.h
 //  EasyAdsSDKDev
 //
 //  Created by CherryKing on 2020/4/13.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DemoFullScreenVideoController : BaseViewController
+@interface FullScreenVideoController : BaseViewController
 
 @end
 

@@ -1,5 +1,5 @@
 //
-//  DemoRewardVideoViewController.h
+//  RewardVideoController.h
 //  EasyAdsSDKDemo
 //
 //  Created by CherryKing on 2020/1/3.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DemoRewardVideoViewController : BaseViewController
+@interface RewardVideoController : BaseViewController
 
 @end
 

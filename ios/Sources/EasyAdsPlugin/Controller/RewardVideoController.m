@@ -1,5 +1,5 @@
 //
-//  DemoRewardVideoViewController.m
+//  RewardVideoController.m
 //  EasyAdsSDKDemo
 //
 //  Created by CherryKing on 2020/1/3.
@@ -10,13 +10,13 @@
 
 #import "EasyAdRewardVideo.h"
 #import "AdDataJsonManager.h"
-@interface DemoRewardVideoViewController () <EasyAdRewardVideoDelegate>
+@interface RewardVideoController () <EasyAdRewardVideoDelegate>
 @property (nonatomic, strong) EasyAdRewardVideo *EasyAdRewardVideo;
 @property (nonatomic) bool isAdLoaded; // 激励视频播放器 采用的是边下边播的方式, 理论上拉取数据成功 即可展示, 但如果网速慢导致缓冲速度慢, 则激励视频会出现卡顿
                                        // 广点通推荐在 easyAdRewardVideoOnAdVideoCached 视频缓冲完成后 在掉用showad
 @end
 
-@implementation DemoRewardVideoViewController
+@implementation RewardVideoController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

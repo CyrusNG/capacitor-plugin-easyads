@@ -1,5 +1,5 @@
 //
-//  DemoBannerViewController.h
+//  BannerController.h
 //  Example
 //
 //  Created by CherryKing on 2019/11/8.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DemoBannerViewController : BaseViewController
+@interface BannerController : BaseViewController
 
 
 @end

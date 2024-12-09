@@ -1,5 +1,5 @@
 //
-//  DemoBannerViewController.m
+//  BannerController.m
 //  Example
 //
 //  Created by CherryKing on 2019/11/8.
@@ -9,13 +9,13 @@
 #import "BannerController.h"
 #import "EasyAdBanner.h"
 #import "AdDataJsonManager.h"
-@interface DemoBannerViewController () <EasyAdBannerDelegate>
+@interface BannerController () <EasyAdBannerDelegate>
 @property (nonatomic, strong) EasyAdBanner *EasyAdBanner;
 @property (nonatomic, strong) UIView *contentV;
 
 @end
 
-@implementation DemoBannerViewController
+@implementation BannerController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

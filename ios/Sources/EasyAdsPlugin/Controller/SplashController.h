@@ -1,5 +1,5 @@
 //
-//  DemoSplashViewController.h
+//  SplashController.h
 //  AAA
 //
 //  Created by CherryKing on 2019/11/1.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DemoSplashViewController : BaseViewController
+@interface SplashController : BaseViewController
 
 @end
 
