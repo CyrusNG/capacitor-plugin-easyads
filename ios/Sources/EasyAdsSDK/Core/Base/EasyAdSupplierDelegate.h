@@ -29,7 +29,7 @@
 /// 返回下一个渠道的参数
 /// @param supplier 被加载的渠道
 /// @param error 异常信息
-- (void)easyAdBaseAdapterLoadSuppluer:(nullable EasyAdSupplier *)supplier error:(nullable NSError *)error;
+- (void)easyAdBaseAdapterLoadSupplier:(nullable EasyAdSupplier *)supplier error:(nullable NSError *)error;
 @end
 
 #endif /* EasyAdSupplierDelegate_h */

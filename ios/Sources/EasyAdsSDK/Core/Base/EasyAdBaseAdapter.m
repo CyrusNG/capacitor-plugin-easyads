@@ -154,8 +154,8 @@
     }
 
     // 加载渠道
-    if ([_baseDelegate respondsToSelector:@selector(easyAdBaseAdapterLoadSuppluer:error:)]) {
-        [_baseDelegate easyAdBaseAdapterLoadSuppluer:supplier error:error];
+    if ([_baseDelegate respondsToSelector:@selector(easyAdBaseAdapterLoadSupplier:error:)]) {
+        [_baseDelegate easyAdBaseAdapterLoadSupplier:supplier error:error];
     }
 }
 

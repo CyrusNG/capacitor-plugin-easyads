@@ -55,7 +55,7 @@
 }
 
 /// 返回下一个渠道的参数
-- (void)easyAdBaseAdapterLoadSuppluer:(nullable EasyAdSupplier *)supplier error:(nullable NSError *)error {
+- (void)easyAdBaseAdapterLoadSupplier:(nullable EasyAdSupplier *)supplier error:(nullable NSError *)error {
     // 返回渠道有问题 则不用再执行下面的渠道了
     if (error) {
         if (self.delegate != nil && [self.delegate respondsToSelector:@selector(easyAdFailedWithError:description:)]) {
