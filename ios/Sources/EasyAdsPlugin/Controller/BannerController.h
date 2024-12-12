@@ -6,12 +6,16 @@
 //  Copyright © 2019 CherryKing. All rights reserved.
 //
 
+#import "Capacitor.h"
 #import "BaseViewController.h"
+#import "AdCallbackProtocol.h"
+#import "AdControllerProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface BannerController : BaseViewController
+@interface BannerController : NSObject <AdControllerProtocol>
 
+- (instancetype)initWithViewController:(nullable UIViewController *)viewController pluginCall:(nullable CAPPluginCall *)capPluginCall delegate:(nullable id<AdCallbackProtocol>)callbackDelegate;
 
 @end
 

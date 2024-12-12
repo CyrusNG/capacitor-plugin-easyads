@@ -159,8 +159,8 @@
 //    NSLog(@"百度开屏拉取成功 %@",self.bd_ad);
     [self.adspot reportWithType:EasyAdSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     [self.adspot reportWithType:EasyAdSdkSupplierRepoLoaded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(easyAdUnifiedViewDidLoad)]) {
-        [self.delegate easyAdUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(easyAdSucceed)]) {
+        [self.delegate easyAdSucceed];
     }
 
 //    [self showAd];

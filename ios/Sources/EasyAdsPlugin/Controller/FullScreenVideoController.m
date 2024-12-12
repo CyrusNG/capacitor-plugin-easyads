@@ -77,7 +77,7 @@
 // MARK: ======================= EasyAdFullScreenVideoDelegate =======================
 
 /// 请求广告数据成功后调用
-- (void)easyAdUnifiedViewDidLoad {
+- (void)easyAdSucceed {
     NSLog(@"请求广告数据成功后调用 %s", __func__);
     self.isLoaded = YES;
     [self showProcessWithText:[NSString stringWithFormat:@"%s\r\n 视频缓存成功", __func__]];

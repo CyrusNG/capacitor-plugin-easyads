@@ -20,7 +20,7 @@
 - (void)easyAdClicked;
 
 /// 广告数据请求成功后调用
-- (void)easyAdUnifiedViewDidLoad;
+- (void)easyAdSucceed;
 
 /// 广告关闭的回调
 - (void)easyAdDidClose;

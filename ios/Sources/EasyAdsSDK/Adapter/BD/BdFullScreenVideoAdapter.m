@@ -69,8 +69,8 @@
 
 - (void)fullScreenVideoAdLoaded:(BaiduMobAdExpressFullScreenVideo *)video {
     [self.adspot reportWithType:EasyAdSdkSupplierRepoLoaded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(easyAdUnifiedViewDidLoad)]) {
-        [self.delegate easyAdUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(easyAdSucceed)]) {
+        [self.delegate easyAdSucceed];
     }
 }
 

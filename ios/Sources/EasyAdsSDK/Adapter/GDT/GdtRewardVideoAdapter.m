@@ -63,8 +63,8 @@
     
 //    NSLog(@"广点通激励视频拉取成功 %@",self.gdt_ad);
 
-    if ([self.delegate respondsToSelector:@selector(easyAdUnifiedViewDidLoad)]) {
-        [self.delegate easyAdUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(easyAdSucceed)]) {
+        [self.delegate easyAdSucceed];
     }
 }
 

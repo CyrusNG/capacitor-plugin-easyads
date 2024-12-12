@@ -74,7 +74,7 @@
 // MARK: ======================= EasyAdInterstitialDelegate =======================
 
 /// 请求广告数据成功后调用
-- (void)easyAdUnifiedViewDidLoad {
+- (void)easyAdSucceed {
     NSLog(@"广告数据拉取成功 %s", __func__);
     self.isLoaded = YES;
     [self showProcessWithText:[NSString stringWithFormat:@"%s\r\n 广告数据拉取成功", __func__]];

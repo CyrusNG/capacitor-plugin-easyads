@@ -76,7 +76,7 @@
 
 // MARK: ======================= EasyAdRewardVideoDelegate =======================
 /// 广告数据加载成功
-- (void)easyAdUnifiedViewDidLoad {
+- (void)easyAdSucceed {
     NSLog(@"广告数据拉取成功, 正在缓存... %s", __func__);
     [JDStatusBarNotification showWithStatus:@"广告加载成功" dismissAfter:1.5];
     [self showProcessWithText:[NSString stringWithFormat:@"%s\r\n 广告数据拉取成功", __func__]];

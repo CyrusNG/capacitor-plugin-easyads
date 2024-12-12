@@ -75,8 +75,8 @@
     [self.adspot reportWithType:EasyAdSdkSupplierRepoLoaded supplier:_supplier error:nil];
     _isDidLoad = YES;
 
-    if ([self.delegate respondsToSelector:@selector(easyAdUnifiedViewDidLoad)]) {
-        [self.delegate easyAdUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(easyAdSucceed)]) {
+        [self.delegate easyAdSucceed];
     }
 }
 /**

@@ -88,8 +88,8 @@
  * splash ad material load, ready to display
  */
 - (void)ksad_splashAdContentDidLoad:(KSSplashAdView *)splashAdView {
-    if ([self.delegate respondsToSelector:@selector(easyAdUnifiedViewDidLoad)]) {
-        [self.delegate easyAdUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(easyAdSucceed)]) {
+        [self.delegate easyAdSucceed];
     }
     [self.adspot reportWithType:EasyAdSdkSupplierRepoSucceeded supplier:_supplier error:nil];
     [self.adspot reportWithType:EasyAdSdkSupplierRepoLoaded supplier:_supplier error:nil];
@@ -223,8 +223,8 @@
 //    if (splashViewController) {
 //        // 请求数据成功
 //        [self.adspot reportWithType:EasyAdSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-//        if ([self.delegate respondsToSelector:@selector(easyAdUnifiedViewDidLoad)]) {
-//            [self.delegate easyAdUnifiedViewDidLoad];
+//        if ([self.delegate respondsToSelector:@selector(easyAdSucceed)]) {
+//            [self.delegate easyAdSucceed];
 //        }
 //        self.vc = splashViewController;
 //        if (_supplier.isParallel == YES) {

@@ -60,7 +60,7 @@
 
 // MARK: ======================= EasyAdSplashDelegate =======================
 /// 广告数据拉取成功
-- (void)easyAdUnifiedViewDidLoad {
+- (void)easyAdSucceed {
     NSLog(@"广告数据拉取成功 %s", __func__);
     [self showProcessWithText:[NSString stringWithFormat:@"%s\r\n 广告拉取成功", __func__]];
     [self loadAdWithState:AdState_LoadSucceed];

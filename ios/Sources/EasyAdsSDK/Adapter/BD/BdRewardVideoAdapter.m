@@ -59,8 +59,8 @@
 - (void)rewardedAdLoadSuccess:(BaiduMobAdRewardVideo *)video {
     //    NSLog(@"激励视频请求成功");
     [self.adspot reportWithType:EasyAdSdkSupplierRepoSucceeded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(easyAdUnifiedViewDidLoad)]) {
-        [self.delegate easyAdUnifiedViewDidLoad];
+    if ([self.delegate respondsToSelector:@selector(easyAdSucceed)]) {
+        [self.delegate easyAdSucceed];
     }
 
 }
