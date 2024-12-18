@@ -4,7 +4,7 @@
 @protocol AdCallbackProtocol <NSObject>
 
 @required
-- (void)notify:(nonnull NSString *) event data:(nullable NSDictionary<NSString *,id> *) data;
+- (void)notify:(nonnull NSString *) callId event:(nonnull NSString *) event data:(nullable NSDictionary<NSString *,id> *) data;
 
 @end
 

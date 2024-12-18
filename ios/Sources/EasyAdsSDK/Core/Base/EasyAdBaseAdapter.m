@@ -12,6 +12,10 @@
 #import "EasyAdSdkConfig.h"
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import <BUAdSDK/BUAdSDK.h>
+#import <GDTMobSDK/GDTSDKConfig.h>
+#import <KSAdSDK/KSAdSDK.h>
+#import <BaiduMobAdSDK/BaiduMobAdSetting.h>
 
 @interface EasyAdBaseAdapter ()  <EasyAdSupplierManagerDelegate, EasyAdSupplierDelegate>
 @property (nonatomic, strong) EasyAdSupplierManager *mgr;
@@ -109,54 +113,90 @@
 /// 返回下一个渠道的参数
 - (void)EasyAdSupplierLoadSuppluer:(nullable EasyAdSupplier *)supplier error:(nullable NSError *)error {
 
+    // inited flag
+    __block BOOL inited = YES;
     
-    // 初始化渠道参数
-    NSString *clsName = @"";
+    // 广点通SDK
     if ([supplier.tag isEqualToString:SDK_TAG_GDT]) {
-        clsName = @"GDTSDKConfig";
-    } else if ([supplier.tag isEqualToString:SDK_TAG_CSJ]) {
-        clsName = @"BUAdSDKManager";
-    } else if ([supplier.tag isEqualToString:SDK_TAG_KS]) {
-        clsName = @"KSAdSDKManager";
-    } else if ([supplier.tag isEqualToString:SDK_TAG_BAIDU]){
-        clsName = @"BaiduMobAdSetting";
-    }
-    
-    if ([supplier.tag isEqualToString:SDK_TAG_GDT]) {
-        // 广点通SDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(registerAppId:) withObject:supplier.appId];
+            // 设置inited flag
+            inited = NO;
+            // 初始化
+            [GDTSDKConfig initWithAppId:supplier.appId];
+            // SDK异步处理广告
+            [GDTSDKConfig startWithCompletionHandler:^(BOOL success, NSError *error) {
+                // 加载渠道
+                if ([self.baseDelegate respondsToSelector:@selector(easyAdBaseAdapterLoadSupplier:error:)]) {
+                    [self.baseDelegate easyAdBaseAdapterLoadSupplier:supplier error:error];
+                }
+            }];
         });
+        
+    // 穿山甲SDK
     } else if ([supplier.tag isEqualToString:SDK_TAG_CSJ]) {
-        // 穿山甲SDK
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppID:) withObject:supplier.appId];
+            // 设置inited flag
+            inited = NO;
+            // 创建配置实例
+            BUAdSDKConfiguration *configuration = [BUAdSDKConfiguration configuration];
+            // 请更换为在平台申请的appid
+            configuration.appID = supplier.appId;
+            // 如果使用聚合维度功能，则务必将以下字段设置为YES，并检查工程有引用CSJMediation.framework，这样SDK初始化时将启动聚合相关必要组件
+            configuration.useMediation = YES;
+            // SDK异步处理广告
+            [BUAdSDKManager startWithAsyncCompletionHandler:^(BOOL success, NSError *error) {
+                // 加载渠道
+                if ([self.baseDelegate respondsToSelector:@selector(easyAdBaseAdapterLoadSupplier:error:)]) {
+                    [self.baseDelegate easyAdBaseAdapterLoadSupplier:supplier error:error];
+                }
+            }];
         });
+        
+    // 快手
     } else if ([supplier.tag isEqualToString:SDK_TAG_KS]) {
-        // 快手
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            [NSClassFromString(clsName) performSelector:@selector(setAppId:) withObject:supplier.appId];
+            // 设置inited flag
+            inited = NO;
+            // 初始化
+            KSAdSDKConfiguration *configuration = [KSAdSDKConfiguration configuration];
+            // 请更换为在平台申请的appid
+            configuration.appId = supplier.appId;
+            // SDK异步处理广告
+            [KSAdSDKManager startWithCompletionHandler:^(BOOL success, NSError *error) {
+                // 加载渠道
+                if ([self.baseDelegate respondsToSelector:@selector(easyAdBaseAdapterLoadSupplier:error:)]) {
+                    [self.baseDelegate easyAdBaseAdapterLoadSupplier:supplier error:error];
+                }
+            }];
         });
 
+    // 百度
     } else if ([supplier.tag isEqualToString:SDK_TAG_BAIDU]) {
-        // 百度
         static dispatch_once_t onceToken;
         dispatch_once(&onceToken, ^{
-            id bdSetting = ((id(*)(id,SEL))objc_msgSend)(NSClassFromString(clsName), @selector(sharedInstance));
-            [bdSetting performSelector:@selector(setSupportHttps:) withObject:NO];
-
+            // 设置inited flag
+            inited = NO;
+            // Baidu SDK默认请求https广告，ATS默认开启状态, 可根据需要关闭App Transport Security Settings，通过设置BaiduMobAdSetting的supportHttps，以请求http广告，多个产品只需要设置一次。
+            //[BaiduMobAdSetting sharedInstance].supportHttps = NO;
+            // 加载渠道
+            if ([self.baseDelegate respondsToSelector:@selector(easyAdBaseAdapterLoadSupplier:error:)]) {
+                [self.baseDelegate easyAdBaseAdapterLoadSupplier:supplier error:error];
+            }
         });
+        
+    //其他
     } else {
         
     }
 
     // 加载渠道
-    if ([_baseDelegate respondsToSelector:@selector(easyAdBaseAdapterLoadSupplier:error:)]) {
-        [_baseDelegate easyAdBaseAdapterLoadSupplier:supplier error:error];
+    if (inited && [self.baseDelegate respondsToSelector:@selector(easyAdBaseAdapterLoadSupplier:error:)]) {
+        [self.baseDelegate easyAdBaseAdapterLoadSupplier:supplier error:error];
     }
+
 }
 
 - (void)setSDKVersion {

@@ -34,6 +34,9 @@
 }
 
 - (void)loadAd {
+    // 先去除上次展示的广告
+    [_csj_ad removeFromSuperview];
+    // 重新配置广告并加载
     _csj_ad = [[BUNativeExpressBannerView alloc] initWithSlotID:_supplier.adspotId rootViewController:_adspot.viewController adSize:_adspot.adContainer.bounds.size interval:_adspot.refreshInterval];
     _csj_ad.frame = _adspot.adContainer.bounds;
     _csj_ad.delegate = self;

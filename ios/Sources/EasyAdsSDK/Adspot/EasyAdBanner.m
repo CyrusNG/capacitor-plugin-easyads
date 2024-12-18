@@ -15,7 +15,6 @@
 @property (nonatomic, strong) id adapter;
 
 @property (nonatomic, assign) CGRect frame;
-@property (nonatomic, strong) UIViewController *controller;
 
 @end
 
