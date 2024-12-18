@@ -20,9 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, weak) id<EasyAdInterstitialDelegate> delegate;
 
 - (instancetype)initWithJsonDic:(NSDictionary *)jsonDic
-                 viewController:(UIViewController *)viewController;
-
-
+                 viewController:(nonnull UIViewController *)viewController;
 
 @end
 

@@ -13,13 +13,13 @@
 @optional
 
 /// 广告视频缓存完成
-- (void)easyAdRewardVideoOnAdVideoCached;
+- (void)easyAdVideoCached;
 
 /// 广告视频播放完成
-- (void)easyAdRewardVideoAdDidPlayFinish;
+- (void)easyAdVideoPlayed;
 
 /// 广告到达激励时间
-- (void)easyAdRewardVideoAdDidRewardEffective;
+- (void)easyAdVideoRewardable;
 
 @end
 

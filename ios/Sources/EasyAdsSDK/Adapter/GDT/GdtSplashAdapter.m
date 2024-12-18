@@ -130,8 +130,8 @@
 - (void)splashAdClosed:(GDTSplashAd *)splashAd {
     // 如果时间大于0 且不是因为点击触发的，则认为是点击了跳过
     if (_leftTime > 0 && !_isClick) {
-        if ([self.delegate respondsToSelector:@selector(easyAdSplashOnAdSkipClicked)]) {
-            [self.delegate easyAdSplashOnAdSkipClicked];
+        if ([self.delegate respondsToSelector:@selector(easyAdSkipped)]) {
+            [self.delegate easyAdSkipped];
         }
     } else {
         if ([self.delegate respondsToSelector:@selector(easyAdDidClose)]) {
@@ -142,8 +142,8 @@
 
 - (void)splashAdLifeTime:(NSUInteger)time {
     _leftTime = time;
-    if (time <= 0 && [self.delegate respondsToSelector:@selector(easyAdSplashOnAdCountdownToZero)]) {
-        [self.delegate easyAdSplashOnAdCountdownToZero];
+    if (time <= 0 && [self.delegate respondsToSelector:@selector(easyAdCountdowned)]) {
+        [self.delegate easyAdCountdowned];
     }
 }
 

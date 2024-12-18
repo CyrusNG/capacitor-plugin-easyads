@@ -31,8 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger timeout;
 
 
-- (instancetype)initWithJsonDic:(NSDictionary *_Nonnull)jsonDic
-                 viewController:(UIViewController *)viewController;
+- (instancetype)initWithJsonDic:(NSDictionary *)jsonDic
+                 viewController:(nonnull UIViewController *)viewController;
 
 
 @end

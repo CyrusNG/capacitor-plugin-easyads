@@ -151,8 +151,8 @@
  */
 - (void)ksad_splashAd:(KSSplashAdView *)splashAdView didSkip:(NSTimeInterval)showDuration {
 //    NSLog(@"----%@", NSStringFromSelector(_cmd));
-    if ([self.delegate respondsToSelector:@selector(easyAdSplashOnAdSkipClicked)]) {
-        [self.delegate easyAdSplashOnAdSkipClicked];
+    if ([self.delegate respondsToSelector:@selector(easyAdSkipped)]) {
+        [self.delegate easyAdSkipped];
     }
     [self deallocAdapter];
 }
@@ -294,16 +294,16 @@
 //
 //- (void)ksad_splashAdTimeOver {
 //    NSLog(@"----%@", NSStringFromSelector(_cmd));
-//    if ([self.delegate respondsToSelector:@selector(easyAdSplashOnAdCountdownToZero)]) {
-//        [self.delegate easyAdSplashOnAdCountdownToZero];
+//    if ([self.delegate respondsToSelector:@selector(easyAdCountdowned)]) {
+//        [self.delegate easyAdCountdowned];
 //    }
 //
 //}
 //
 //- (void)ksad_splashAdVideoDidSkipped:(NSTimeInterval)playDuration {
 //    NSLog(@"----%@", NSStringFromSelector(_cmd));
-//    if ([self.delegate respondsToSelector:@selector(easyAdSplashOnAdSkipClicked)]) {
-//        [self.delegate easyAdSplashOnAdSkipClicked];
+//    if ([self.delegate respondsToSelector:@selector(easyAdSkipped)]) {
+//        [self.delegate easyAdSkipped];
 //    }
 //}
 //

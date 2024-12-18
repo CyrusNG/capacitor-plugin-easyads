@@ -1,3 +1,10 @@
+//
+//  BannerController.h
+//
+//  Created by CherryKing on 2019/11/1.
+//  Updated by CyrusNG on 2024/12/18.
+//  Copyright © 2019 CherryKing. All rights reserved.
+//
 #import "BannerController.h"
 #import "EasyAdBanner.h"
 #import "AdDataJsonManager.h"
@@ -7,9 +14,9 @@
 #import "SettingModel.h"
 #import "NSObject+EasyAdModel.h"
 @interface BannerController () <EasyAdBannerDelegate>
-@property (nonatomic, strong) SettingModel *setting;
-@property (nonatomic, strong) EasyAdBanner *easyAdBanner;
 @property (nonatomic, strong) UIView *adspotView;
+@property (nonatomic, strong) EasyAdBanner *easyAdBanner;
+@property (nonatomic, strong) SettingModel *setting;
 @property (nonatomic, strong) UIViewController *viewController;
 @property (nonatomic, strong) CAPPluginCall *call;              // Cap插件调用响应实例
 @property (nonatomic, weak) id<AdCallbackProtocol> delegate;    // Cap插件事件回调代理
@@ -31,13 +38,12 @@
 - (void)load {
     // 通知代理因viewController为nil而失败
     if(!self.viewController && self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"fail" data:nil];
+    // 广告实例不要用初始化加载, 要确保每次都用最新的实例, 且一次广告流程中 delegate 不能发生变化
+    [self destroy];
     // 添加广告view到cap根view
-    if (!self.adspotView) {
-        CGSize adSize = CGSizeMake(320, 50);
-        self.adspotView = [[UIView alloc] initWithFrame:CGRectMake((self.viewController.view.bounds.size.width - adSize.width) / 2.0, 0, adSize.width, adSize.height)];
-        //self.adspotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.viewController.view.bounds.size.width, self.viewController.view.bounds.size.width *5/32)];
-        //[self.viewController.view addSubview:self.adspotView];
-    }
+    CGSize adSize = CGSizeMake(320, 50);
+    self.adspotView = [[UIView alloc] initWithFrame:CGRectMake((self.viewController.view.bounds.size.width - adSize.width) / 2.0, 0, adSize.width, adSize.height)];
+    //self.adspotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.viewController.view.bounds.size.width, self.viewController.view.bounds.size.width *5/32)];
     //初始化easyAdBanner
     self.easyAdBanner = [[EasyAdBanner alloc] initWithJsonDic:[self.setting easyAd_modelToJSONObject] adContainer:self.adspotView viewController:self.viewController];
     //设置代理
@@ -72,30 +78,30 @@
 }
 
 
-
-// 广告数据拉取成功回调
+// 广告数据加载成功
 - (void)easyAdSucceed {
     NSLog(@"广告数据拉取成功 %s", __func__);
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.viewController.view addSubview:self.adspotView];
-    });
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"start" data:nil];
+    dispatch_async(dispatch_get_main_queue(), ^{ [self.viewController.view addSubview:self.adspotView]; });
+    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"ready" data:nil];
 }
 
 // 广告曝光
 - (void)easyAdExposured {
     NSLog(@"广告曝光回调 %s", __func__);
+    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"start" data:nil];
 }
 
 // 广告点击
 - (void)easyAdClicked {
     NSLog(@"广告点击 %s", __func__);
+    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-click" data:nil];
 }
 
 // 广告关闭回调
 - (void)easyAdDidClose {
     NSLog(@"广告关闭了 %s", __func__);
     if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"end" data:nil];
+    [self destroy];
 }
 
 

@@ -127,8 +127,8 @@
  */
 - (void)fullscreenVideoAdDidPlayFinish:(KSFullscreenVideoAd *)fullscreenVideoAd didFailWithError:(NSError *_Nullable)error {
     if (!error) {
-        if ([self.delegate respondsToSelector:@selector(easyAdFullScreenVideoOnAdPlayFinish)]) {
-            [self.delegate easyAdFullScreenVideoOnAdPlayFinish];
+        if ([self.delegate respondsToSelector:@selector(easyAdVideoPlayed)]) {
+            [self.delegate easyAdVideoPlayed];
         }
     }
 }

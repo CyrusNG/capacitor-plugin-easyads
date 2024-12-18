@@ -85,8 +85,8 @@
  */
 - (void)rewardedVideoAdVideoDidLoad:(KSRewardedVideoAd *)rewardedVideoAd {
     [self.adspot reportWithType:EasyAdSdkSupplierRepoLoaded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoOnAdVideoCached)]) {
-        [self.delegate easyAdRewardVideoOnAdVideoCached];
+    if ([self.delegate respondsToSelector:@selector(easyAdVideoCached)]) {
+        [self.delegate easyAdVideoCached];
     }
 }
 /**
@@ -134,8 +134,8 @@
  */
 - (void)rewardedVideoAdDidPlayFinish:(KSRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *_Nullable)error {
     if (!error) {
-        if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoAdDidPlayFinish)]) {
-            [self.delegate easyAdRewardVideoAdDidPlayFinish];
+        if ([self.delegate respondsToSelector:@selector(easyAdVideoPlayed)]) {
+            [self.delegate easyAdVideoPlayed];
         }
     }
 }
@@ -156,8 +156,8 @@
  */
 - (void)rewardedVideoAd:(KSRewardedVideoAd *)rewardedVideoAd hasReward:(BOOL)hasReward {
     if (hasReward) {
-        if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoAdDidRewardEffective)]) {
-            [self.delegate easyAdRewardVideoAdDidRewardEffective];
+        if ([self.delegate respondsToSelector:@selector(easyAdVideoRewardable)]) {
+            [self.delegate easyAdVideoRewardable];
         }
     }
 }

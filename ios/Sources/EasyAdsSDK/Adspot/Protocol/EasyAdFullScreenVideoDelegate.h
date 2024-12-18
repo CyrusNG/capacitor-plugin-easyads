@@ -12,7 +12,7 @@
 @protocol EasyAdFullScreenVideoDelegate <EasyAdBaseDelegate>
 @optional
 /// 视频播放完成
-- (void)easyAdFullScreenVideoOnAdPlayFinish;
+- (void)easyAdVideoPlayed;
 
 
 @end

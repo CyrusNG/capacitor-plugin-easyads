@@ -13,11 +13,11 @@
 @optional
 /// 广告点击跳过
 #pragma 百度广告不支持该回调
-- (void)easyAdSplashOnAdSkipClicked;
+- (void)easyAdSkipped;
 
 /// 广告倒计时结束回调 百度广告不支持该回调
 #pragma 百度广告不支持该回调
-- (void)easyAdSplashOnAdCountdownToZero;
+- (void)easyAdCountdowned;
 
 
 @end

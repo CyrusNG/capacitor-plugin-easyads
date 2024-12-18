@@ -99,8 +99,8 @@
 - (void)fullScreenVideoAdDidPlayFinish:(BaiduMobAdExpressFullScreenVideo *)video {
     
 //    NSLog(@"全屏视频完成播放");
-    if ([self.delegate respondsToSelector:@selector(easyAdFullScreenVideoOnAdPlayFinish)]) {
-        [self.delegate easyAdFullScreenVideoOnAdPlayFinish];
+    if ([self.delegate respondsToSelector:@selector(easyAdVideoPlayed)]) {
+        [self.delegate easyAdVideoPlayed];
     }
 }
 

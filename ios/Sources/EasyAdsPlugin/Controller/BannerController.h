@@ -1,8 +1,8 @@
 //
 //  BannerController.h
-//  Example
 //
 //  Created by CherryKing on 2019/11/8.
+//  Updated by CyrusNG on 2024/12/18.
 //  Copyright © 2019 CherryKing. All rights reserved.
 //
 

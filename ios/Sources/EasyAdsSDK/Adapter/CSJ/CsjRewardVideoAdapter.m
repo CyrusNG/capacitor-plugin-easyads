@@ -91,8 +91,8 @@
 //视频缓存成功回调
 - (void)nativeExpressRewardedVideoAdDidDownLoadVideo:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd {
     [self.adspot reportWithType:EasyAdSdkSupplierRepoLoaded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoOnAdVideoCached)]) {
-        [self.delegate easyAdRewardVideoOnAdVideoCached];
+    if ([self.delegate respondsToSelector:@selector(easyAdVideoCached)]) {
+        [self.delegate easyAdVideoCached];
     }
 }
 
@@ -121,12 +121,12 @@
 
 - (void)nativeExpressRewardedVideoAdDidPlayFinish:(BUNativeExpressRewardedVideoAd *)rewardedVideoAd didFailWithError:(NSError *)error {
     /// 视频广告播放达到激励条件回调
-    if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoAdDidRewardEffective)]) {
-        [self.delegate easyAdRewardVideoAdDidRewardEffective];
+    if ([self.delegate respondsToSelector:@selector(easyAdVideoRewardable)]) {
+        [self.delegate easyAdVideoRewardable];
     }
     /// 视频广告视频播放完成
-    if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoAdDidPlayFinish)]) {
-        [self.delegate easyAdRewardVideoAdDidPlayFinish];
+    if ([self.delegate respondsToSelector:@selector(easyAdVideoPlayed)]) {
+        [self.delegate easyAdVideoPlayed];
     }
 }
 

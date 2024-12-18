@@ -73,8 +73,8 @@
 - (void)rewardedVideoAdLoaded:(BaiduMobAdRewardVideo *)video {
 //    NSLog(@"激励视频缓存成功");
     [self.adspot reportWithType:EasyAdSdkSupplierRepoLoaded supplier:_supplier error:nil];
-    if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoOnAdVideoCached)]) {
-        [self.delegate easyAdRewardVideoOnAdVideoCached];
+    if ([self.delegate respondsToSelector:@selector(easyAdVideoCached)]) {
+        [self.delegate easyAdVideoCached];
     }
     
 }
@@ -104,8 +104,8 @@
 - (void)rewardedVideoAdDidPlayFinish:(BaiduMobAdRewardVideo *)video {
     
 //    NSLog(@"激励视频完成播放");
-    if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoAdDidPlayFinish)]) {
-        [self.delegate easyAdRewardVideoAdDidPlayFinish];
+    if ([self.delegate respondsToSelector:@selector(easyAdVideoPlayed)]) {
+        [self.delegate easyAdVideoPlayed];
     }
 
 }
@@ -131,8 +131,8 @@
 
 - (void)rewardedVideoAdRewardDidSuccess:(BaiduMobAdRewardVideo *)video verify:(BOOL)verify {
     //    NSLog(@"激励成功回调, progress:%f", progress);
-    if ([self.delegate respondsToSelector:@selector(easyAdRewardVideoAdDidRewardEffective)]) {
-        [self.delegate easyAdRewardVideoAdDidRewardEffective];
+    if ([self.delegate respondsToSelector:@selector(easyAdVideoRewardable)]) {
+        [self.delegate easyAdVideoRewardable];
     }
 }
 

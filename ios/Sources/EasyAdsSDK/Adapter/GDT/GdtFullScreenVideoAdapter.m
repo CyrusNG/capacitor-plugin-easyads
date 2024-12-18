@@ -105,8 +105,8 @@
 /// 视频播放状态发生改变
 - (void)unifiedInterstitialAd:(GDTUnifiedInterstitialAd *)unifiedInterstitial playerStatusChanged:(GDTMediaPlayerStatus)status {
     if (status == GDTMediaPlayerStatusStoped) {
-        if ([self.delegate respondsToSelector:@selector(easyAdFullScreenVideoOnAdPlayFinish)]) {
-            [self.delegate easyAdFullScreenVideoOnAdPlayFinish];
+        if ([self.delegate respondsToSelector:@selector(easyAdVideoPlayed)]) {
+            [self.delegate easyAdVideoPlayed];
         }
     }
 }
