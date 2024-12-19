@@ -13,6 +13,7 @@
 #import "SettingModel.h"
 #import "OptionModel.h"
 #import "NSObject+EasyAdModel.h"
+#import "LayoutUtils.h"
 @interface BannerController () <EasyAdBannerDelegate>
 @property (nonatomic, strong) UIView *adspotView;
 @property (nonatomic, strong) EasyAdBanner *easyAdBanner;
@@ -43,10 +44,10 @@
     // 广告实例不要用初始化加载, 要确保每次都用最新的实例, 且一次广告流程中 delegate 不能发生变化
     [self destroy];
     // 添加广告view到cap根view
-    CGSize adSize = CGSizeMake([self.option.width floatValue], [self.option.height floatValue]);
-    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
-    self.adspotView = [[UIView alloc] initWithFrame:CGRectMake((self.viewController.view.bounds.size.width - adSize.width) / 2.0, MIN(statusBarSize.width, statusBarSize.height), adSize.width, adSize.height)];
-    //self.adspotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.viewController.view.bounds.size.width, self.viewController.view.bounds.size.width *5/32)];
+    //dispatch_async(dispatch_get_main_queue(), ^{
+        CGSize adSize = CGSizeMake([self.option.width floatValue], [self.option.height floatValue]);
+        self.adspotView = [[UIView alloc] initWithFrame:CGRectMake((self.viewController.view.bounds.size.width - adSize.width) / 2.0, [LayoutUtils getStatusBarHeight], adSize.width, adSize.height)];
+    //});
     //初始化easyAdBanner
     self.easyAdBanner = [[EasyAdBanner alloc] initWithJsonDic:[self.setting easyAd_modelToJSONObject] adContainer:self.adspotView viewController:self.viewController];
     //设置代理
@@ -60,6 +61,7 @@
     self.easyAdBanner = nil;
     self.easyAdBanner.delegate = nil;
 }
+
 
 // MARK: ======================= EasyAdBannerDelegate =======================
 
