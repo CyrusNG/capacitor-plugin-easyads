@@ -5,19 +5,19 @@ import android.content.Intent;
 import android.view.ViewGroup;
 
 import com.capacitorjs.plugins.easyads.activity.DrawActivity;
-import com.capacitorjs.plugins.easyads.adspot.BaseAdspot;
-import com.capacitorjs.plugins.easyads.adspot.FullScreenVideoAdspot;
-import com.capacitorjs.plugins.easyads.adspot.InterstitialAdspot;
-import com.capacitorjs.plugins.easyads.adspot.NativeExpressAdspot;
+import com.capacitorjs.plugins.easyads.controller.BaseController;
+import com.capacitorjs.plugins.easyads.controller.FullScreenVideoController;
+import com.capacitorjs.plugins.easyads.controller.InterstitialController;
+import com.capacitorjs.plugins.easyads.controller.NativeExpressController;
 import com.capacitorjs.plugins.easyads.activity.NativeExpressRecyclerViewActivity;
-import com.capacitorjs.plugins.easyads.adspot.RewardVideoAdspot;
+import com.capacitorjs.plugins.easyads.controller.RewardVideoController;
 import com.capacitorjs.plugins.easyads.activity.CustomActivity;
-import com.capacitorjs.plugins.easyads.adspot.SplashAdspot;
+import com.capacitorjs.plugins.easyads.controller.SplashController;
 import com.capacitorjs.plugins.easyads.model.ConfigModel;
 import com.capacitorjs.plugins.easyads.model.EventModel;
 import com.capacitorjs.plugins.easyads.model.ResultModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
-import com.capacitorjs.plugins.easyads.adspot.BannerAdspot;
+import com.capacitorjs.plugins.easyads.controller.BannerController;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.easyads.core.BuildConfig;
 import com.easyads.model.EALogLevel;
@@ -38,7 +38,7 @@ public class EasyAdsPlugin extends Plugin {
 
     private ConfigModel config;
 
-    private final HashMap<String, BaseAdspot> adspotList = new HashMap<>();
+    private final HashMap<String, BaseController> adspotList = new HashMap<>();
 
     @PluginMethod
     public void init(PluginCall call) {
@@ -73,7 +73,7 @@ public class EasyAdsPlugin extends Plugin {
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("splash", callId, name);
         activity.runOnUiThread(() -> {
-            BaseAdspot ad = new SplashAdspot(activity, setting);
+            BaseController ad = new SplashController(activity, setting);
             //adspotList.put(callId, ad);
             ad.load(callback);
         });
@@ -95,7 +95,7 @@ public class EasyAdsPlugin extends Plugin {
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("banner", callId, name);
         activity.runOnUiThread(() -> {
-            BaseAdspot ad = new BannerAdspot(activity, setting);
+            BaseController ad = new BannerController(activity, setting);
             adspotList.put(callId, ad);
             ad.load(callback);
         });
@@ -117,7 +117,7 @@ public class EasyAdsPlugin extends Plugin {
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("interstitial", callId, name);
         activity.runOnUiThread(() -> {
-            BaseAdspot ad = new InterstitialAdspot(activity, setting);
+            BaseController ad = new InterstitialController(activity, setting);
             //adspotList.put(callId, ad);
             ad.load(callback);
         });
@@ -140,7 +140,7 @@ public class EasyAdsPlugin extends Plugin {
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("rewardVideo", callId, name);
         activity.runOnUiThread(() -> {
-            BaseAdspot ad = new RewardVideoAdspot(activity, setting);
+            BaseController ad = new RewardVideoController(activity, setting);
             //adspotList.put(callId, ad);
             ad.load(callback);
         });
@@ -163,7 +163,7 @@ public class EasyAdsPlugin extends Plugin {
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback("fullVideo", callId, name);
         activity.runOnUiThread(() -> {
-            BaseAdspot ad = new FullScreenVideoAdspot(activity, setting);
+            BaseController ad = new FullScreenVideoController(activity, setting);
             //adspotList.put(callId, ad);
             ad.load(callback);
         });
@@ -187,7 +187,7 @@ public class EasyAdsPlugin extends Plugin {
         ViewGroup nativeContainer = (ViewGroup) activity.findViewById(containerId);
         AdCallback callback = this.createAdCallback("nativeExpress", callId, name);
         activity.runOnUiThread(() -> {
-            BaseAdspot ad = new NativeExpressAdspot(activity, setting, nativeContainer);
+            BaseController ad = new NativeExpressController(activity, setting, nativeContainer);
             adspotList.put(callId, ad);
             ad.load(callback);
         });
@@ -257,7 +257,7 @@ public class EasyAdsPlugin extends Plugin {
         //获取参数
         String callId = call.getString("callId");
         //查找目标Adspot
-        BaseAdspot targetAdspot = this.adspotList.get(callId);
+        BaseController targetAdspot = this.adspotList.get(callId);
         //销毁广告位(如有)
         if(targetAdspot != null) getActivity().runOnUiThread(() -> targetAdspot.destroy());
     }

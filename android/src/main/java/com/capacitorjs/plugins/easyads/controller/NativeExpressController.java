@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.adspot;
+package com.capacitorjs.plugins.easyads.controller;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,13 +14,13 @@ import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.easyads.model.EasyAdError;
 
 @SuppressLint("ViewConstructor")
-public class NativeExpressAdspot extends RelativeLayout implements BaseAdspot {
+public class NativeExpressController extends RelativeLayout implements BaseController {
     Activity context;
     SettingModel setting;
     ViewGroup nativeContainer;
     EasyADController ad;
 
-    public NativeExpressAdspot(@NonNull final Activity context, SettingModel setting, ViewGroup nativeContainer) {
+    public NativeExpressController(@NonNull final Activity context, SettingModel setting, ViewGroup nativeContainer) {
         super(context);
         //保存当前activity
         this.context = context;
@@ -42,7 +42,7 @@ public class NativeExpressAdspot extends RelativeLayout implements BaseAdspot {
         this.ad = new EasyADController(this.context);
         //加载banner并在成功时在appRootViewGroup中添加此RelativeLayout
         //TODO: this.nativeContainer.addView(this)
-        NativeExpressAdspot self = this;
+        NativeExpressController self = this;
         AdCallback adspotCallback = new AdCallback() {
             @Override
             public void start() { nativeContainer.addView(self); pluginCallback.start(); }

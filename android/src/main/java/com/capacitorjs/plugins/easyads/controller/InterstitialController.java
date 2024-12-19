@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.adspot;
+package com.capacitorjs.plugins.easyads.controller;
 
 import android.app.Activity;
 
@@ -9,12 +9,12 @@ import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.easyads.model.EasyAdError;
 
-public class FullScreenVideoAdspot implements BaseAdspot {
+public class InterstitialController implements BaseController {
     Activity context;
     SettingModel setting;
     EasyADController ad;
 
-    public FullScreenVideoAdspot(@NonNull final Activity context, SettingModel setting) {
+    public InterstitialController(@NonNull final Activity context, SettingModel setting) {
         //保存当前activity
         this.context = context;
         //保存当前setting
@@ -28,7 +28,7 @@ public class FullScreenVideoAdspot implements BaseAdspot {
         //初始化广告处理封装类
         this.ad = new EasyADController(this.context);
         //加载广告
-        FullScreenVideoAdspot self = this;
+        InterstitialController self = this;
         AdCallback adspotCallback = new AdCallback() {
             @Override
             public void start() { pluginCallback.start(); }
@@ -39,7 +39,7 @@ public class FullScreenVideoAdspot implements BaseAdspot {
             @Override
             public void fail(EasyAdError error) { pluginCallback.fail(error); }
         };
-        this.ad.initFullVideo(this.setting.toJsonString(), adspotCallback).loadAndShow();
+        this.ad.initInterstitial(this.setting.toJsonString(), adspotCallback).loadAndShow();
     }
 
     @Override

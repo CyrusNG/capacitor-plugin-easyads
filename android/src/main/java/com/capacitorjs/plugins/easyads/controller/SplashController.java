@@ -1,4 +1,4 @@
-package com.capacitorjs.plugins.easyads.adspot;
+package com.capacitorjs.plugins.easyads.controller;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -20,7 +20,7 @@ import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.easyads.model.EasyAdError;
 
-public class SplashAdspot extends Dialog implements BaseAdspot {
+public class SplashController extends Dialog implements BaseController {
     LinearLayout logo;
     FrameLayout adContainer;
     Activity context;
@@ -28,7 +28,7 @@ public class SplashAdspot extends Dialog implements BaseAdspot {
     EasyADController ad;
 
 
-    public SplashAdspot(@NonNull final Activity context, SettingModel setting) {
+    public SplashController(@NonNull final Activity context, SettingModel setting) {
         super(context);
         //保存当前activity
         this.context = context;
@@ -49,7 +49,7 @@ public class SplashAdspot extends Dialog implements BaseAdspot {
         //初始化广告处理封装类
         this.ad = new EasyADController(this.context);
         //加载广告
-        SplashAdspot self = this;
+        SplashController self = this;
         AdCallback adspotCallback = new AdCallback() {
             @Override
             public void start() { self.show(); pluginCallback.start(); }
