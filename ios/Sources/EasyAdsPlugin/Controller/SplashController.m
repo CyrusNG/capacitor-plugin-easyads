@@ -7,7 +7,6 @@
 //
 #import "SplashController.h"
 #import "EasyAdSplash.h"
-#import "AdDataJsonManager.h"
 #import "AdCallbackProtocol.h"
 #import "AdControllerProtocol.h"
 #import "EasyAdBannerDelegate.h"
@@ -16,6 +15,7 @@
 @interface SplashController () <EasyAdSplashDelegate>
 @property (nonatomic, strong) EasyAdSplash *easyAdSplash;
 @property (nonatomic, strong) SettingModel *setting;
+@property (nonatomic, strong) OptionModel *option;
 @property (nonatomic, strong) UIViewController *viewController;
 @property (nonatomic, strong) CAPPluginCall *call;              // Cap插件调用响应实例
 @property (nonatomic, weak) id<AdCallbackProtocol> delegate;    // Cap插件事件回调代理
@@ -23,10 +23,11 @@
 
 @implementation SplashController
 
-- (instancetype)initWithViewController:(nullable UIViewController *)viewController setting:(SettingModel*)settingModel pluginCall:(nullable CAPPluginCall *)capPluginCall delegate:(nullable id<AdCallbackProtocol>)callbackDelegate {
+- (instancetype)initWithViewController:(nullable UIViewController *)viewController pluginCall:(nullable CAPPluginCall *)capPluginCall delegate:(nullable id<AdCallbackProtocol>)callbackDelegate setting:(SettingModel*)settingModel option: (OptionModel*) optionModel {
     self = [super init];
     if (self) {
         self.setting = settingModel;
+        self.option = optionModel;
         self.viewController = viewController;
         self.call = capPluginCall;
         self.delegate = callbackDelegate;
@@ -41,7 +42,7 @@
     [self destroy];
     //初始化easyAdSplash并设置
     self.easyAdSplash = [[EasyAdSplash alloc] initWithJsonDic:[self.setting easyAd_modelToJSONObject] viewController:self.viewController];
-    self.easyAdSplash.showLogoRequire = YES;
+    self.easyAdSplash.showLogoRequire = self.option.showLogo;
     self.easyAdSplash.logoImage = [UIImage imageNamed:@"app_logo"];
     self.easyAdSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     self.easyAdSplash.timeout = 5;

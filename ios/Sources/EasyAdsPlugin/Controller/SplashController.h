@@ -11,12 +11,17 @@
 #import "AdCallbackProtocol.h"
 #import "AdControllerProtocol.h"
 #import "SettingModel.h"
+#import "OptionModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface SplashController : NSObject <AdControllerProtocol>
 
-- (instancetype)initWithViewController:(nullable UIViewController *)viewController setting:(SettingModel*)settingModel pluginCall:(nullable CAPPluginCall *)capPluginCall delegate:(nullable id<AdCallbackProtocol>)callbackDelegate;
+- (instancetype)initWithViewController: (nullable UIViewController *) viewController
+                            pluginCall: (nullable CAPPluginCall *) capPluginCall
+                              delegate: (nullable id<AdCallbackProtocol>) callbackDelegate
+                               setting: (SettingModel*) settingModel
+                                option: (OptionModel*) optionModel;
 
 @end
 

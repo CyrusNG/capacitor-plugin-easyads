@@ -7,7 +7,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ModelConverter : NSObject
 
 - (nullable SettingModel *) convertSettingFromConfig: (ConfigModel*) configModel adspotTag: (NSString *) adspotTag;
+- (nullable OptionModel *) convertOptionFromConfig: (ConfigModel*) configModel adspotTag: (NSString *) adspotTag;
 
 @end
+
 
 NS_ASSUME_NONNULL_END

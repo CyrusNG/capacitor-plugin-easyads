@@ -7,16 +7,17 @@
 //
 #import "BannerController.h"
 #import "EasyAdBanner.h"
-#import "AdDataJsonManager.h"
 #import "AdCallbackProtocol.h"
 #import "AdControllerProtocol.h"
 #import "EasyAdBannerDelegate.h"
 #import "SettingModel.h"
+#import "OptionModel.h"
 #import "NSObject+EasyAdModel.h"
 @interface BannerController () <EasyAdBannerDelegate>
 @property (nonatomic, strong) UIView *adspotView;
 @property (nonatomic, strong) EasyAdBanner *easyAdBanner;
 @property (nonatomic, strong) SettingModel *setting;
+@property (nonatomic, strong) OptionModel *option;
 @property (nonatomic, strong) UIViewController *viewController;
 @property (nonatomic, strong) CAPPluginCall *call;              // Cap插件调用响应实例
 @property (nonatomic, weak) id<AdCallbackProtocol> delegate;    // Cap插件事件回调代理
@@ -24,10 +25,11 @@
 
 @implementation BannerController
 
-- (instancetype)initWithViewController:(nullable UIViewController *)viewController setting:(SettingModel*)settingModel pluginCall:(nullable CAPPluginCall *)capPluginCall delegate:(nullable id<AdCallbackProtocol>)callbackDelegate {
+- (instancetype)initWithViewController:(nullable UIViewController *)viewController pluginCall:(nullable CAPPluginCall *)capPluginCall delegate:(nullable id<AdCallbackProtocol>)callbackDelegate setting:(SettingModel*)settingModel option: (OptionModel*) optionModel {
     self = [super init];
     if (self) {
         self.setting = settingModel;
+        self.option = optionModel;
         self.viewController = viewController;
         self.call = capPluginCall;
         self.delegate = callbackDelegate;
@@ -41,8 +43,9 @@
     // 广告实例不要用初始化加载, 要确保每次都用最新的实例, 且一次广告流程中 delegate 不能发生变化
     [self destroy];
     // 添加广告view到cap根view
-    CGSize adSize = CGSizeMake(320, 50);
-    self.adspotView = [[UIView alloc] initWithFrame:CGRectMake((self.viewController.view.bounds.size.width - adSize.width) / 2.0, 0, adSize.width, adSize.height)];
+    CGSize adSize = CGSizeMake([self.option.width floatValue], [self.option.height floatValue]);
+    CGSize statusBarSize = [[UIApplication sharedApplication] statusBarFrame].size;
+    self.adspotView = [[UIView alloc] initWithFrame:CGRectMake((self.viewController.view.bounds.size.width - adSize.width) / 2.0, MIN(statusBarSize.width, statusBarSize.height), adSize.width, adSize.height)];
     //self.adspotView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.viewController.view.bounds.size.width, self.viewController.view.bounds.size.width *5/32)];
     //初始化easyAdBanner
     self.easyAdBanner = [[EasyAdBanner alloc] initWithJsonDic:[self.setting easyAd_modelToJSONObject] adContainer:self.adspotView viewController:self.viewController];

@@ -49,4 +49,16 @@ static ModelConverter *instance;
     return suppliers.count == 0? nil : [SettingModel easyAd_modelWithJSON:@{@"rules": rules, @"suppliers": suppliers}];
 }
 
+- (nullable OptionModel *) convertOptionFromConfig: (ConfigModel*) configModel adspotTag: (NSString *) adspotTag {
+    // 获取所有相关models
+    NSArray<AdspotModel*> *adspots = configModel.adspots;
+    // 遍历adspots找到adspotName一致项
+    OptionModel *target = nil;
+    for (AdspotModel *adspot in adspots) {
+        if([adspotTag isEqualToString:adspot.tag]) target = adspot.options;
+    }
+    // 返回optionModel
+    return target;
+}
+
 @end
