@@ -7,7 +7,6 @@
 //
 
 #import "Capacitor.h"
-#import "BaseViewController.h"
 #import "AdCallbackProtocol.h"
 #import "AdControllerProtocol.h"
 #import "SettingModel.h"

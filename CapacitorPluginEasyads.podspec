@@ -32,9 +32,6 @@ Pod::Spec.new do |s|
   # Masonry is a light-weight layout framework which wraps AutoLayout with a nicer syntax.
   # ref: https://cocoapods.org/pods/Masonry
   s.dependency 'Masonry', '1.1.0'
-    
-  # plugin resources
-  s.resources = ['ios/Sources/Resources/*']
 
   # GDT only support x86_64 iPhone simulator
   s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
