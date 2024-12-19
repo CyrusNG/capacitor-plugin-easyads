@@ -42,8 +42,6 @@ public class EasyAdsPlugin extends Plugin {
 
     @PluginMethod
     public void init(PluginCall call) {
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
         //获取参数
         JSObject config = call.getObject("config");
         //保存配置
@@ -55,15 +53,13 @@ public class EasyAdsPlugin extends Plugin {
         // 初始化 Toast 框架
         ToastUtils.init(getActivity().getApplication());
         // 返回 JSObject 结果
-        call.resolve(ResultModel.create(callId).toJsObject());
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
     }
 
     @PluginMethod
     public void splash(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
@@ -71,185 +67,96 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加载Splash广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("splash", callId, name);
+        AdCallback callback = this.createAdCallback("splash", call.getCallbackId(), name);
         activity.runOnUiThread(() -> {
             BaseController ad = new SplashController(activity, setting);
             //adspotList.put(callId, ad);
             ad.load(callback);
         });
         //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
     }
 
     @PluginMethod
     public void banner(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
         //加载Banner广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("banner", callId, name);
+        AdCallback callback = this.createAdCallback("banner", call.getCallbackId(), name);
         activity.runOnUiThread(() -> {
             BaseController ad = new BannerController(activity, setting);
-            adspotList.put(callId, ad);
+            adspotList.put(call.getCallbackId(), ad);
             ad.load(callback);
         });
         //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
     }
 
     @PluginMethod
     public void interstitial(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
         //加载插屏广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("interstitial", callId, name);
+        AdCallback callback = this.createAdCallback("interstitial", call.getCallbackId(), name);
         activity.runOnUiThread(() -> {
             BaseController ad = new InterstitialController(activity, setting);
             //adspotList.put(callId, ad);
             ad.load(callback);
         });
         //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
 
     }
 
     @PluginMethod
-    public void rewardVideo(PluginCall call) {
+    public void reward(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
         //加载激励视频广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("rewardVideo", callId, name);
+        AdCallback callback = this.createAdCallback("rewardVideo", call.getCallbackId(), name);
         activity.runOnUiThread(() -> {
             BaseController ad = new RewardVideoController(activity, setting);
             //adspotList.put(callId, ad);
             ad.load(callback);
         });
         //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
 
     }
 
     @PluginMethod
-    public void fullVideo(PluginCall call) {
+    public void fullscreen(PluginCall call) {
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
         //获取参数
         String name = call.getString("name");
         //将配置转换成EasyADController需要的格式
         SettingModel setting = SettingModel.create(this.config, name);
         //加载全屏视频广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("fullVideo", callId, name);
+        AdCallback callback = this.createAdCallback("fullVideo", call.getCallbackId(), name);
         activity.runOnUiThread(() -> {
             BaseController ad = new FullScreenVideoController(activity, setting);
             //adspotList.put(callId, ad);
             ad.load(callback);
         });
         //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
-    }
-
-    @PluginMethod
-    public void nativeExpress(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
-        //获取参数
-        String name = call.getString("name");
-        Integer containerId = call.getInt("containerId");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加载原生模板广告
-        Activity activity = getActivity();
-        ViewGroup nativeContainer = (ViewGroup) activity.findViewById(containerId);
-        AdCallback callback = this.createAdCallback("nativeExpress", callId, name);
-        activity.runOnUiThread(() -> {
-            BaseController ad = new NativeExpressController(activity, setting, nativeContainer);
-            adspotList.put(callId, ad);
-            ad.load(callback);
-        });
-        //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
-    }
-
-    @PluginMethod
-    public void nativeExpressRecyclerView(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), NativeExpressRecyclerViewActivity.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        getContext().startActivity(intent);
-        //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
-    }
-
-    @PluginMethod
-    public void draw(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), DrawActivity.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        getContext().startActivity(intent);
-        //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
-    }
-
-    @PluginMethod
-    public void customChannel(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //生成随机callId
-        String callId = UUID.randomUUID().toString();
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加入参数到Intent
-        Intent intent = new Intent(getContext(), CustomActivity.class);
-        intent.putExtra("setting", setting);
-        //打开Activity
-        getContext().startActivity(intent);
-        //返回结果
-        call.resolve(ResultModel.create(callId).toJsObject());
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
     }
 
     @PluginMethod
