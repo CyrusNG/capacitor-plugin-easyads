@@ -14,9 +14,9 @@ import auto.parcelgson.gson.annotations.SerializedName;
 @AutoParcelGson
 public abstract class SettingModel extends BaseModel implements Parcelable {
   @SerializedName("rules")
-  abstract List<RuleModel> rules();
+  public abstract List<RuleModel> rules();
   @SerializedName("suppliers")
-  abstract List<SupplierModel> suppliers();
+  public abstract List<SupplierModel> suppliers();
 
   public static SettingModel create(ConfigModel config, String adspotTag) {
     // 获取所有相关models

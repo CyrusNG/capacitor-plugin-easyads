@@ -91,7 +91,7 @@
 // 广点通推荐在 easyAdVideoCached 视频缓冲完成后再调用showad
 - (void)easyAdVideoCached {
     NSLog(@"视频缓存成功 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-cach" data:nil];
+    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-cache" data:nil];
 }
 
 // 广告点击

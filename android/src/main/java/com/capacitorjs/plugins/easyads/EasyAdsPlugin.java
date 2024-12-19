@@ -1,21 +1,14 @@
 package com.capacitorjs.plugins.easyads;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.view.ViewGroup;
 
-import com.capacitorjs.plugins.easyads.activity.DrawActivity;
 import com.capacitorjs.plugins.easyads.controller.BaseController;
 import com.capacitorjs.plugins.easyads.controller.FullScreenVideoController;
 import com.capacitorjs.plugins.easyads.controller.InterstitialController;
-import com.capacitorjs.plugins.easyads.controller.NativeExpressController;
-import com.capacitorjs.plugins.easyads.activity.NativeExpressRecyclerViewActivity;
 import com.capacitorjs.plugins.easyads.controller.RewardVideoController;
-import com.capacitorjs.plugins.easyads.activity.CustomActivity;
 import com.capacitorjs.plugins.easyads.controller.SplashController;
 import com.capacitorjs.plugins.easyads.model.ConfigModel;
 import com.capacitorjs.plugins.easyads.model.EventModel;
-import com.capacitorjs.plugins.easyads.model.ResultModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.controller.BannerController;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
@@ -31,7 +24,6 @@ import com.hjq.toast.ToastUtils;
 import com.easyads.EasyAds;
 
 import java.util.HashMap;
-import java.util.UUID;
 
 @CapacitorPlugin(name = "EasyAds")
 public class EasyAdsPlugin extends Plugin {
@@ -67,11 +59,11 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加载Splash广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("splash", call.getCallbackId(), name);
+        AdCallback callback = this.createAdCallback("splash", call, name);
         activity.runOnUiThread(() -> {
-            BaseController ad = new SplashController(activity, setting);
+            BaseController ad = new SplashController(activity, callback, setting, null);
             //adspotList.put(callId, ad);
-            ad.load(callback);
+            ad.load();
         });
         //返回结果
         call.resolve(new JSObject().put("callId", call.getCallbackId()));
@@ -87,11 +79,11 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加载Banner广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("banner", call.getCallbackId(), name);
+        AdCallback callback = this.createAdCallback("banner", call, name);
         activity.runOnUiThread(() -> {
-            BaseController ad = new BannerController(activity, setting);
+            BaseController ad = new BannerController(activity, callback, setting, null);
             adspotList.put(call.getCallbackId(), ad);
-            ad.load(callback);
+            ad.load();
         });
         //返回结果
         call.resolve(new JSObject().put("callId", call.getCallbackId()));
@@ -107,11 +99,11 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加载插屏广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("interstitial", call.getCallbackId(), name);
+        AdCallback callback = this.createAdCallback("interstitial", call, name);
         activity.runOnUiThread(() -> {
-            BaseController ad = new InterstitialController(activity, setting);
+            BaseController ad = new InterstitialController(activity, callback, setting, null);
             //adspotList.put(callId, ad);
-            ad.load(callback);
+            ad.load();
         });
         //返回结果
         call.resolve(new JSObject().put("callId", call.getCallbackId()));
@@ -128,11 +120,11 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加载激励视频广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("rewardVideo", call.getCallbackId(), name);
+        AdCallback callback = this.createAdCallback("reward", call, name);
         activity.runOnUiThread(() -> {
-            BaseController ad = new RewardVideoController(activity, setting);
+            BaseController ad = new RewardVideoController(activity, callback, setting, null);
             //adspotList.put(callId, ad);
-            ad.load(callback);
+            ad.load();
         });
         //返回结果
         call.resolve(new JSObject().put("callId", call.getCallbackId()));
@@ -149,11 +141,11 @@ public class EasyAdsPlugin extends Plugin {
         SettingModel setting = SettingModel.create(this.config, name);
         //加载全屏视频广告
         Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("fullVideo", call.getCallbackId(), name);
+        AdCallback callback = this.createAdCallback("fullscreen", call, name);
         activity.runOnUiThread(() -> {
-            BaseController ad = new FullScreenVideoController(activity, setting);
+            BaseController ad = new FullScreenVideoController(activity, callback, setting, null);
             //adspotList.put(callId, ad);
-            ad.load(callback);
+            ad.load();
         });
         //返回结果
         call.resolve(new JSObject().put("callId", call.getCallbackId()));
@@ -169,19 +161,38 @@ public class EasyAdsPlugin extends Plugin {
         if(targetAdspot != null) getActivity().runOnUiThread(() -> targetAdspot.destroy());
     }
 
-    private AdCallback createAdCallback(String type, String call, String tag) {
+    // AdCallback implementation ===============================
+    private AdCallback createAdCallback(String type, PluginCall call, String tag) {
         return new AdCallback() {
             @Override
-            public void start() { notifyListeners(type, EventModel.create(type, "start", call, tag, null).toJsObject()); }
+            public void ready() { notifyListeners(type, EventModel.create(type, "ready", call.getCallbackId(), tag, null).toJsObject()); }
 
             @Override
-            public void skip() { notifyListeners(type, EventModel.create(type, "skip", call, tag, null).toJsObject()); }
+            public void start() { notifyListeners(type, EventModel.create(type, "start", call.getCallbackId(), tag, null).toJsObject()); }
 
             @Override
-            public void end() { notifyListeners(type, EventModel.create(type, "end", call, tag, null).toJsObject()); }
+            public void end() { notifyListeners(type, EventModel.create(type, "end", call.getCallbackId(), tag, null).toJsObject()); }
 
             @Override
-            public void fail(EasyAdError error) { notifyListeners(type, EventModel.create(type, "fail", call, tag, error).toJsObject()); }
+            public void fail(EasyAdError error) { notifyListeners(type, EventModel.create(type, "fail", call.getCallbackId(), tag, error).toJsObject()); }
+
+            @Override
+            public void didClick() { notifyListeners(type, EventModel.create(type, "did-click", call.getCallbackId(), tag, null).toJsObject()); }
+
+            @Override
+            public void didPlay() { notifyListeners(type, EventModel.create(type, "did-play", call.getCallbackId(), tag, null).toJsObject()); }
+
+            @Override
+            public void didCache() { notifyListeners(type, EventModel.create(type, "did-cache", call.getCallbackId(), tag, null).toJsObject()); }
+
+            @Override
+            public void didRewardable() { notifyListeners(type, EventModel.create(type, "did-rewardable", call.getCallbackId(), tag, null).toJsObject()); }
+
+            @Override
+            public void didCountdown() { notifyListeners(type, EventModel.create(type, "did-countdown", call.getCallbackId(), tag, null).toJsObject()); }
+
+            @Override
+            public void didSkip() { notifyListeners(type, EventModel.create(type, "did-skip", call.getCallbackId(), tag, null).toJsObject()); }
         };
     }
 

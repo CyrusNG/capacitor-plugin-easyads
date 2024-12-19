@@ -8,11 +8,11 @@ import auto.parcelgson.AutoParcelGson;
 
 @AutoParcelGson
 public abstract class EventModel extends BaseModel implements Parcelable {
-  abstract String type();
-  abstract String event();
-  abstract String call();
-  abstract String tag();
-  abstract Object error();
+  public abstract String type();
+  public abstract String event();
+  public abstract String call();
+  public abstract String tag();
+  public abstract Object error();
 
   public static EventModel create(String type, String event, String call, String tag, Object error) {
     if(error == null) error = new Object();

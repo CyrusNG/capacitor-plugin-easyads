@@ -8,10 +8,10 @@ import auto.parcelgson.AutoParcelGson;
 
 @AutoParcelGson
 public abstract class SupplierModel extends BaseModel implements Parcelable {
-  abstract String tag();
-  abstract String appId();
-  abstract Integer index();
-  abstract String adspotId();
+  public abstract String tag();
+  public abstract String appId();
+  public abstract Integer index();
+  public abstract String adspotId();
 
   public static SupplierModel create(String tag, String appId, Integer index, String adspotId) {
     return new AutoParcelGson_SupplierModel(tag, appId, index, adspotId);

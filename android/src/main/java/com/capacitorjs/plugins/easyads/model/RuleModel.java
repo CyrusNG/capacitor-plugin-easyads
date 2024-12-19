@@ -10,9 +10,9 @@ import auto.parcelgson.AutoParcelGson;
 
 @AutoParcelGson
 public abstract class RuleModel extends BaseModel implements Parcelable {
-  abstract String tag();
-  abstract List<Integer> sort();
-  abstract Integer percent();
+  public abstract String tag();
+  public abstract List<Integer> sort();
+  public abstract Integer percent();
 
   public static RuleModel create(String tag, List<Integer> sort, Integer percent) {
     return new AutoParcelGson_RuleModel(tag, sort, percent);

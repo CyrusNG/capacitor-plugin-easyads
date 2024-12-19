@@ -190,7 +190,7 @@ public class EasyADController {
                 logAndToast(mActivity, "视频播放完毕");
             }
             @Override
-            public void onVideoSkip() { logAndToast(mActivity, "跳过视频播放");  if(callBack != null) callBack.skip(); }
+            public void onVideoSkip() { logAndToast(mActivity, "跳过视频播放");  if(callBack != null) callBack.didSkip(); }
             @Override
             public void onAdReward() { logAndToast(mActivity, "激励发放"); }
             @Override
@@ -235,7 +235,7 @@ public class EasyADController {
                 logAndToast(mActivity, "视频播放结束");
             }
             @Override
-            public void onVideoSkipped() { logAndToast(mActivity, "跳过视频"); if(callBack != null) callBack.skip(); }
+            public void onVideoSkipped() { logAndToast(mActivity, "跳过视频"); if(callBack != null) callBack.didSkip(); }
             @Override
             public void onAdClicked() {
                 logAndToast(mActivity, "广告点击");

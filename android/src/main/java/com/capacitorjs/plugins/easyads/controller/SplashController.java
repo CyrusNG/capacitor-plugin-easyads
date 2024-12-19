@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import androidx.annotation.NonNull;
 
 import android.os.Build;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -14,27 +15,34 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import com.capacitorjs.plugins.easyads.EasyADController;
 import com.capacitorjs.plugins.easyads.R;
+import com.capacitorjs.plugins.easyads.model.OptionModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
+import com.easyads.core.splash.EASplashListener;
+import com.easyads.core.splash.EasyAdSplash;
 import com.easyads.model.EasyAdError;
 
 public class SplashController extends Dialog implements BaseController {
+    Activity context;
+    AdCallback pluginCallback;
+    SettingModel setting;
+    OptionModel option;
     LinearLayout logo;
     FrameLayout adContainer;
-    Activity context;
-    SettingModel setting;
-    EasyADController ad;
 
+    private static final String TAG = SplashController.class.getSimpleName();
 
-    public SplashController(@NonNull final Activity context, SettingModel setting) {
+    public SplashController(@NonNull final Activity context, AdCallback pluginCallback, SettingModel setting, OptionModel option) {
         super(context);
         //保存当前activity
         this.context = context;
+        //保存插件回调
+        this.pluginCallback = pluginCallback;
         //保存当前setting
         this.setting = setting;
-        Window window = this.getWindow();
+        //保存当前option
+        this.option = option;
         //设置View内容
         setContentView(R.layout.adspot_splash);
         //获取广告容器和LogoView
@@ -42,31 +50,31 @@ public class SplashController extends Dialog implements BaseController {
         this.logo = findViewById(R.id.ll_logo);
     }
 
+    /**
+     * 加载开屏广告，开屏推荐使用加载并展示开屏广告方式，所有的广告均支持请求和展示分离，如有必要，可分别调用加载广告和展示广告，可参考"插屏广告"中的处理示例。
+     */
     @Override
-    public void load(AdCallback pluginCallback) {
+    public void load() {
         //先销毁广告（如有）
         this.destroy();
-        //初始化广告处理封装类
-        this.ad = new EasyADController(this.context);
-        //加载广告
-        SplashController self = this;
-        AdCallback adspotCallback = new AdCallback() {
-            @Override
-            public void start() { self.show(); pluginCallback.start(); }
-            @Override
-            public void skip() { pluginCallback.skip(); }
-            @Override
-            public void end() { self.dismiss(); pluginCallback.end(); }
-            @Override
-            public void fail(EasyAdError error) { pluginCallback.fail(error); }
-        };
-        this.ad.loadSplash(setting.toJsonString(), this.adContainer, this.logo, false, adspotCallback);
+        //初始化广告实例
+        EasyAdSplash easySplash = new EasyAdSplash(this.context, this.adContainer, this.createListeners());
+        //注意：如果开屏页是fragment或者dialog实现，这里需要置为false。默认为true，代表开屏和首页为两个不同的activity
+        easySplash.setShowInSingleActivity(this.option.singleActivity());
+        //注意：此处自定义渠道的tag，一定要和setData()中配置的tag一致。
+//        if (cusXiaoMi) easySplash.addCustomSupplier("xm", new XiaoMiSplashAdapter(new SoftReference<>(this.context), easySplash));
+//        if (cusHuaWei) easySplash.addCustomSupplier("hw", new HuaWeiSplashAdapter(new SoftReference<>(this.context), easySplash));
+        //必须：设置策略信息
+        easySplash.setData(this.setting.toJsonString());
+        //必须：请求并展示广告
+        easySplash.loadAndShow();
+        //展示提示
+        Log.d(TAG, "广告请求中");
     }
 
     @Override
     public void destroy() {
         //销毁广告
-        if (this.ad != null) this.ad.destroy();
     }
 
     @Override
@@ -116,6 +124,46 @@ public class SplashController extends Dialog implements BaseController {
 
     private void clearFocusNotAle(Window window) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+    }
+
+
+
+    // MARK: ======================= Banner Listeners =======================
+    private EASplashListener createListeners() {
+        SplashController self = this;
+        //必须：核心事件监听回调
+        return new EASplashListener() {
+
+            @Override
+            public void onAdFailed(EasyAdError error) {
+                Log.d(TAG, "广告加载失败 code=" + error.code + " msg=" + error.msg);
+                if(self.pluginCallback != null) self.pluginCallback.fail(error);
+            }
+
+            @Override
+            public void onAdSucceed() {
+                Log.d(TAG, "广告加载成功");
+                if(self.pluginCallback != null) self.pluginCallback.ready();
+            }
+
+            @Override
+            public void onAdExposure() {
+                Log.d(TAG, "广告展现");
+                if(self.pluginCallback != null) self.pluginCallback.start();
+            }
+
+            @Override
+            public void onAdClose() {
+                Log.d(TAG, "广告关闭");
+                if(self.pluginCallback != null) self.pluginCallback.end();
+            }
+
+            @Override
+            public void onAdClicked() {
+                Log.d(TAG, "广告点击");
+                if(self.pluginCallback != null) self.pluginCallback.didClick();
+            }
+        };
     }
 
 }

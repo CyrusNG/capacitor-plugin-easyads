@@ -1,51 +1,119 @@
 package com.capacitorjs.plugins.easyads.controller;
 
 import android.app.Activity;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.capacitorjs.plugins.easyads.EasyADController;
+import com.capacitorjs.plugins.easyads.model.OptionModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
+import com.easyads.core.reward.EARewardServerCallBackInf;
+import com.easyads.core.reward.EARewardVideoListener;
+import com.easyads.core.reward.EasyAdRewardVideo;
 import com.easyads.model.EasyAdError;
 
 public class RewardVideoController implements BaseController {
     Activity context;
+    AdCallback pluginCallback;
     SettingModel setting;
-    EasyADController ad;
+    OptionModel option;
+    private static final String TAG = RewardVideoController.class.getSimpleName();
 
-    public RewardVideoController(@NonNull final Activity context, SettingModel setting) {
+    public RewardVideoController(@NonNull final Activity context, AdCallback pluginCallback, SettingModel setting, OptionModel option) {
         //保存当前activity
         this.context = context;
+        //保存插件回调
+        this.pluginCallback = pluginCallback;
         //保存当前setting
         this.setting = setting;
+        //保存当前option
+        this.option = option;
     }
 
+    /**
+     * 加载并展示激励视频广告。
+     * 也可以选择性先提前加载，然后在合适的时机再调用展示方法
+     */
     @Override
-    public void load(AdCallback pluginCallback) {
+    public void load() {
         //先销毁广告（如有）
         this.destroy();
-        //初始化广告处理封装类
-        this.ad = new EasyADController(this.context);
-        //加载广告
-        RewardVideoController self = this;
-        AdCallback adspotCallback = new AdCallback() {
-            @Override
-            public void start() { pluginCallback.start(); }
-            @Override
-            public void skip() { pluginCallback.skip(); }
-            @Override
-            public void end() { pluginCallback.end(); }
-            @Override
-            public void fail(EasyAdError error) { pluginCallback.fail(error); }
-        };
-        this.ad.initReward(this.setting.toJsonString(), adspotCallback).loadAndShow();
+        //初始化，注意需要时再初始化，不要复用。
+        EasyAdRewardVideo easyRewardVideo = new EasyAdRewardVideo(this.context, this.createListeners());
+        //必须：设置策略信息
+        easyRewardVideo.setData(this.setting.toJsonString());
+        //必须：请求并展示广告
+        easyRewardVideo.loadAndShow();
     }
 
     @Override
     public void destroy() {
         //销毁广告
-        if (this.ad != null) this.ad.destroy();
     }
 
+
+    // MARK: ======================= Banner Listeners =======================
+    private EARewardVideoListener createListeners() {
+        RewardVideoController self = this;
+        //必须：核心事件监听回调
+        return new EARewardVideoListener() {
+
+            @Override
+            public void onAdFailed(EasyAdError error) {
+                Log.d(TAG, "广告加载失败 code=" + error.code + " msg=" + error.msg);
+                if(self.pluginCallback != null) self.pluginCallback.fail(error);
+            }
+
+            @Override
+            public void onAdSucceed() {
+                Log.d(TAG, "广告加载成功");
+                if(self.pluginCallback != null) self.pluginCallback.ready();
+            }
+
+            @Override
+            public void onAdExposure() {
+                Log.d(TAG, "广告展现");
+                if(self.pluginCallback != null) self.pluginCallback.start();
+            }
+
+            @Override
+            public void onAdClose() {
+                Log.d(TAG, "广告关闭");
+                if(self.pluginCallback != null) self.pluginCallback.end();
+            }
+
+            @Override
+            public void onAdClicked() {
+                Log.d(TAG, "广告点击");
+                if(self.pluginCallback != null) self.pluginCallback.didClick();
+            }
+            @Override
+            public void onVideoCached() {
+
+                Log.d(TAG, "广告缓存成功");
+                if(self.pluginCallback != null) self.pluginCallback.didCache();
+            }
+            @Override
+            public void onVideoComplete() {
+                Log.d(TAG, "视频播放完毕");
+                if(self.pluginCallback != null) self.pluginCallback.didPlay();
+            }
+            @Override
+            public void onVideoSkip() {
+                Log.d(TAG, "跳过视频播放");
+                if(self.pluginCallback != null) self.pluginCallback.didSkip();
+            }
+            @Override
+            public void onAdReward() {
+                Log.d(TAG, "激励发放");
+                if(self.pluginCallback != null) self.pluginCallback.didRewardable();
+            }
+
+            @Override
+            public void onRewardServerInf(EARewardServerCallBackInf inf) { //优量汇和穿山甲支持回调服务端激励验证信息，详见RewardServerCallBackInf中字段信息
+                Log.d(TAG, "激励服务端验证" + inf);
+            }
+        };
+    }
 }

@@ -8,9 +8,9 @@ import auto.parcelgson.AutoParcelGson;
 
 @AutoParcelGson
 public abstract class AppModel extends BaseModel implements Parcelable {
-  abstract String tag();
-  abstract String appId();
-  abstract Integer index();
+  public abstract String tag();
+  public abstract String appId();
+  public abstract Integer index();
 
   public static AppModel create(String tag, String appId, Integer index) {
     return new AutoParcelGson_AppModel(tag, appId, index);
