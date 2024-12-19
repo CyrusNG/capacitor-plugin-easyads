@@ -101,7 +101,7 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         call.resolve(["callId": call.callbackId!])
     }
     
-    @objc func rewardVideo(_ call: CAPPluginCall) {
+    @objc func reward(_ call: CAPPluginCall) {
         //获取参数
         let name = call.getString("name")
         //获取viewController
@@ -124,7 +124,7 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         call.resolve(["callId": call.callbackId!])
     }
     
-    @objc func fullScreenVideo(_ call: CAPPluginCall) {
+    @objc func fullscreen(_ call: CAPPluginCall) {
         //获取参数
         let name = call.getString("name")
         //获取viewController
