@@ -67,15 +67,15 @@ public class EasyADController {
         //必须：设置开屏核心回调事件的监听器。
         EASplashListener listener = new EASplashListener() {
             @Override
-            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.start(); }
+            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onAdExposure() { logAndToast(mActivity, "广告展示成功"); }
             @Override
             public void onAdClicked() { logAndToast(mActivity, "广告点击"); }
             @Override
-            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.end(); }
+            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
-            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.fail(error); }
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.notify(null, null, null); }
         };
         //初始化广告实例
         EasyAdSplash easySplash = new EasyAdSplash(mActivity, adContainer, listener);
@@ -103,7 +103,7 @@ public class EasyADController {
         //必须：核心事件监听回调
         EABannerListener listener = new EABannerListener() {
             @Override
-            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.start(); }
+            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onAdExposure() { logAndToast(mActivity, "广告展现"); }
             @Override
@@ -111,9 +111,9 @@ public class EasyADController {
                 logAndToast(mActivity, "广告点击");
             }
             @Override
-            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.end(); }
+            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
-            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.fail(error); }
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.notify(null, null, null); }
         };
         //初始化广告实例
         EasyAdBanner easyAdBanner = new EasyAdBanner(mActivity, adContainer, listener);
@@ -144,7 +144,7 @@ public class EasyADController {
         //必须：核心事件监听回调
         EAInterstitialListener listener = new EAInterstitialListener() {
             @Override
-            public void onAdSucceed() { logAndToast(mActivity, "广告就绪"); if(callBack != null) callBack.start(); }
+            public void onAdSucceed() { logAndToast(mActivity, "广告就绪"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onAdExposure() { logAndToast(mActivity, "广告展示"); }
             @Override
@@ -152,9 +152,9 @@ public class EasyADController {
                 logAndToast(mActivity, "广告点击");
             }
             @Override
-            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.end(); }
+            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
-            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.fail(error); }
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.notify(null, null, null); }
         };
         //初始化广告实例
         EasyAdInterstitial easyInterstitial = new EasyAdInterstitial(mActivity, listener);
@@ -176,7 +176,7 @@ public class EasyADController {
         //必须：核心事件监听回调
         EARewardVideoListener listener = new EARewardVideoListener() {
             @Override
-            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.start(); }
+            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onAdExposure() {
                 logAndToast(mActivity, "广告展示");
@@ -190,7 +190,7 @@ public class EasyADController {
                 logAndToast(mActivity, "视频播放完毕");
             }
             @Override
-            public void onVideoSkip() { logAndToast(mActivity, "跳过视频播放");  if(callBack != null) callBack.didSkip(); }
+            public void onVideoSkip() { logAndToast(mActivity, "跳过视频播放");  if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onAdReward() { logAndToast(mActivity, "激励发放"); }
             @Override
@@ -198,9 +198,9 @@ public class EasyADController {
                 logAndToast(mActivity, "广告点击");
             }
             @Override
-            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.end(); }
+            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
-            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.fail(error); }
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onRewardServerInf(EARewardServerCallBackInf inf) { logAndToast(mActivity, "onRewardServerInf" + inf); } //优量汇和穿山甲支持回调服务端激励验证信息，详见RewardServerCallBackInf中字段信息
         };
@@ -223,7 +223,7 @@ public class EasyADController {
         //推荐：核心事件监听回调
         EAFullScreenVideoListener listener = new EAFullScreenVideoListener() {
             @Override
-            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.end(); }
+            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onAdExposure() {
                 logAndToast(mActivity, "广告展示");
@@ -235,15 +235,15 @@ public class EasyADController {
                 logAndToast(mActivity, "视频播放结束");
             }
             @Override
-            public void onVideoSkipped() { logAndToast(mActivity, "跳过视频"); if(callBack != null) callBack.didSkip(); }
+            public void onVideoSkipped() { logAndToast(mActivity, "跳过视频"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onAdClicked() {
                 logAndToast(mActivity, "广告点击");
             }
             @Override
-            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.end(); }
+            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
-            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.fail(error); }
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); if(callBack != null) callBack.notify(null, null, null); }
         };
         //初始化
         EasyAdFullScreenVideo easyFullScreenVideo = new EasyAdFullScreenVideo(mActivity, listener);
@@ -277,7 +277,7 @@ public class EasyADController {
         //推荐：核心事件监听回调
         EANativeExpressListener listener = new EANativeExpressListener() {
             @Override
-            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.start(); }
+            public void onAdSucceed() { logAndToast(mActivity, "广告加载成功"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
             public void onAdExposure() { logAndToast(mActivity, "广告展示"); hasNativeShow = true; isNativeLoading = false; }
             @Override
@@ -289,9 +289,9 @@ public class EasyADController {
                 logAndToast(mActivity, "广告点击");
             }
             @Override
-            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.end(); }
+            public void onAdClose() { logAndToast(mActivity, "广告关闭"); if(callBack != null) callBack.notify(null, null, null); }
             @Override
-            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); isNativeLoading = false; if(callBack != null) callBack.fail(error); }
+            public void onAdFailed(EasyAdError error) { logAndToast(mActivity, "广告加载失败 code=" + error.code + " msg=" + error.msg); isNativeLoading = false; if(callBack != null) callBack.notify(null, null, null); }
 
         };
         //初始化

@@ -13,8 +13,10 @@ public abstract class AdspotModel extends BaseModel implements Parcelable {
   public abstract String tag();
   public abstract List<String> targets();
 
-  public static AdspotModel create(String tag, List<String> targets) {
-    return new AutoParcelGson_AdspotModel(tag, targets);
+  public abstract OptionModel options();
+
+  public static AdspotModel create(String tag, List<String> targets, OptionModel options) {
+    return new AutoParcelGson_AdspotModel(tag, targets, options);
   }
 
   public static AdspotModel create(JSObject json) {

@@ -19,11 +19,13 @@ import com.easyads.core.banner.EABannerListener;
 import com.easyads.core.banner.EasyAdBanner;
 import com.easyads.model.EasyAdError;
 import com.easyads.utils.ScreenUtil;
+import com.getcapacitor.PluginCall;
 
 
 @SuppressLint("ViewConstructor")
 public class BannerController extends RelativeLayout implements BaseController {
     Activity context;
+    PluginCall call;
     AdCallback pluginCallback;
     SettingModel setting;
     OptionModel option;
@@ -31,10 +33,12 @@ public class BannerController extends RelativeLayout implements BaseController {
 
     private static final String TAG = BannerController.class.getSimpleName();
 
-    public BannerController(@NonNull final Activity context, AdCallback pluginCallback, SettingModel setting, OptionModel option) {
+    public BannerController(@NonNull final Activity context, PluginCall call, AdCallback pluginCallback, SettingModel setting, OptionModel option) {
         super(context);
         //保存当前activity
         this.context = context;
+        //保存当前Capacitor插件call
+        this.call = call;
         //保存插件回调
         this.pluginCallback = pluginCallback;
         //保存当前setting
@@ -57,7 +61,7 @@ public class BannerController extends RelativeLayout implements BaseController {
         EasyAdBanner easyAdBanner = new EasyAdBanner(this.context, adContainer, this.createListeners());
         //如果集成穿山甲，这里必须配置，建议尺寸要和穿山甲后台中的"代码位尺寸"宽高比例一致，值单位为dp，这里示例使用的广告位宽高比为640：100。
         int adWidth = ScreenUtil.px2dip(this.context, ScreenUtil.getScreenWidth(this.context));
-        int adHeight = (int) (((double) adWidth / (double) 320) * 50);
+        int adHeight = (int) (((double) adWidth / (double) this.option.width()) * this.option.height());
         //如果高度传入0代表自适应高度
         easyAdBanner.setCsjExpressSize(adWidth, adHeight);
         //必须：设置策略信息
@@ -107,33 +111,33 @@ public class BannerController extends RelativeLayout implements BaseController {
             @Override
             public void onAdFailed(EasyAdError error) {
                 Log.d(TAG, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-                if(self.pluginCallback != null) self.pluginCallback.fail(error);
+                if(self.pluginCallback != null) self.pluginCallback.notify("fail", self.call, error);
             }
 
             @Override
             public void onAdSucceed() {
                 Log.d(TAG, "广告加载成功");
                 appRootViewGroup.addView(self);
-                if(self.pluginCallback != null) self.pluginCallback.ready();
+                if(self.pluginCallback != null) self.pluginCallback.notify("ready", self.call, null);
             }
 
             @Override
             public void onAdExposure() {
                 Log.d(TAG, "广告展现");
-                if(self.pluginCallback != null) self.pluginCallback.start();
+                if(self.pluginCallback != null) self.pluginCallback.notify("start", self.call, null);
             }
 
             @Override
             public void onAdClose() {
                 Log.d(TAG, "广告关闭");
-                if(self.pluginCallback != null) self.pluginCallback.end();
+                if(self.pluginCallback != null) self.pluginCallback.notify("end", self.call, null);
             }
 
 
             @Override
             public void onAdClicked() {
                 Log.d(TAG, "广告点击");
-                if(self.pluginCallback != null) self.pluginCallback.didClick();
+                if(self.pluginCallback != null) self.pluginCallback.notify("did-click", self.call, null);
             }
         };
     }

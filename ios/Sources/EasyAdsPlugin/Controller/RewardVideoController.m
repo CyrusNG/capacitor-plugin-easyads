@@ -38,7 +38,7 @@
 
 - (void)load {
     // 通知代理因viewController为nil而失败
-    if(!self.viewController && self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"fail" data:nil];
+    if(!self.viewController && self.delegate != nil) [self.delegate notify:@"fail" call:self.call error:[[NSError alloc] init]];
     // 广告实例不要用初始化加载, 要确保每次都用最新的实例, 且一次广告流程中 delegate 不能发生变化
     [self destroy];
     //初始化easyAdRewardVideo
@@ -69,7 +69,7 @@
 // 广告加载失败
 - (void)easyAdFailedWithError:(NSError *)error description:(NSDictionary *)description{
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"fail" data:description];
+    if (self.delegate != nil) [self.delegate notify:@"fail" call:self.call error:error];
     [self destroy];
 }
 
@@ -77,46 +77,47 @@
 // 广告数据加载成功
 - (void)easyAdSucceed {
     NSLog(@"广告数据拉取成功, 正在缓存... %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"ready" data:nil];
+    if (self.delegate != nil) [self.delegate notify:@"ready" call:self.call error:nil];
 }
 
 // 广告曝光
 - (void)easyAdExposured {
     NSLog(@"广告曝光回调 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"start" data:nil];
+    if (self.delegate != nil) [self.delegate notify:@"start" call:self.call error:nil];
 }
+
+// 广告关闭
+- (void)easyAdDidClose {
+    NSLog(@"广告关闭了 %s", __func__);
+    if (self.delegate != nil) [self.delegate notify:@"end" call:self.call error:nil];
+    [self destroy];
+}
+
 
 // 视频缓存成功
 // 激励视频播放器采用的是边下边播的方式, 理论上拉取数据成功 即可展示, 但如果网速慢导致缓冲速度慢, 则激励视频会出现卡顿
 // 广点通推荐在 easyAdVideoCached 视频缓冲完成后再调用showad
 - (void)easyAdVideoCached {
     NSLog(@"视频缓存成功 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-cache" data:nil];
+    if (self.delegate != nil) [self.delegate notify:@"did-cache" call:self.call error:nil];
 }
 
 // 广告点击
 - (void)easyAdClicked {
     NSLog(@"广告点击 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-click" data:nil];
+    if (self.delegate != nil) [self.delegate notify:@"did-click" call:self.call error:nil];
 }
 
 // 到达激励时间
 - (void)easyAdVideoRewardable {
     NSLog(@"到达激励时间 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-rewardable" data:nil];
+    if (self.delegate != nil) [self.delegate notify:@"did-rewardable" call:self.call error:nil];
 }
 
 // 播放完成
 - (void)easyAdVideoPlayed {
     NSLog(@"广告播放完成 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-play" data:nil];
-}
-
-// 广告关闭
-- (void)easyAdDidClose {
-    NSLog(@"广告关闭了 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"end" data:nil];
-    [self destroy];
+    if (self.delegate != nil) [self.delegate notify:@"did-play" call:self.call error:nil];
 }
 
 

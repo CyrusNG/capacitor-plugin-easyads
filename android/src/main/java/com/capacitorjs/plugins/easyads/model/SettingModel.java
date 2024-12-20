@@ -18,27 +18,7 @@ public abstract class SettingModel extends BaseModel implements Parcelable {
   @SerializedName("suppliers")
   public abstract List<SupplierModel> suppliers();
 
-  public static SettingModel create(ConfigModel config, String adspotTag) {
-    // 获取所有相关models
-    List<RuleModel> rules = config.rules();
-    List<AppModel> apps = config.apps();
-    List<AdspotModel> adspots = config.adspots();
-    List<SupplierModel> suppliers = new ArrayList<>();
-    // 遍历adspots找到adspotName一致项
-    List<String> targets = Collections.emptyList();
-    for (AdspotModel adspot : adspots) {
-      if(adspotTag.equals(adspot.tag())) targets = adspot.targets();
-    }
-    // 遍历apps添加adspotId
-    for (AppModel app : apps) {
-      for (String target : targets) {
-        String[] parts = target.split("-", 2);
-        String appTag = parts[0];
-        String appTarget = parts[1];
-        if(app.tag().equals(appTag)) suppliers.add(SupplierModel.create(app, appTarget));
-      }
-    }
-    // 返回settingModel
+  public static SettingModel create(List<RuleModel> rules, List<SupplierModel> suppliers) {
     return new AutoParcelGson_SettingModel(rules, suppliers);
   }
 

@@ -37,7 +37,7 @@
 
 - (void)load {
     // 通知代理因viewController为nil而失败
-    if(!self.viewController && self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"fail" data:nil];
+    if(!self.viewController && self.delegate != nil) [self.delegate notify:@"fail" call:self.call error:[[NSError alloc] init]];
     // 广告实例不要用初始化加载, 要确保每次都用最新的实例, 且一次广告流程中 delegate 不能发生变化
     [self destroy];
     //初始化easyAdSplash并设置
@@ -73,45 +73,46 @@
 // 广告加载失败
 - (void)easyAdFailedWithError:(NSError *)error description:(NSDictionary *)description{
     NSLog(@"广告展示失败 %s  error: %@ 详情:%@", __func__, error, description);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"fail" data:description];
+    if (self.delegate != nil) [self.delegate notify:@"fail" call:self.call error:error];
     [self destroy];
 }
 
 // 广告数据拉取成功
 - (void)easyAdSucceed {
     NSLog(@"广告数据拉取成功 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"ready" data:nil];
+    if (self.delegate != nil) [self.delegate notify:@"ready" call:self.call error:nil];
 }
 
 // 广告曝光成功
 - (void)easyAdExposured {
     NSLog(@"广告曝光成功 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"start" data:nil];
-}
-
-// 广告点击
-- (void)easyAdClicked {
-    NSLog(@"广告点击 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-click" data:nil];
-}
-
-// 广告倒计时结束
-- (void)easyAdCountdowned {
-    NSLog(@"广告倒计时结束 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-countdown" data:nil];
-}
-
-// 点击了跳过
-- (void)easyAdSkipped {
-    NSLog(@"点击了跳过 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"did-skip" data:nil];
-    [self destroy];
+    if (self.delegate != nil) [self.delegate notify:@"start" call:self.call error:nil];
 }
 
 // 广告关闭
 - (void)easyAdDidClose {
     NSLog(@"广告关闭了 %s", __func__);
-    if (self.delegate != nil) [self.delegate notify:self.call.callbackId event:@"end" data:nil];
+    if (self.delegate != nil) [self.delegate notify:@"end" call:self.call error:nil];
+    [self destroy];
+}
+
+
+// 广告点击
+- (void)easyAdClicked {
+    NSLog(@"广告点击 %s", __func__);
+    if (self.delegate != nil) [self.delegate notify:@"did-click" call:self.call error:nil];
+}
+
+// 广告倒计时结束
+- (void)easyAdCountdowned {
+    NSLog(@"广告倒计时结束 %s", __func__);
+    if (self.delegate != nil) [self.delegate notify:@"did-countdown" call:self.call error:nil];
+}
+
+// 点击了跳过
+- (void)easyAdSkipped {
+    NSLog(@"点击了跳过 %s", __func__);
+    if (self.delegate != nil) [self.delegate notify:@"did-skip" call:self.call error:nil];
     [self destroy];
 }
 

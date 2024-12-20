@@ -12,11 +12,7 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
     public let jsName = "EasyAds"
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "init", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "splash", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "banner", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "interstitial", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "rewardVideo", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "fullVideo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "load", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "destroy", returnType: CAPPluginReturnPromise)
     ]
     
@@ -32,17 +28,39 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         call.resolve(["callId": call.callbackId!])
     }
     
-    @objc func splash(_ call: CAPPluginCall) {
+    @objc func load(_ call: CAPPluginCall) {
         //获取参数
-        let name = call.getString("name")
+        let type = call.getString("type")
+        let tag = call.getString("tag")
+        //错误检查
+        if(self.config == nil) { call.reject("Not yet init.", "NOT_INIT") }
+        if(type == nil || tag == nil) { call.reject("Param invalid.", "TYPE_AND_TAG_REQUIRED") }
+        //导航到对应函数
+        switch(tag) {
+            case "splash": self.splash(adType:type!, adTag:tag!, call:call); break;
+            case "banner": self.banner(adType:type!, adTag:tag!, call:call); break;
+            case "interstitial": self.interstitial(adType:type!, adTag:tag!, call:call); break;
+            case "reward": self.reward(adType:type!, adTag:tag!, call:call); break;
+            case "fullscreen": self.fullscreen(adType:type!, adTag:tag!, call:call); break;
+            default: call.reject("Unknown ad type.", "UNKNOWN_AD_TYPE"); break;
+        }
+    }
+    
+    @objc func destroy(_ call: CAPPluginCall) {
+        let callId = call.getString("callId") ?? ""
+        adspotList[callId]?.destroy()
+        call.resolve(["callId": callId])
+    }
+    
+    
+    // Api implementation ===============================
+    private func splash(adType: String, adTag: String, call: CAPPluginCall) {
         //获取viewController
         let vc = self.bridge?.viewController
         //将配置转换成Controller需要的格式
-        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: name!)
-        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: name!)
+        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: adTag)
+        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: adTag)
         //错误检查
-        if(self.config == nil) { call.reject("Not yet init.", "NOT_INIT") }
-        if(name == nil) { call.reject("Invalid param.", "INVALID_PARAM") }
         if(setting == nil) { call.reject("Invalid name.", "INVALID_NAME") }
         if(vc == nil) { call.reject("Not found view controller.", "NOT_FOUND_VIEW_CONTROLLER") }
         //初始化广告控制器
@@ -55,17 +73,13 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         call.resolve(["callId": call.callbackId!])
     }
     
-    @objc func banner(_ call: CAPPluginCall) {
-        //获取参数
-        let name = call.getString("name")
+    private func banner(adType: String, adTag: String, call: CAPPluginCall) {
         //获取viewController
         let vc = self.bridge?.viewController
         //将配置转换成Controller需要的格式
-        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: name!)
-        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: name!)
+        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: adTag)
+        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: adTag)
         //错误检查
-        if(self.config == nil) { call.reject("Not yet init.", "NOT_INIT") }
-        if(name == nil) { call.reject("Invalid param.", "INVALID_PARAM") }
         if(setting == nil) { call.reject("Invalid name.", "INVALID_NAME") }
         if(vc == nil) { call.reject("Not found view controller.", "NOT_FOUND_VIEW_CONTROLLER") }
         //初始化广告控制器
@@ -78,17 +92,14 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         call.resolve(["callId": call.callbackId!])
     }
     
-    @objc func interstitial(_ call: CAPPluginCall) {
-        //获取参数
-        let name = call.getString("name")
+    private func interstitial(adType: String, adTag: String, call: CAPPluginCall) {
         //获取viewController
         let vc = self.bridge?.viewController
         //将配置转换成Controller需要的格式
-        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: name!)
-        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: name!)
+        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: adTag)
+        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: adTag)
         //错误检查
         if(self.config == nil) { call.reject("Not yet init.", "NOT_INIT") }
-        if(name == nil) { call.reject("Invalid param.", "INVALID_PARAM") }
         if(setting == nil) { call.reject("Invalid name.", "INVALID_NAME") }
         if(vc == nil) { call.reject("Not found view controller.", "NOT_FOUND_VIEW_CONTROLLER") }
         //初始化广告控制器
@@ -101,17 +112,13 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         call.resolve(["callId": call.callbackId!])
     }
     
-    @objc func reward(_ call: CAPPluginCall) {
-        //获取参数
-        let name = call.getString("name")
+    private func reward(adType: String, adTag: String, call: CAPPluginCall) {
         //获取viewController
         let vc = self.bridge?.viewController
         //将配置转换成Controller需要的格式
-        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: name!)
-        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: name!)
+        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: adTag)
+        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: adTag)
         //错误检查
-        if(self.config == nil) { call.reject("Not yet init.", "NOT_INIT") }
-        if(name == nil) { call.reject("Invalid param.", "INVALID_PARAM") }
         if(setting == nil) { call.reject("Invalid name.", "INVALID_NAME") }
         if(vc == nil) { call.reject("Not found view controller.", "NOT_FOUND_VIEW_CONTROLLER") }
         //初始化广告控制器
@@ -124,17 +131,13 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         call.resolve(["callId": call.callbackId!])
     }
     
-    @objc func fullscreen(_ call: CAPPluginCall) {
-        //获取参数
-        let name = call.getString("name")
+    private func fullscreen(adType: String, adTag: String, call: CAPPluginCall) {
         //获取viewController
         let vc = self.bridge?.viewController
         //将配置转换成Controller需要的格式
-        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: name!)
-        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: name!)
+        let setting = ModelConverter().convertSetting(fromConfig: self.config!, adspotTag: adTag)
+        let option = ModelConverter().convertOption(fromConfig: self.config!, adspotTag: adTag)
         //错误检查
-        if(self.config == nil) { call.reject("Not yet init.", "NOT_INIT") }
-        if(name == nil) { call.reject("Invalid param.", "INVALID_PARAM") }
         if(setting == nil) { call.reject("Invalid name.", "INVALID_NAME") }
         if(vc == nil) { call.reject("Not found view controller.", "NOT_FOUND_VIEW_CONTROLLER") }
         //初始化广告控制器
@@ -147,16 +150,11 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         call.resolve(["callId": call.callbackId!])
     }
     
-    @objc func destroy(_ call: CAPPluginCall) {
-        let callId = call.getString("callId") ?? ""
-        adspotList[callId]?.destroy()
-        call.resolve(["callId": callId])
-    }
-    
     
     // AdCallbackProtocol implementation ===============================
-    @objc public func notify(_ callId: String, event: String, data: [String : Any]?) {
-        self.notifyListeners(event, data: data)
+    @objc public func notify(_ event: String, call: CAPPluginCall, error: (any Error)?) {
+        let eventModel = EventModel.easyAd_model(withJSON: [ "event": event, "adType": call.getString("type")!, "adTag": call.getString("tag")!, "callId": call.callbackId!, "error": error as Any ])
+        self.notifyListeners(event, data: eventModel?.easyAd_modelToJSONObject() as? Dictionary)
     }
     
 }

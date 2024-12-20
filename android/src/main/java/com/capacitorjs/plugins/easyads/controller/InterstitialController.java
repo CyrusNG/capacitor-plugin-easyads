@@ -11,17 +11,21 @@ import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.easyads.core.inter.EAInterstitialListener;
 import com.easyads.core.inter.EasyAdInterstitial;
 import com.easyads.model.EasyAdError;
+import com.getcapacitor.PluginCall;
 
 public class InterstitialController implements BaseController {
     Activity context;
+    PluginCall call;
     AdCallback pluginCallback;
     SettingModel setting;
     OptionModel option;
     private static final String TAG = InterstitialController.class.getSimpleName();
 
-    public InterstitialController(@NonNull final Activity context, AdCallback pluginCallback, SettingModel setting, OptionModel option) {
+    public InterstitialController(@NonNull final Activity context, PluginCall call, AdCallback pluginCallback, SettingModel setting, OptionModel option) {
         //保存当前activity
         this.context = context;
+        //保存当前Capacitor插件call
+        this.call = call;
         //保存插件回调
         this.pluginCallback = pluginCallback;
         //保存当前setting
@@ -67,31 +71,31 @@ public class InterstitialController implements BaseController {
             @Override
             public void onAdFailed(EasyAdError error) {
                 Log.d(TAG, "广告加载失败 code=" + error.code + " msg=" + error.msg);
-                if(self.pluginCallback != null) self.pluginCallback.fail(error);
+                if(self.pluginCallback != null) self.pluginCallback.notify("fail", self.call, error);
             }
 
             @Override
             public void onAdSucceed() {
                 Log.d(TAG, "广告加载成功");
-                if(self.pluginCallback != null) self.pluginCallback.ready();
+                if(self.pluginCallback != null) self.pluginCallback.notify("ready", self.call, null);
             }
 
             @Override
             public void onAdExposure() {
                 Log.d(TAG, "广告展现");
-                if(self.pluginCallback != null) self.pluginCallback.start();
+                if(self.pluginCallback != null) self.pluginCallback.notify("start", self.call, null);
             }
 
             @Override
             public void onAdClose() {
                 Log.d(TAG, "广告关闭");
-                if(self.pluginCallback != null) self.pluginCallback.end();
+                if(self.pluginCallback != null) self.pluginCallback.notify("end", self.call, null);
             }
 
             @Override
             public void onAdClicked() {
                 Log.d(TAG, "广告点击");
-                if(self.pluginCallback != null) self.pluginCallback.didClick();
+                if(self.pluginCallback != null) self.pluginCallback.notify("did-click", self.call, null);
             }
         };
     }

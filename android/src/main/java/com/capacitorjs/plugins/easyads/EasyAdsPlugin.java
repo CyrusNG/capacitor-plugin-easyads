@@ -9,9 +9,11 @@ import com.capacitorjs.plugins.easyads.controller.RewardVideoController;
 import com.capacitorjs.plugins.easyads.controller.SplashController;
 import com.capacitorjs.plugins.easyads.model.ConfigModel;
 import com.capacitorjs.plugins.easyads.model.EventModel;
+import com.capacitorjs.plugins.easyads.model.OptionModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.controller.BannerController;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
+import com.capacitorjs.plugins.easyads.utils.ModelConverter;
 import com.easyads.core.BuildConfig;
 import com.easyads.model.EALogLevel;
 import com.easyads.model.EasyAdError;
@@ -24,6 +26,7 @@ import com.hjq.toast.ToastUtils;
 import com.easyads.EasyAds;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 @CapacitorPlugin(name = "EasyAds")
 public class EasyAdsPlugin extends Plugin {
@@ -49,106 +52,22 @@ public class EasyAdsPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void splash(PluginCall call) {
+    public void load(PluginCall call) {
+        //获取参数
+        String type = call.getString("type");
+        String tag = call.getString("tag");
         //检查初始化状态
         if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        // TODO: check setting format
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加载Splash广告
-        Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("splash", call, name);
-        activity.runOnUiThread(() -> {
-            BaseController ad = new SplashController(activity, callback, setting, null);
-            //adspotList.put(callId, ad);
-            ad.load();
-        });
-        //返回结果
-        call.resolve(new JSObject().put("callId", call.getCallbackId()));
-    }
-
-    @PluginMethod
-    public void banner(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加载Banner广告
-        Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("banner", call, name);
-        activity.runOnUiThread(() -> {
-            BaseController ad = new BannerController(activity, callback, setting, null);
-            adspotList.put(call.getCallbackId(), ad);
-            ad.load();
-        });
-        //返回结果
-        call.resolve(new JSObject().put("callId", call.getCallbackId()));
-    }
-
-    @PluginMethod
-    public void interstitial(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加载插屏广告
-        Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("interstitial", call, name);
-        activity.runOnUiThread(() -> {
-            BaseController ad = new InterstitialController(activity, callback, setting, null);
-            //adspotList.put(callId, ad);
-            ad.load();
-        });
-        //返回结果
-        call.resolve(new JSObject().put("callId", call.getCallbackId()));
-
-    }
-
-    @PluginMethod
-    public void reward(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加载激励视频广告
-        Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("reward", call, name);
-        activity.runOnUiThread(() -> {
-            BaseController ad = new RewardVideoController(activity, callback, setting, null);
-            //adspotList.put(callId, ad);
-            ad.load();
-        });
-        //返回结果
-        call.resolve(new JSObject().put("callId", call.getCallbackId()));
-
-    }
-
-    @PluginMethod
-    public void fullscreen(PluginCall call) {
-        //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        //获取参数
-        String name = call.getString("name");
-        //将配置转换成EasyADController需要的格式
-        SettingModel setting = SettingModel.create(this.config, name);
-        //加载全屏视频广告
-        Activity activity = getActivity();
-        AdCallback callback = this.createAdCallback("fullscreen", call, name);
-        activity.runOnUiThread(() -> {
-            BaseController ad = new FullScreenVideoController(activity, callback, setting, null);
-            //adspotList.put(callId, ad);
-            ad.load();
-        });
-        //返回结果
-        call.resolve(new JSObject().put("callId", call.getCallbackId()));
+        if(type == null || tag == null) call.reject("Param invalid.", "TYPE_AND_TAG_REQUIRED");
+        //导航到对应函数
+        switch(Objects.requireNonNull(type)) {
+            case "splash": this.splash(type, tag, call); break;
+            case "banner": this.banner(type, tag, call); break;
+            case "interstitial": this.interstitial(type, tag, call); break;
+            case "reward": this.reward(type, tag, call); break;
+            case "fullscreen": this.fullscreen(type, tag, call); break;
+            default: call.reject("Unknown ad type.", "UNKNOWN_AD_TYPE"); break;
+        }
     }
 
     @PluginMethod
@@ -161,39 +80,94 @@ public class EasyAdsPlugin extends Plugin {
         if(targetAdspot != null) getActivity().runOnUiThread(() -> targetAdspot.destroy());
     }
 
+
+    // Api implementation ===============================
+    private void splash(String adType, String adTag, PluginCall call) {
+        //将配置和选项转换成EasyADController需要的格式
+        SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
+        OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //加载Splash广告
+        Activity activity = getActivity();
+        AdCallback callback = this.createAdCallback();
+        activity.runOnUiThread(() -> {
+            BaseController ad = new SplashController(activity, call, callback, setting, option);
+            adspotList.put(call.getCallbackId(), ad);
+            ad.load();
+        });
+        //返回结果
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
+    }
+
+    private void banner(String adType, String adTag, PluginCall call) {
+        //将配置和选项转换成EasyADController需要的格式
+        SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
+        OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //加载Banner广告
+        Activity activity = getActivity();
+        AdCallback callback = this.createAdCallback();
+        activity.runOnUiThread(() -> {
+            BaseController ad = new BannerController(activity, call, callback, setting, option);
+            adspotList.put(call.getCallbackId(), ad);
+            ad.load();
+        });
+        //返回结果
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
+    }
+
+    private void interstitial(String adType, String adTag, PluginCall call) {
+        //将配置和选项转换成EasyADController需要的格式
+        SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
+        OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //加载插屏广告
+        Activity activity = getActivity();
+        AdCallback callback = this.createAdCallback();
+        activity.runOnUiThread(() -> {
+            BaseController ad = new InterstitialController(activity, call, callback, setting, option);
+            adspotList.put(call.getCallbackId(), ad);
+            ad.load();
+        });
+        //返回结果
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
+
+    }
+
+    private void reward(String adType, String adTag, PluginCall call) {
+        //将配置和选项转换成EasyADController需要的格式
+        SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
+        OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //加载激励视频广告
+        Activity activity = getActivity();
+        AdCallback callback = this.createAdCallback();
+        activity.runOnUiThread(() -> {
+            BaseController ad = new RewardVideoController(activity, call, callback, setting, option);
+            adspotList.put(call.getCallbackId(), ad);
+            ad.load();
+        });
+        //返回结果
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
+
+    }
+
+    private void fullscreen(String adType, String adTag, PluginCall call) {
+        //将配置和选项转换成EasyADController需要的格式
+        SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
+        OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //加载全屏视频广告
+        Activity activity = getActivity();
+        AdCallback callback = this.createAdCallback();
+        activity.runOnUiThread(() -> {
+            BaseController ad = new FullScreenVideoController(activity, call, callback, setting, option);
+            adspotList.put(call.getCallbackId(), ad);
+            ad.load();
+        });
+        //返回结果
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
+    }
+
+
     // AdCallback implementation ===============================
-    private AdCallback createAdCallback(String type, PluginCall call, String tag) {
-        return new AdCallback() {
-            @Override
-            public void ready() { notifyListeners(type, EventModel.create(type, "ready", call.getCallbackId(), tag, null).toJsObject()); }
-
-            @Override
-            public void start() { notifyListeners(type, EventModel.create(type, "start", call.getCallbackId(), tag, null).toJsObject()); }
-
-            @Override
-            public void end() { notifyListeners(type, EventModel.create(type, "end", call.getCallbackId(), tag, null).toJsObject()); }
-
-            @Override
-            public void fail(EasyAdError error) { notifyListeners(type, EventModel.create(type, "fail", call.getCallbackId(), tag, error).toJsObject()); }
-
-            @Override
-            public void didClick() { notifyListeners(type, EventModel.create(type, "did-click", call.getCallbackId(), tag, null).toJsObject()); }
-
-            @Override
-            public void didPlay() { notifyListeners(type, EventModel.create(type, "did-play", call.getCallbackId(), tag, null).toJsObject()); }
-
-            @Override
-            public void didCache() { notifyListeners(type, EventModel.create(type, "did-cache", call.getCallbackId(), tag, null).toJsObject()); }
-
-            @Override
-            public void didRewardable() { notifyListeners(type, EventModel.create(type, "did-rewardable", call.getCallbackId(), tag, null).toJsObject()); }
-
-            @Override
-            public void didCountdown() { notifyListeners(type, EventModel.create(type, "did-countdown", call.getCallbackId(), tag, null).toJsObject()); }
-
-            @Override
-            public void didSkip() { notifyListeners(type, EventModel.create(type, "did-skip", call.getCallbackId(), tag, null).toJsObject()); }
-        };
+    private AdCallback createAdCallback() {
+        return (event, call, error) -> notifyListeners(event, EventModel.create(event, call.getString("type"), call.getString("tag"), call.getCallbackId(), error).toJsObject());
     }
 
 }
