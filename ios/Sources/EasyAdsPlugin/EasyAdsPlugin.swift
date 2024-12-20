@@ -36,7 +36,7 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         if(self.config == nil) { call.reject("Not yet init.", "NOT_INIT") }
         if(type == nil || tag == nil) { call.reject("Param invalid.", "TYPE_AND_TAG_REQUIRED") }
         //导航到对应函数
-        switch(tag) {
+        switch(type) {
             case "splash": self.splash(adType:type!, adTag:tag!, call:call); break;
             case "banner": self.banner(adType:type!, adTag:tag!, call:call); break;
             case "interstitial": self.interstitial(adType:type!, adTag:tag!, call:call); break;

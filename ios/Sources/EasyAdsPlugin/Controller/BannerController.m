@@ -57,7 +57,12 @@
 }
 
 - (void)destroy {
-    self.adspotView = nil;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if(self.adspotView) {
+            [self.adspotView removeFromSuperview];
+            self.adspotView = nil;
+        }
+    });
     self.easyAdBanner = nil;
     self.easyAdBanner.delegate = nil;
 }
