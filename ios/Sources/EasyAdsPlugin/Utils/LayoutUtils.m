@@ -26,4 +26,9 @@ static LayoutUtils *instance;
     return MIN(statusBarSize.width, statusBarSize.height);
 }
 
++ (UIImage*)getAppIcon {
+    UIImage *appIcon = [UIImage imageNamed: [[[[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleIcons"] objectForKey:@"CFBundlePrimaryIcon"] objectForKey:@"CFBundleIconFiles"]  objectAtIndex:0]];
+    return appIcon;
+}
+
 @end

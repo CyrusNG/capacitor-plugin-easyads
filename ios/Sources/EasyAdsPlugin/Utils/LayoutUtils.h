@@ -3,5 +3,6 @@
 @interface LayoutUtils : NSObject
 
 + (CGFloat)getStatusBarHeight;
++ (UIImage*)getAppIcon;
 
 @end

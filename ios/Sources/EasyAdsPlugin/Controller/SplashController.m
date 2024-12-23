@@ -12,6 +12,7 @@
 #import "EasyAdBannerDelegate.h"
 #import "SettingModel.h"
 #import "NSObject+EasyAdModel.h"
+#import "LayoutUtils.h"
 @interface SplashController () <EasyAdSplashDelegate>
 @property (nonatomic, strong) EasyAdSplash *easyAdSplash;
 @property (nonatomic, strong) SettingModel *setting;
@@ -43,7 +44,7 @@
     //初始化easyAdSplash并设置
     self.easyAdSplash = [[EasyAdSplash alloc] initWithJsonDic:[self.setting easyAd_modelToJSONObject] viewController:self.viewController];
     self.easyAdSplash.showLogoRequire = self.option.showLogo;
-    self.easyAdSplash.logoImage = [UIImage imageNamed:@"app_logo"];
+    self.easyAdSplash.logoImage = [LayoutUtils getAppIcon];
     self.easyAdSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
     self.easyAdSplash.timeout = 5;
     //设置代理
