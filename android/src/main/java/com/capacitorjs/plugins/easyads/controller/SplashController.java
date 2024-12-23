@@ -146,6 +146,7 @@ public class SplashController extends Dialog implements BaseController {
 
             @Override
             public void onAdSucceed() {
+                self.show(); //广告加载成功后随即打开Dialog
                 Log.d(TAG, "广告加载成功");
                 if(self.pluginCallback != null) self.pluginCallback.notify("ready", self.call, null);
             }
@@ -158,6 +159,7 @@ public class SplashController extends Dialog implements BaseController {
 
             @Override
             public void onAdClose() {
+                self.dismiss(); //广告关闭后随即关闭Dialog
                 Log.d(TAG, "广告关闭");
                 if(self.pluginCallback != null) self.pluginCallback.notify("end", self.call, null);
             }
