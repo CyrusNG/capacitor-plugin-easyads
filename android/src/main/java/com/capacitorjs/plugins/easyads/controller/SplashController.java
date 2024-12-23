@@ -64,7 +64,7 @@ public class SplashController extends Dialog implements BaseController {
         //初始化广告实例
         EasyAdSplash easySplash = new EasyAdSplash(this.context, this.adContainer, this.createListeners());
         //注意：如果开屏页是fragment或者dialog实现，这里需要置为false。默认为true，代表开屏和首页为两个不同的activity
-        easySplash.setShowInSingleActivity(this.option.singleActivity());
+        easySplash.setShowInSingleActivity(false);
         //注意：此处自定义渠道的tag，一定要和setData()中配置的tag一致。
 //        if (cusXiaoMi) easySplash.addCustomSupplier("xm", new XiaoMiSplashAdapter(new SoftReference<>(this.context), easySplash));
 //        if (cusHuaWei) easySplash.addCustomSupplier("hw", new HuaWeiSplashAdapter(new SoftReference<>(this.context), easySplash));

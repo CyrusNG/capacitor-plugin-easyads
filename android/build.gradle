@@ -68,8 +68,8 @@ dependencies {
     implementation "com.qq.e:gdt-sdk-union-normal:4.603.1473"                      //优量汇广告SDK（建议）
     implementation "com.baidu.mobads.proxy:baidu-mobads-sdk:9.3.52"                //百度广告SDK（可选）
     implementation "com.kwad.sdk:kssdk-ad:3.3.63"                                  //快手广告SDK（可选）
-    implementation "com.miui.zeus.mimo.sdk:mimo-ad-sdk:5.0.9"                      //自定义-小米广告SDK
-    implementation 'com.huawei.hms:ads-lite:13.4.49.301'                           //自定义-华为广告SDK
+    //implementation "com.miui.zeus.mimo.sdk:mimo-ad-sdk:5.0.9"                      //自定义-小米广告SDK
+    //implementation 'com.huawei.hms:ads-lite:13.4.49.301'                           //自定义-华为广告SDK
 
     // GroMore官方提供的依赖
     //implementation "com.pangle.cn:mediation-test-tools:6.5.0.2"                  //groMore 测试工具，仅在测试阶段使用，请勿带到线上

@@ -45,10 +45,6 @@
 <!--            </intent-filter>-->
 <!--        </activity>-->
 
-        <activity android:name="com.capacitorjs.plugins.easyads.activity.NativeExpressRecyclerViewActivity" />
-        <activity android:name="com.capacitorjs.plugins.easyads.activity.DrawActivity" android:configChanges="keyboard|orientation|screenSize" />
-        <activity android:name="com.capacitorjs.plugins.easyads.activity.CustomActivity" />
-
         <!-- 穿山甲广告SDK Provider -->
         <provider
             android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
