@@ -13,12 +13,14 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.capacitorjs.plugins.easyads.R;
 import com.capacitorjs.plugins.easyads.model.OptionModel;
 import com.capacitorjs.plugins.easyads.model.SettingModel;
 import com.capacitorjs.plugins.easyads.utils.AdCallback;
+import com.capacitorjs.plugins.easyads.utils.UIUtils;
 import com.easyads.core.splash.EASplashListener;
 import com.easyads.core.splash.EasyAdSplash;
 import com.easyads.model.EasyAdError;
@@ -30,7 +32,7 @@ public class SplashController extends Dialog implements BaseController {
     AdCallback pluginCallback;
     SettingModel setting;
     OptionModel option;
-    LinearLayout logo;
+    ImageView logo;
     FrameLayout adContainer;
 
     private static final String TAG = SplashController.class.getSimpleName();
@@ -51,7 +53,9 @@ public class SplashController extends Dialog implements BaseController {
         setContentView(R.layout.adspot_splash);
         //获取广告容器和LogoView
         this.adContainer = findViewById(R.id.splash_container);
-        this.logo = findViewById(R.id.ll_logo);
+        this.logo = findViewById(R.id.splash_logo_image);
+        //设置App logo
+        this.logo.setImageDrawable(UIUtils.getAppLogo(context));
     }
 
     /**

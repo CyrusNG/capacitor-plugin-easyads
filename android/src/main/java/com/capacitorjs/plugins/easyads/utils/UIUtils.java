@@ -2,6 +2,8 @@ package com.capacitorjs.plugins.easyads.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -123,7 +125,7 @@ public class UIUtils {
      */
     public static boolean isAndroidPHasNotch(Activity activity){
         boolean result = false;
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             DisplayCutout displayCutout = null;
             try {
                 WindowInsets windowInsets = activity.getWindow().getDecorView().getRootWindowInsets();
@@ -326,5 +328,21 @@ public class UIUtils {
         size[0] = dm.widthPixels;
         size[1] = dm.heightPixels;
         return size;
+    }
+
+
+    /**
+     * 获取App图标
+     * @param context
+     * @return
+     */
+    public static Drawable getAppLogo(Context context) {
+        Drawable appIcon = null;
+        try {
+            appIcon = context.getPackageManager().getApplicationIcon(context.getPackageName());
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return appIcon;
     }
 }
