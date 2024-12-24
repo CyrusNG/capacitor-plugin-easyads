@@ -156,7 +156,7 @@ EasyAd中ad.load()配置格式 - 仅供参考不需配置，程序内会自动�
 
 解决办法：配置 @ app -> Build Settings Architectures -> Exclude Architectures -> Debug/Release -> Any iOS Simulator SDK: arm64
 
- [<img src="https://github.com/CyrusNG/capacitor-plugin-easyads/blob/c28371f7e9becb0fce57351a8007f3e430aa61e0/reference/settingExcludeArm64.png"/>](settingExcludeArm64.png)
+ [<img src="https://github.com/CyrusNG/capacitor-plugin-easyads/blob/c41931073c6dc7d31dc5b1565d3183046d9d6176/reference/settingExcludeArm64.png"/>](settingExcludeArm64.png)
 
 
 ### 2、构建成功，但打开APP闪退报错
