@@ -22,7 +22,7 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.hjq.toast.ToastUtils;
+// import com.hjq.toast.ToastUtils;
 import com.easyads.EasyAds;
 
 import java.util.HashMap;
@@ -46,7 +46,7 @@ public class EasyAdsPlugin extends Plugin {
         //自定义渠道-华为广告的初始化，如果不需要自定义可忽略此处
         //HwAds.init(getContext());
         // 初始化 Toast 框架
-        ToastUtils.init(getActivity().getApplication());
+        // ToastUtils.init(getActivity().getApplication());
         // 返回 JSObject 结果
         call.resolve(new JSObject().put("callId", call.getCallbackId()));
     }

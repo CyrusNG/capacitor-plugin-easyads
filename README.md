@@ -154,6 +154,8 @@ EasyAd中ad.load()配置格式 - 仅供参考不需配置，程序内会自动�
 
 ### 1、无法在arm64的simulator中运行
 
+原因：优量汇的libGDTMobSDK.a预编译文件不支持arm64架构的iPhone模拟器
+
 解决办法：配置 @ app -> Build Settings Architectures -> Exclude Architectures -> Debug/Release -> Any iOS Simulator SDK: arm64
 
  [<img src="https://github.com/CyrusNG/capacitor-plugin-easyads/blob/c41931073c6dc7d31dc5b1565d3183046d9d6176/reference/settingExcludeArm64.png"/>](settingExcludeArm64.png)
