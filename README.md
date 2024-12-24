@@ -23,6 +23,17 @@ npm install capacitor-plugin-easyads
 npx cap sync
 ```
 
+## 使用
+
+```javascript
+// 初始化 - 可在用户首次确认隐私前调用
+await window.EasyAdsPlugin.init({ config: CONFIG.ads });
+// 加载广告
+const result = await window.EasyAdsPlugin.load({type: "splash", tag: "app_splash"});
+// 销毁广告
+await window.EasyAdsPlugin.destroy({callId: result.callId });
+```
+
 ## API
 
 <docgen-index>
@@ -48,7 +59,7 @@ npx cap sync
 | **`adspots`** | <code><a href="#array">Array</a>&lt;{ tag: string, targets: <a href="#array">Array</a>&lt;string&gt;, options: <a href="#object">Object</a> }&gt;</code> |
 
 格式范例:
-```json
+```
 { 
   rules: [
     { tag: "rule-1", sort: [ 1, 3 ], percent: 50 },
@@ -124,7 +135,7 @@ destroy({ callId: string }) => Promise<Result>
 
 ## 参考
 EasyAd中ad.load()配置格式 - 仅供参考不需配置，程序内会自动将init()输入的参数转成以下格式传去EasyAdSDK:
-```json
+```
 {
     rules: [
       { tag: "rule-1", sort: [ 1, 3 ], percent: 50 },
