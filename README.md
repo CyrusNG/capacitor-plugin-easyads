@@ -151,25 +151,12 @@ EasyAd中ad.load()配置格式 - 仅供参考不需配置，程序内会自动�
 ```
 
 ## 问题与解决
-### 1、编译报错尝试加以下脚本：
-```pod
-post_install do |installer|
-  
-  assertDeploymentTarget(installer)
-  
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      # for support ads
-      if target.name == 'Masonry'
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = $target              # build fail on latest xCode 16 for masonry default old date deployment target 8.0
-        config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'    # GDT's libGDTMobSDK.a NOT support arm64 iPhone simulator
-      end
-    end
-  end
-  
-end
-```
 
+### 1、无法在arm64的simulator中运行
+
+解决办法：配置 @ app -> Build Settings Architectures -> Exclude Architectures -> Debug/Release -> Any iOS Simulator SDK: arm64
+
+ [<img src="https://github.com/CyrusNG/capacitor-plugin-easyads/blob/c28371f7e9becb0fce57351a8007f3e430aa61e0/reference/settingExcludeArm64.png"/>](settingExcludeArm64.png)
 
 
 ### 2、构建成功，但打开APP闪退报错
