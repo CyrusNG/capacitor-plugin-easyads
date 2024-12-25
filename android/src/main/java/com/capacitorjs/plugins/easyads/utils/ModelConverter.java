@@ -44,7 +44,7 @@ public class ModelConverter {
             }
         }
         // 返回settingModel
-        return SettingModel.create(rules, suppliers);
+        return suppliers.isEmpty()? null : SettingModel.create(rules, suppliers);
     }
 
     public static OptionModel convertOption(ConfigModel config, String adspotTag) {

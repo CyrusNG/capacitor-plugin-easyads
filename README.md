@@ -26,6 +26,7 @@ npx cap sync
 ## 使用
 
 ```javascript
+
 // 初始化 - 可在用户首次确认隐私前调用
 await window.EasyAdsPlugin.init({ config: CONFIG.ads });
 
@@ -38,8 +39,9 @@ await window.EasyAdsPlugin.destroy({callId: adRes.callId });
 // 检查权限
 const permRes = await window.EasyAdsPlugin.permission({action: "check", name: "location" });
 
-// 请求权限
+// 请求权限 - 所有权限都不是必须的，如涉及权限必须在隐私说明中提及此权限应用于广告，否则影响上架审核
 if(permRes !== "grant") await window.EasyAdsPlugin.permission({action: "grant", name: "location" });
+
 ```
 
 ## API

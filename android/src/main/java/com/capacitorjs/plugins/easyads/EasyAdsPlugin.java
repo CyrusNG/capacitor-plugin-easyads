@@ -150,6 +150,8 @@ public class EasyAdsPlugin extends Plugin {
         //将配置和选项转换成EasyADController需要的格式
         SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
         OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //错误检查
+        if(setting == null) { call.reject("Invalid name.", "INVALID_NAME"); return; }
         //加载Splash广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback();
@@ -166,6 +168,8 @@ public class EasyAdsPlugin extends Plugin {
         //将配置和选项转换成EasyADController需要的格式
         SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
         OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //错误检查
+        if(setting == null) { call.reject("Invalid name.", "INVALID_NAME"); return; }
         //加载Banner广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback();
@@ -182,6 +186,8 @@ public class EasyAdsPlugin extends Plugin {
         //将配置和选项转换成EasyADController需要的格式
         SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
         OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //错误检查
+        if(setting == null) { call.reject("Invalid name.", "INVALID_NAME"); return; }
         //加载插屏广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback();
@@ -199,6 +205,8 @@ public class EasyAdsPlugin extends Plugin {
         //将配置和选项转换成EasyADController需要的格式
         SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
         OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //错误检查
+        if(setting == null) { call.reject("Invalid name.", "INVALID_NAME"); return; }
         //加载激励视频广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback();
@@ -216,6 +224,8 @@ public class EasyAdsPlugin extends Plugin {
         //将配置和选项转换成EasyADController需要的格式
         SettingModel setting = ModelConverter.convertSetting(this.config, adTag);
         OptionModel option = ModelConverter.convertOption(this.config, adTag);
+        //错误检查
+        if(setting == null) { call.reject("Invalid name.", "INVALID_NAME"); return; }
         //加载全屏视频广告
         Activity activity = getActivity();
         AdCallback callback = this.createAdCallback();
@@ -232,9 +242,9 @@ public class EasyAdsPlugin extends Plugin {
     // AdCallback implementation ===============================
     private AdCallback createAdCallback() {
         return (event, call, error) -> {
-            // remove adspot from list
+            // 删出广告列表中的广告
             if(Arrays.asList("end", "fail").contains(event)) this.adspotList.remove(call.getCallbackId());
-            // notify listeners
+            // 通知监听
             notifyListeners(event, EventModel.create(event, call.getString("type"), call.getString("tag"), call.getCallbackId(), error).toJsObject());
         };
     }
