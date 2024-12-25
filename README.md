@@ -14,7 +14,7 @@
 **注意:** 
 * 穿山甲是GroMore；
 * 暂时只测试过穿山甲GroMore，其他平台可以自行测试；
-* 暂时只完成Happy Flow的开发，未完成权限申请等功能；
+* 暂时只完成Happy Flow的功能开发；
 
 ## 安装
 
@@ -28,10 +28,18 @@ npx cap sync
 ```javascript
 // 初始化 - 可在用户首次确认隐私前调用
 await window.EasyAdsPlugin.init({ config: CONFIG.ads });
+
 // 加载广告
-const result = await window.EasyAdsPlugin.load({type: "splash", tag: "app_splash"});
+const adRes = await window.EasyAdsPlugin.load({type: "splash", tag: "app_splash"});
+
 // 销毁广告
-await window.EasyAdsPlugin.destroy({callId: result.callId });
+await window.EasyAdsPlugin.destroy({callId: adRes.callId });
+
+// 检查权限
+const permRes = await window.EasyAdsPlugin.permission({action: "check", name: "location" });
+
+// 请求权限
+if(permRes !== "grant") await window.EasyAdsPlugin.permission({action: "grant", name: "location" });
 ```
 
 ## API
@@ -41,6 +49,7 @@ await window.EasyAdsPlugin.destroy({callId: result.callId });
 * [`init(...)`](#init)
 * [`load(...)`](#load)
 * [`destroy(...)`](#destroy)
+* [`permission(...)`](#permission)
 
 </docgen-index>
 
@@ -80,15 +89,13 @@ await window.EasyAdsPlugin.destroy({callId: result.callId });
 }
 ```
 
-#### Result
+#### Exception
 
-| Prop        | Type                                      |
-| ----------- | ----------------------------------------- |
-| **`code`**  | <code>string</code>                       |
-| **`data`**  | <code><a href="#object">Object</a></code> |
-| **`error`** | <code><a href="#object">Object</a></code> |
-
-
+| Prop          | Type                                      |
+| ------------- | ----------------------------------------- |
+| **`code`**    | <code>string</code>                       |
+| **`message`** | <code>string</code>                       |
+| **`data`**    | <code>Object</code>                       |
 
 
 ### init(...)
@@ -101,7 +108,9 @@ init({ config: Config }) => Promise<Result>
 | ------------ | ----------------------------------------- | ------------ 
 | **`config`** | <code><a href="#config">Config</a></code> | 必须先初始化在调用其他API
 
-**Returns:** <code>Promise&lt;<a href="#result">Result</a>&gt;</code>
+**Returns:** <code>Promise&lt;{ callId: string }&gt;</code>
+
+**Throw:** <code><a href="#result">Exception</a></code>
 
 
 ### load(...)
@@ -113,9 +122,11 @@ load({ type: string, tag: string }) => Promise<Result>
 | 参数       | 类型                 | 说明
 | ---------- | ------------------- | --------------
 | **`type`** | <code>string</code> | 广告类型，如 splash / banner / interstitial / reward_video / fullscreen_video
-| **`tag`**  | <code>string</code> | 广告位名称，对应Config内的tag名，如 app_splash
+| **`tag`**  | <code>string</code> | 广告位名称（对应Config内的tag名），如 app_splash
 
-**Returns:** <code>Promise&lt;<a href="#result">Result</a>&gt;</code>
+**Returns:** <code>Promise&lt;{ callId: string }&gt;</code>
+
+**Throw:** <code><a href="#result">Exception</a></code>
 
 
 ### destroy(...)
@@ -126,10 +137,27 @@ destroy({ callId: string }) => Promise<Result>
 
 | 参数          | 类型                 | 说明
 | ------------- | ------------------- | --------------
-| **`callId`**  | <code>string</code> | 广告callId,如：14912745
+| **`callId`**  | <code>string</code> | 广告callId，如：14912745
 
-**Returns:** <code>Promise&lt;<a href="#result">Result</a>&gt;</code>
+**Returns:** <code>Promise&lt;{ callId: string }&gt;</code>
 
+**Throw:** <code><a href="#result">Exception</a></code>
+
+
+### permission(...)
+
+```typescript
+permission({ action: string, name: string }) => Promise<Result>
+```
+
+| 参数       | 类型                 | 说明
+| ---------- | ------------------- | --------------
+| **`action`** | <code>string</code> | 命令名，如 check / grant
+| **`name`**  | <code>string</code> | 权限名，如 location / storage / phone / install
+
+**Returns:** <code>Promise&lt;{ state: "grant" | "denied" | "prompt" | "prompt-with-rationale" }&gt;</code>
+
+**Throw:** <code><a href="#result">Exception</a></code>
 
 </docgen-api>
 

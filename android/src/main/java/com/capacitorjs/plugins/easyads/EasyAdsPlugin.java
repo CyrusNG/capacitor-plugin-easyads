@@ -1,6 +1,10 @@
 package com.capacitorjs.plugins.easyads;
 
 import android.app.Activity;
+import android.Manifest.permission;
+import android.net.Uri;
+import android.provider.Settings;
+import android.content.Intent;
 
 import com.capacitorjs.plugins.easyads.controller.BaseController;
 import com.capacitorjs.plugins.easyads.controller.FullScreenVideoController;
@@ -16,19 +20,28 @@ import com.capacitorjs.plugins.easyads.utils.AdCallback;
 import com.capacitorjs.plugins.easyads.utils.ModelConverter;
 import com.easyads.core.BuildConfig;
 import com.easyads.model.EALogLevel;
-import com.easyads.model.EasyAdError;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-// import com.hjq.toast.ToastUtils;
+import com.getcapacitor.annotation.Permission;
+import com.getcapacitor.annotation.PermissionCallback;
 import com.easyads.EasyAds;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Objects;
 
-@CapacitorPlugin(name = "EasyAds")
+@CapacitorPlugin(
+    name = "EasyAds",
+    permissions = {
+        @Permission( alias = "phone",    strings = { permission.READ_PHONE_STATE } ),
+        @Permission( alias = "location", strings = { permission.ACCESS_FINE_LOCATION, permission.ACCESS_COARSE_LOCATION } ),
+        @Permission( alias = "storage",  strings = { permission.READ_EXTERNAL_STORAGE, permission.WRITE_EXTERNAL_STORAGE } ),
+        @Permission( alias = "install",  strings = { permission.REQUEST_INSTALL_PACKAGES } )
+   }
+)
 public class EasyAdsPlugin extends Plugin {
 
     private ConfigModel config;
@@ -57,8 +70,8 @@ public class EasyAdsPlugin extends Plugin {
         String type = call.getString("type");
         String tag = call.getString("tag");
         //检查初始化状态
-        if(this.config == null) call.reject("Not yet init.", "NOT_INIT");
-        if(type == null || tag == null) call.reject("Param invalid.", "TYPE_AND_TAG_REQUIRED");
+        if(this.config == null) { call.reject("Not yet init.", "NOT_INIT"); return; }
+        if(type == null || tag == null) { call.reject("Param invalid.", "TYPE_AND_TAG_REQUIRED"); return; }
         //导航到对应函数
         switch(Objects.requireNonNull(type)) {
             case "splash": this.splash(type, tag, call); break;
@@ -78,7 +91,58 @@ public class EasyAdsPlugin extends Plugin {
         BaseController targetAdspot = this.adspotList.get(callId);
         //销毁广告位(如有)
         if(targetAdspot != null) getActivity().runOnUiThread(() -> targetAdspot.destroy());
+        //返回 JSObject 结果
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
     }
+
+
+    @PluginMethod
+    public void permission(PluginCall call) {
+        //获取参数
+        String name = call.getString("name");
+        String action = call.getString("action");
+        //检查参数
+        if(name == null || !getPermissionStates().containsKey(name)) { call.reject("Permission name out of scope.", "PERM_NAME_OUT_OF_SCOPE"); return; }
+        if(action == null || !Arrays.asList("check", "grant").contains(action)) { call.reject("Permission action out of scope.", "PERM_ACTION_OUT_OF_SCOPE"); return; }
+        //处理操作
+        switch (action.toUpperCase()) {
+            //授权权限
+            case "GRANT":
+                switch (getPermissionState(name)) {
+                    case GRANTED:
+                        //直接返回GRANTED结果
+                        call.resolve(new JSObject().put("state", getPermissionState(name)));
+                        break;
+                    case DENIED:
+                        //跳转到APP设置页
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getContext().getPackageName(), null));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        getActivity().startActivity(intent);
+                        call.resolve(new JSObject().put("state", getPermissionState(name)));
+                        break;
+                    case PROMPT:
+                    case PROMPT_WITH_RATIONALE:
+                    default:
+                        //请求权限
+                        requestPermissionForAlias(name, call, "permissionCallback");
+                }
+                break;
+            //检查权限
+            case "CHECK":
+            default:
+                call.resolve(new JSObject().put("state", getPermissionState(name)));
+                break;
+        }
+    }
+
+    @PermissionCallback
+    private void permissionCallback(PluginCall call) {
+        //获取参数
+        String name = call.getString("name");
+        // 返回 JSObject 结果
+        call.resolve(new JSObject().put("state", getPermissionState(name)));
+    }
+
 
 
     // Api implementation ===============================
@@ -167,7 +231,12 @@ public class EasyAdsPlugin extends Plugin {
 
     // AdCallback implementation ===============================
     private AdCallback createAdCallback() {
-        return (event, call, error) -> notifyListeners(event, EventModel.create(event, call.getString("type"), call.getString("tag"), call.getCallbackId(), error).toJsObject());
+        return (event, call, error) -> {
+            // remove adspot from list
+            if(Arrays.asList("end", "fail").contains(event)) this.adspotList.remove(call.getCallbackId());
+            // notify listeners
+            notifyListeners(event, EventModel.create(event, call.getString("type"), call.getString("tag"), call.getCallbackId(), error).toJsObject());
+        };
     }
 
 }
