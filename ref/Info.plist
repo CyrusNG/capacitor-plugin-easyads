@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <!-- Add following config into your app project Info.plist -->
+  <dict>
+    <!-- all ads SDK API by https but some ads' photo -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+    </dict>
+    <!-- iOS14+ need user to agree tracking -->
+    <key>NSMotionUsageDescription</key>
+    <string>App正在请求权限为您更好地提供个性化内容</string>
+    <!-- no need ask for user to approve, just require this setting for avoiding crash app -->
+    <key>NSUserTrackingUsageDescription</key>
+    <string>App正在请求权限为您更好地提供个性化内容</string>
+    <!-- ads required if user disagree tracking -->
+    <key>SKAdNetworkItems</key>
+    <array>
+      <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>238da6jt44.skadnetwork</string>
+      </dict>
+      <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>x2jnk7ly8j.skadnetwork</string>
+      </dict>
+      <dict>
+        <key>SKAdNetworkIdentifier</key>
+        <string>22mmun2rn5.skadnetwork</string>
+      </dict>
+    </array>
+  </dict>
+</plist>

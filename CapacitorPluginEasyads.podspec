@@ -32,28 +32,32 @@ Pod::Spec.new do |s|
   # Masonry is a light-weight layout framework which wraps AutoLayout with a nicer syntax.
   # ref: https://cocoapods.org/pods/Masonry
   # s.dependency 'Masonry', '1.1.0'
-
-  # GDT only support x86_64 iPhone simulator
-  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
   
   # prefix header for Masonry
   s.prefix_header_file = 'ios/Sources/PrefixHeader.pch'
   
-  # info plist settings
+  # plugin's target xcconfig
+  s.pod_target_xcconfig = { 
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64',                        # GDT only support x86_64 iPhone simulator
+  }
+
+  # plugin's info plist settings - Actually this should set in main project just reference
   s.info_plist = {
-    'LSRequiresIPhoneOS' => true,
-    'NSAppTransportSecurity' => { 'NSAllowsArbitraryLoads': true },
-    'NSUserTrackingUsageDescription' => '请求idfa权限',
-    'SKAdNetworkItems' => [ 
-      { 'SKAdNetworkIdentifier': 'r3y5dwb26t.skadnetwork' },
+    # 'LSRequiresIPhoneOS' => true,
+    # 'UILaunchStoryboardName' => 'LaunchScreen',
+    # 'UIMainStoryboardFile' => 'Main',
+    # 'UIRequiredDeviceCapabilities' => [ 'armv7' ],
+    # 'UISupportedInterfaceOrientations' => [ 'UIInterfaceOrientationPortrait', 'UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight' ],
+    # 'UISupportedInterfaceOrientations~ipad' => [ 'UIInterfaceOrientationPortrait', 'UIInterfaceOrientationPortraitUpsideDown', 'UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight' ],
+    
+    'NSAppTransportSecurity' => { 'NSAllowsArbitraryLoads': true },           # all ads SDK API by https but some ads' photo
+    'NSUserTrackingUsageDescription' => 'App正在请求跟踪你的用户数据用于投放广告',  # iOS14+ need user to agree tracking
+    'NSMotionUsageDescription' => 'App正在请求获取你的设备运动数据用于投放广告',     # no need ask for user to approve, just require this setting for avoiding crash app
+    'SKAdNetworkItems' => [                                                   # ads required if user disagree tracking
       { 'SKAdNetworkIdentifier': '238da6jt44.skadnetwork' },
+      { 'SKAdNetworkIdentifier': 'x2jnk7ly8j.skadnetwork' },
       { 'SKAdNetworkIdentifier': '22mmun2rn5.skadnetwork' }
-    ],
-    'UILaunchStoryboardName' => 'LaunchScreen',
-    'UIMainStoryboardFile' => 'Main',
-    'UIRequiredDeviceCapabilities' => [ 'armv7' ],
-    'UISupportedInterfaceOrientations' => [ 'UIInterfaceOrientationPortrait', 'UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight' ],
-    'UISupportedInterfaceOrientations~ipad' => [ 'UIInterfaceOrientationPortrait', 'UIInterfaceOrientationPortraitUpsideDown', 'UIInterfaceOrientationLandscapeLeft', 'UIInterfaceOrientationLandscapeRight' ]
+    ]
   }
 
   # subspec settings
