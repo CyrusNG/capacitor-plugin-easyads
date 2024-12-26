@@ -27,7 +27,13 @@ npx cap sync
 
   **注意：** 如你的主项目有相应配置，请因情况适当修改。
 
+### Android
+
+Gradle会自动整合所有子项目的AndroidManifest.xml，因此无需手动配置。
+
 ### iOS
+
+考虑到冲突问题，CocoaPods没有整合子项目的Info.plist和PrivacyInfo.xcprivacy，因此请手动配置一下内容：
 
 * 第一步：将以下内容添加到你的主项目中的Info.plist内；
 
