@@ -126,10 +126,10 @@ const adRes = await window.EasyAdsPlugin.load({type: "splash", tag: "app_splash"
 await window.EasyAdsPlugin.destroy({callId: adRes.callId });
 
 // 检查权限
-const permRes = await window.EasyAdsPlugin.permission({action: "check", name: "location" });
+const permRes = await window.EasyAdsPlugin.checkPermission({ name: "location" });
 
 // 请求权限 - 所有权限都不是必须的，如涉及权限必须在隐私说明中提及此权限应用于广告，否则影响上架审核
-if(permRes !== "grant") await window.EasyAdsPlugin.permission({action: "grant", name: "location" });
+if(permRes !== "granted") await window.EasyAdsPlugin.requestPermission({ name: "location" });
 
 ```
 
@@ -137,10 +137,11 @@ if(permRes !== "grant") await window.EasyAdsPlugin.permission({action: "grant", 
 
 <docgen-index>
 
-* [`init(...)`](#init)
-* [`load(...)`](#load)
-* [`destroy(...)`](#destroy)
-* [`permission(...)`](#permission)
+* [`init(...)`](#初始化插件)
+* [`load(...)`](#加载广告)
+* [`destroy(...)`](#销毁广告)
+* [`checkPermission(...)`](#请求权限)
+* [`requestPermission(...)`](#检查权限)
 
 </docgen-index>
 
@@ -189,7 +190,7 @@ if(permRes !== "grant") await window.EasyAdsPlugin.permission({action: "grant", 
 | **`data`**    | <code>Object</code>                       |
 
 
-### init(...)
+### 初始化插件
 
 ```typescript
 init({ config: Config }) => Promise<Result>
@@ -204,7 +205,7 @@ init({ config: Config }) => Promise<Result>
 **Throw:** <code><a href="#result">Exception</a></code>
 
 
-### load(...)
+### 加载广告
 
 ```typescript
 load({ type: string, tag: string }) => Promise<Result>
@@ -220,7 +221,7 @@ load({ type: string, tag: string }) => Promise<Result>
 **Throw:** <code><a href="#result">Exception</a></code>
 
 
-### destroy(...)
+### 销毁广告
 
 ```typescript
 destroy({ callId: string }) => Promise<Result>
@@ -235,18 +236,32 @@ destroy({ callId: string }) => Promise<Result>
 **Throw:** <code><a href="#result">Exception</a></code>
 
 
-### permission(...)
+### 检查权限
 
 ```typescript
-permission({ action: string, name: string }) => Promise<Result>
+checkPermission({ name: string }) => Promise<Result>
 ```
 
 | 参数       | 类型                 | 说明
 | ---------- | ------------------- | --------------
-| **`action`** | <code>string</code> | 命令名，如 check / grant
 | **`name`**  | <code>string</code> | 权限名，如 location / storage / phone / install / track
 
-**Returns:** <code>Promise&lt;{ state: "grant" | "denied" | "prompt" | "prompt-with-rationale" | "unknown" }&gt;</code>
+**Returns:** <code>Promise&lt;{ state: "grant" | "denied" | "never" | "asked" | "unknown" }&gt;</code>
+
+**Throw:** <code><a href="#result">Exception</a></code>
+
+
+### 请求权限
+
+```typescript
+requestPermission({ name: string }) => Promise<Result>
+```
+
+| 参数       | 类型                 | 说明
+| ---------- | ------------------- | --------------
+| **`name`**  | <code>string</code> | 权限名，如 location / storage / phone / install / track
+
+**Returns:** <code>Promise&lt;{ state: "grant" | "denied" | "never" | "asked" | "unknown" }&gt;</code>
 
 **Throw:** <code><a href="#result">Exception</a></code>
 
@@ -260,7 +275,7 @@ permission({ action: string, name: string }) => Promise<Result>
 
 解决办法：配置 @ app -> Build Settings Architectures -> Exclude Architectures -> Debug/Release -> Any iOS Simulator SDK: arm64
 
- [<img src="https://github.com/CyrusNG/capacitor-plugin-easyads/blob/c41931073c6dc7d31dc5b1565d3183046d9d6176/reference/settingExcludeArm64.png"/>](settingExcludeArm64.png)
+ [<img src="https://github.com/CyrusNG/capacitor-plugin-easyads/blob/575cda0de6fee22b59f87c6a1f11016cc4510a6d/doc/readme-settingExcludeArm64.png"/>](readme-settingExcludeArm64.png)
 
 
 ### 2、构建成功，但打开APP闪退报错

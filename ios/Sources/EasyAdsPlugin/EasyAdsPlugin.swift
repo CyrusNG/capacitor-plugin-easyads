@@ -17,7 +17,8 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         CAPPluginMethod(name: "init", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "load", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "destroy", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "permission", returnType: CAPPluginReturnPromise)
+        CAPPluginMethod(name: "checkPermission", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "requestPermission", returnType: CAPPluginReturnPromise)
     ]
     
     private var config: ConfigModel?
@@ -57,34 +58,33 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
     }
     
     // Permission implementation ===============================
-    @objc func permission(_ call: CAPPluginCall) {
+    @objc func checkPermission(_ call: CAPPluginCall) {
         //获取参数
-        let action = call.getString("action")
         let name = call.getString("name")
         //检查参数
-        if(name == nil || !["track"].contains(name!)) { call.reject("Permission name out of scope.", "PERM_NAME_OUT_OF_SCOPE"); return }
-        if(action == nil || !["check", "grant"].contains(action!)) { call.reject("Permission action out of scope.", "PERM_ACTION_OUT_OF_SCOPE"); return }
-        //处理操作
-        switch action!.uppercased() {
-            //授权权限
-            case "GRANT":
-                switch self.getPermissionState(name!) {
-                    case "granted":
-                        //直接返回GRANTED结果
-                        call.resolve(["state": self.getPermissionState(name)])
-                    case "denied":
-                        //跳转到APP设置页
-                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
-                    case "prompt", "prompt-with-rationale": fallthrough
-                    default:
-                        //请求权限
-                        if #available(iOS 14, *) { ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in self.permissionCallback(call) }) }
-                        else { self.permissionCallback(call) }
-                }
-            //检查权限
-            case "CHECK": fallthrough
+        if(name == nil || !["track"].contains(name!)) { call.reject("Unknown permission type.", "UNKNOWN_PERMISSION_TYPE"); return }
+        //检查授权
+        call.resolve(["state": self.checkPermissionState(name)])
+    }
+    
+    @objc func requestPermission(_ call: CAPPluginCall) {
+        //获取参数
+        let name = call.getString("name")
+        //检查参数
+        if(name == nil || !["track"].contains(name!)) { call.reject("Unknown permission type.", "UNKNOWN_PERMISSION_TYPE"); return }
+        //请求授权
+        switch self.checkPermissionState(name) {
+            case "denied":
+                //跳转到APP设置页
+                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!, options: [:], completionHandler: nil)
+            case "never", "asked":
+                //请求权限
+                if #available(iOS 14, *) { ATTrackingManager.requestTrackingAuthorization(completionHandler: { status in self.permissionCallback(call) }) }
+                else { self.permissionCallback(call) }
+            case "granted", "unknown": fallthrough
             default:
-                call.resolve(["state": self.getPermissionState(name)])
+                //返回状态
+                call.resolve(["state": self.checkPermissionState(name)])
         }
     }
     
@@ -92,19 +92,19 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
         //获取参数
         let name = call.getString("name");
         // 返回 JSObject 结果
-        call.resolve(["state": self.getPermissionState(name)])
+        call.resolve(["state": self.checkPermissionState(name)])
     }
     
-    private func getPermissionState(_ name: String?) -> String {
+    private func checkPermissionState(_ name: String?) -> String {
         let state: String
         switch name {
             case "track":
                 if #available(iOS 14, *) {
                     switch ATTrackingManager.trackingAuthorizationStatus {
-                        case .notDetermined: state = "prompt"
+                        case .notDetermined: state = "never"
                         case .restricted, .denied: state = "denied"
                         case .authorized: state = "granted"
-                        @unknown default: state = "prompt-with-rationale"
+                        @unknown default: state = "asked"
                     }
                 } else { state = "granted" }
             default:

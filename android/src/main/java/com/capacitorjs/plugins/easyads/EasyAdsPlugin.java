@@ -97,40 +97,40 @@ public class EasyAdsPlugin extends Plugin {
 
     // Permission implementation ===============================
     @PluginMethod
-    public void permission(PluginCall call) {
+    public void checkPermission(PluginCall call) {
         //获取参数
         String name = call.getString("name");
-        String action = call.getString("action");
         //检查参数
-        if(name == null || !getPermissionStates().containsKey(name)) { call.reject("Permission name out of scope.", "PERM_NAME_OUT_OF_SCOPE"); return; }
-        if(action == null || !Arrays.asList("check", "grant").contains(action)) { call.reject("Permission action out of scope.", "PERM_ACTION_OUT_OF_SCOPE"); return; }
-        //处理操作
-        switch (action.toUpperCase()) {
-            //授权权限
-            case "GRANT":
-                switch (getPermissionState(name)) {
-                    case GRANTED:
-                        //直接返回GRANTED结果
-                        call.resolve(new JSObject().put("state", getPermissionState(name)));
-                        break;
-                    case DENIED:
-                        //跳转到APP设置页
-                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getContext().getPackageName(), null));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getActivity().startActivity(intent);
-                        call.resolve(new JSObject().put("state", getPermissionState(name)));
-                        break;
-                    case PROMPT:
-                    case PROMPT_WITH_RATIONALE:
-                    default:
-                        //请求权限
-                        requestPermissionForAlias(name, call, "permissionCallback");
-                }
+        if(name == null || !getPermissionStates().containsKey(name)) { call.reject("Unknown permission type.", "UNKNOWN_PERMISSION_TYPE"); return; }
+        //检查权限
+        call.resolve(new JSObject().put("state", this.checkPermissionState(name)));
+    }
+
+    @PluginMethod
+    public void requestPermission(PluginCall call) {
+        //获取参数
+        String name = call.getString("name");
+        //检查参数
+        if(name == null || !getPermissionStates().containsKey(name)) { call.reject("Unknown permission type.", "UNKNOWN_PERMISSION_TYPE"); return; }
+        //请求权限
+        switch (this.checkPermissionState(name)) {
+            case "denied":
+                //跳转到APP设置页
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", getContext().getPackageName(), null));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getActivity().startActivity(intent);
+                call.resolve(new JSObject().put("state", this.checkPermissionState(name)));
                 break;
-            //检查权限
-            case "CHECK":
+            case "never":
+            case "asked":
+                //请求权限
+                requestPermissionForAlias(name, call, "permissionCallback");
+                break;
+            case "granted":
+            case "unknown":
             default:
-                call.resolve(new JSObject().put("state", getPermissionState(name)));
+                //直接状态
+                call.resolve(new JSObject().put("state", this.checkPermissionState(name)));
                 break;
         }
     }
@@ -140,10 +140,21 @@ public class EasyAdsPlugin extends Plugin {
         //获取参数
         String name = call.getString("name");
         // 返回 JSObject 结果
-        call.resolve(new JSObject().put("state", getPermissionState(name)));
+        call.resolve(new JSObject().put("state", this.checkPermissionState(name)));
     }
 
-
+    private String checkPermissionState(String name) {
+        if(getPermissionStates().containsKey(name)) {
+            return switch (getPermissionState(name)) {
+                case GRANTED -> "granted";
+                case DENIED -> "denied";
+                case PROMPT -> "never";
+                case PROMPT_WITH_RATIONALE -> "asked";
+            };
+        } else {
+            return "unknown";
+        }
+    }
 
     // Api implementation ===============================
     private void splash(String adType, String adTag, PluginCall call) {
