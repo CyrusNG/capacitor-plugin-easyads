@@ -50,7 +50,13 @@
     //设置代理
     self.easyAdSplash.delegate = self;
     //加载广告
-    [self.easyAdSplash loadAndShowAd];
+    if(self.option.showLater) { [self.easyAdSplash loadAd]; }
+    else { [self.easyAdSplash loadAndShowAd]; }
+}
+
+- (void)show {
+    //展示广告
+    [self.easyAdSplash showAd];
 }
 
 - (void)destroy {

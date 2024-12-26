@@ -46,7 +46,13 @@
     //设置代理
     self.easyAdFullScreenVideo.delegate = self;
     //加载广告
-    [self.easyAdFullScreenVideo loadAndShowAd];
+    if(self.option.showLater) { [self.easyAdFullScreenVideo loadAd]; }
+    else { [self.easyAdFullScreenVideo loadAndShowAd]; }
+}
+
+- (void)show {
+    //展示广告
+    [self.easyAdFullScreenVideo showAd];
 }
 
 - (void)destroy {

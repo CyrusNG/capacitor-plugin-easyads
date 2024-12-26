@@ -53,7 +53,13 @@
     //设置代理
     self.easyAdBanner.delegate = self;
     //加载广告
-    [self.easyAdBanner loadAndShowAd];
+    if(self.option.showLater) { [self.easyAdBanner loadAd]; }
+    else { [self.easyAdBanner loadAndShowAd]; }
+}
+
+- (void)show {
+    //展示广告
+    [self.easyAdBanner showAd];
 }
 
 - (void)destroy {

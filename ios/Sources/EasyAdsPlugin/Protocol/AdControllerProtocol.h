@@ -5,6 +5,7 @@
 
 @required
 - (void)load;
+- (void)show;
 - (void)destroy;
 
 @end

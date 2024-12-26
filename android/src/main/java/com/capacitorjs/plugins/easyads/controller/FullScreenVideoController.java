@@ -17,6 +17,7 @@ public class FullScreenVideoController implements BaseController {
     Activity context;
     PluginCall call;
     AdCallback pluginCallback;
+    EasyAdFullScreenVideo easyFullScreenVideo;
     SettingModel setting;
     OptionModel option;
     private static final String TAG = FullScreenVideoController.class.getSimpleName();
@@ -43,13 +44,22 @@ public class FullScreenVideoController implements BaseController {
         //先销毁广告（如有）
         this.destroy();
         //初始化
-        EasyAdFullScreenVideo easyFullScreenVideo = new EasyAdFullScreenVideo(this.context, this.createListeners());
+        this.easyFullScreenVideo = new EasyAdFullScreenVideo(this.context, this.createListeners());
         //必须：设置策略信息
-        easyFullScreenVideo.setData(this.setting.toJsonString());
+        this.easyFullScreenVideo.setData(this.setting.toJsonString());
         //返回实例
-        easyFullScreenVideo.loadAndShow();
+        this.easyFullScreenVideo.loadAndShow();
+        //必须：请求/展示广告
+        if(this.option.showLater()) { this.easyFullScreenVideo.loadOnly(); }
+        else { this.easyFullScreenVideo.loadAndShow(); }
+        //展示提示
+        Log.d(TAG, "广告请求中");
     }
 
+    @Override
+    public void show() {
+        this.easyFullScreenVideo.show();
+    }
 
     @Override
     public void destroy() {

@@ -16,6 +16,7 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
     public let pluginMethods: [CAPPluginMethod] = [
         CAPPluginMethod(name: "init", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "load", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "show", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "destroy", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "checkPermission", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "requestPermission", returnType: CAPPluginReturnPromise)
@@ -49,6 +50,12 @@ public class EasyAdsPlugin: CAPPlugin, CAPBridgedPlugin, AdCallbackProtocol {
             case "fullscreen": self.fullscreen(adType:type!, adTag:tag!, call:call)
             default: call.reject("Unknown ad type.", "UNKNOWN_AD_TYPE")
         }
+    }
+    
+    @objc func show(_ call: CAPPluginCall) {
+        let callId = call.getString("callId") ?? ""
+        self.adspotList[callId]?.show()
+        call.resolve(["callId": callId])
     }
     
     @objc func destroy(_ call: CAPPluginCall) {

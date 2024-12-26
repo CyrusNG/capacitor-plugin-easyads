@@ -18,6 +18,7 @@ public class RewardVideoController implements BaseController {
     Activity context;
     PluginCall call;
     AdCallback pluginCallback;
+    EasyAdRewardVideo easyRewardVideo;
     SettingModel setting;
     OptionModel option;
     private static final String TAG = RewardVideoController.class.getSimpleName();
@@ -44,11 +45,19 @@ public class RewardVideoController implements BaseController {
         //先销毁广告（如有）
         this.destroy();
         //初始化，注意需要时再初始化，不要复用。
-        EasyAdRewardVideo easyRewardVideo = new EasyAdRewardVideo(this.context, this.createListeners());
+        this.easyRewardVideo = new EasyAdRewardVideo(this.context, this.createListeners());
         //必须：设置策略信息
-        easyRewardVideo.setData(this.setting.toJsonString());
-        //必须：请求并展示广告
-        easyRewardVideo.loadAndShow();
+        this.easyRewardVideo.setData(this.setting.toJsonString());
+        //必须：请求/展示广告
+        if(this.option.showLater()) { this.easyRewardVideo.loadOnly(); }
+        else {  this.easyRewardVideo.loadAndShow(); }
+        //展示提示
+        Log.d(TAG, "广告请求中");
+    }
+
+    @Override
+    public void show() {
+        this.easyRewardVideo.show();
     }
 
     @Override

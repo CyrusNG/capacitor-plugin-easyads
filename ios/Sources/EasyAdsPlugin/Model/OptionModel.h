@@ -11,6 +11,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSNumber *width;      // Banner Ads
 @property (nonatomic, strong) NSNumber *height;     // Banner Ads
 @property (nonatomic, assign) BOOL showLogo;        // Splash Ads
+@property (nonatomic, assign) BOOL showLater;       // Show Ads after loaded
 
 @end
 

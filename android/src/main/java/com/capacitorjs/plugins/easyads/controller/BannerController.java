@@ -27,6 +27,7 @@ public class BannerController extends RelativeLayout implements BaseController {
     Activity context;
     PluginCall call;
     AdCallback pluginCallback;
+    EasyAdBanner easyAdBanner;
     SettingModel setting;
     OptionModel option;
     ViewGroup appRootViewGroup;
@@ -58,18 +59,24 @@ public class BannerController extends RelativeLayout implements BaseController {
         //找到banner_layout
         RelativeLayout adContainer = this.findViewById(R.id.banner_container);
         //初始化广告实例
-        EasyAdBanner easyAdBanner = new EasyAdBanner(this.context, adContainer, this.createListeners());
+        this.easyAdBanner = new EasyAdBanner(this.context, adContainer, this.createListeners());
         //如果集成穿山甲，这里必须配置，建议尺寸要和穿山甲后台中的"代码位尺寸"宽高比例一致，值单位为dp，这里示例使用的广告位宽高比为640：100。
         int adWidth = ScreenUtil.px2dip(this.context, ScreenUtil.getScreenWidth(this.context));
         int adHeight = (int) (((double) adWidth / (double) this.option.width()) * this.option.height());
         //如果高度传入0代表自适应高度
-        easyAdBanner.setCsjExpressSize(adWidth, adHeight);
+        this.easyAdBanner.setCsjExpressSize(adWidth, adHeight);
         //必须：设置策略信息
-        easyAdBanner.setData(this.setting.toJsonString());
-        //必须：请求并展示广告
-        easyAdBanner.loadAndShow();
+        this.easyAdBanner.setData(this.setting.toJsonString());
+        //必须：请求/展示广告
+        if(this.option.showLater()) { this.easyAdBanner.loadOnly(); }
+        else { this.easyAdBanner.loadAndShow(); }
         //展示提示
         Log.d(TAG, "广告请求中");
+    }
+
+    @Override
+    public void show() {
+        this.easyAdBanner.show();
     }
 
     @Override

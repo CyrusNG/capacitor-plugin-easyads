@@ -45,7 +45,13 @@
     //设置代理
     self.easyAdInterstitial.delegate = self;
     //加载广告
-    [self.easyAdInterstitial loadAndShowAd];
+    if(self.option.showLater) { [self.easyAdInterstitial loadAd]; }
+    else { [self.easyAdInterstitial loadAndShowAd]; }
+}
+
+- (void)show {
+    //展示广告
+    [self.easyAdInterstitial showAd];
 }
 
 - (void)destroy {

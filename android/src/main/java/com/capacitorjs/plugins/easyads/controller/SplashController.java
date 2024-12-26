@@ -30,6 +30,7 @@ public class SplashController extends Dialog implements BaseController {
     Activity context;
     PluginCall call;
     AdCallback pluginCallback;
+    EasyAdSplash easySplash;
     SettingModel setting;
     OptionModel option;
     ImageView logo;
@@ -66,18 +67,24 @@ public class SplashController extends Dialog implements BaseController {
         //先销毁广告（如有）
         this.destroy();
         //初始化广告实例
-        EasyAdSplash easySplash = new EasyAdSplash(this.context, this.adContainer, this.createListeners());
+        this.easySplash = new EasyAdSplash(this.context, this.adContainer, this.createListeners());
         //注意：如果开屏页是fragment或者dialog实现，这里需要置为false。默认为true，代表开屏和首页为两个不同的activity
-        easySplash.setShowInSingleActivity(false);
+        this.easySplash.setShowInSingleActivity(false);
         //注意：此处自定义渠道的tag，一定要和setData()中配置的tag一致。
-//        if (cusXiaoMi) easySplash.addCustomSupplier("xm", new XiaoMiSplashAdapter(new SoftReference<>(this.context), easySplash));
-//        if (cusHuaWei) easySplash.addCustomSupplier("hw", new HuaWeiSplashAdapter(new SoftReference<>(this.context), easySplash));
+//        if (cusXiaoMi) this.easySplash.addCustomSupplier("xm", new XiaoMiSplashAdapter(new SoftReference<>(this.context), this.easySplash));
+//        if (cusHuaWei) this.easySplash.addCustomSupplier("hw", new HuaWeiSplashAdapter(new SoftReference<>(this.context), this.easySplash));
         //必须：设置策略信息
-        easySplash.setData(this.setting.toJsonString());
-        //必须：请求并展示广告
-        easySplash.loadAndShow();
+        this.easySplash.setData(this.setting.toJsonString());
+        //必须：请求/展示广告
+        if(this.option.showLater()) { this.easySplash.loadOnly(); }
+        else {  this.easySplash.loadAndShow(); }
         //展示提示
         Log.d(TAG, "广告请求中");
+    }
+
+    @Override
+    public void show() {
+        this.easySplash.show();
     }
 
     @Override
@@ -85,8 +92,7 @@ public class SplashController extends Dialog implements BaseController {
         //销毁广告
     }
 
-    @Override
-    public void show() {
+    public void display() {
         Window window = getWindow();
         if (window == null) { super.show(); return; }
         dismissPadding(window);
@@ -95,7 +101,6 @@ public class SplashController extends Dialog implements BaseController {
         hideNavigationBar(window);
         clearFocusNotAle(window);
     }
-
 
     private void dismissPadding(Window window) {
         //设置window背景，默认的背景会有Padding值，不能全屏。当然不一定要是透明，你可以设置其他背景，替换默认的背景即可。
@@ -150,7 +155,7 @@ public class SplashController extends Dialog implements BaseController {
 
             @Override
             public void onAdSucceed() {
-                self.show(); //广告加载成功后随即打开Dialog
+                self.display(); //广告加载成功后随即打开Dialog
                 Log.d(TAG, "广告加载成功");
                 if(self.pluginCallback != null) self.pluginCallback.notify("ready", self.call, null);
             }

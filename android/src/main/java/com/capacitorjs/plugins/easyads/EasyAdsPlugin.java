@@ -82,6 +82,17 @@ public class EasyAdsPlugin extends Plugin {
             default: call.reject("Unknown ad type.", "UNKNOWN_AD_TYPE"); break;
         }
     }
+    @PluginMethod
+    public void show(PluginCall call) {
+        //获取参数
+        String callId = call.getString("callId");
+        //查找目标Adspot
+        BaseController targetAdspot = this.adspotList.get(callId);
+        //销毁广告位(如有)
+        if(targetAdspot != null) getActivity().runOnUiThread(() -> targetAdspot.show());
+        //返回 JSObject 结果
+        call.resolve(new JSObject().put("callId", call.getCallbackId()));
+    }
 
     @PluginMethod
     public void destroy(PluginCall call) {

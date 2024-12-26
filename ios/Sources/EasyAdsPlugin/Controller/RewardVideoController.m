@@ -46,7 +46,13 @@
     //设置代理
     self.easyAdRewardVideo.delegate = self;
     //加载广告
-    [self.easyAdRewardVideo loadAndShowAd];
+    if(self.option.showLater) { [self.easyAdRewardVideo loadAd]; }
+    else { [self.easyAdRewardVideo loadAndShowAd]; }
+}
+
+- (void)show {
+    //展示广告
+    [self.easyAdRewardVideo showAd];
 }
 
 - (void)destroy {

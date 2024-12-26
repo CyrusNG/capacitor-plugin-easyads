@@ -17,6 +17,7 @@ public class InterstitialController implements BaseController {
     Activity context;
     PluginCall call;
     AdCallback pluginCallback;
+    EasyAdInterstitial easyInterstitial;
     SettingModel setting;
     OptionModel option;
     private static final String TAG = InterstitialController.class.getSimpleName();
@@ -46,16 +47,22 @@ public class InterstitialController implements BaseController {
         //先销毁广告（如有）
         this.destroy();
         //初始化广告实例
-        EasyAdInterstitial easyInterstitial = new EasyAdInterstitial(this.context, this.createListeners());
+        this.easyInterstitial = new EasyAdInterstitial(this.context, this.createListeners());
         //注意：穿山甲默认为"新插屏广告"，如果要使用旧版请打开这条设置
         //easyInterstitial.setCsjNew(false);
         //必须：设置策略信息
-        easyInterstitial.setData(this.setting.toJsonString());
-        //必须：请求并展示广告
-        easyInterstitial.loadAndShow();
+        this.easyInterstitial.setData(this.setting.toJsonString());
+        //必须：请求/展示广告
+        if(this.option.showLater()) { this.easyInterstitial.loadOnly(); }
+        else {  this.easyInterstitial.loadAndShow(); }
+        //展示提示
+        Log.d(TAG, "广告请求中");
     }
 
-
+    @Override
+    public void show() {
+        this.easyInterstitial.show();
+    }
 
     @Override
     public void destroy() {

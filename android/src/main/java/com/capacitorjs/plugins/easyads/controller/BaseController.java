@@ -4,5 +4,6 @@ import com.capacitorjs.plugins.easyads.utils.AdCallback;
 
 public interface BaseController {
     void load();
+    void show();
     void destroy();
 }

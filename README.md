@@ -139,6 +139,7 @@ if(permRes !== "granted") await window.EasyAdsPlugin.requestPermission({ name: "
 
 * [`init(...)`](#初始化插件)
 * [`load(...)`](#加载广告)
+* [`show(...)`](#展示广告)
 * [`destroy(...)`](#销毁广告)
 * [`checkPermission(...)`](#请求权限)
 * [`requestPermission(...)`](#检查权限)
@@ -148,18 +149,17 @@ if(permRes !== "granted") await window.EasyAdsPlugin.requestPermission({ name: "
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### Interfaces
 
+### 数据结构
 
 #### Config
 
 | 属性          | 类型                                          |
 | ------------- | -------------------------------------------- |
-| **`rules`**   | <code><a href="#array">Array</a>&lt;{ tag: string, sort: <a href="#array">Array</a>&lt;number&gt;, percent: number }&gt;</code> |
-| **`apps`**    | <code><a href="#array">Array</a>&lt;{ tag: string, appId: string, index: number }&gt;</code> |
-| **`adspots`** | <code><a href="#array">Array</a>&lt;{ tag: string, targets: <a href="#array">Array</a>&lt;string&gt;, options: <a href="#object">Object</a> }&gt;</code> |
+| **`rules`**   | <code>Array&lt;{ tag: string, sort: Array&lt;number&gt;, percent: number }&gt;</code> |
+| **`apps`**    | <code>Array&lt;{ tag: string, appId: string, index: number }&gt;</code> |
+| **`adspots`** | <code>Array&lt;{ tag: string, targets: Array&lt;string&gt;, options: [`Options`](#Options) }&gt;</code> |
 
-格式范例:
 ```
 { 
   rules: [
@@ -173,22 +173,33 @@ if(permRes !== "granted") await window.EasyAdsPlugin.requestPermission({ name: "
     { tag: "bd",  appId: "e866cfb0",   index: 4 }
   ],
   adspots: [
-    { tag: "app_splash",           targets: [ "csj-103256285", "ylh-2001447730515391", "bd-2058622", "ks-4000000042" ], options: { showLogo: false }       },
-    { tag: "project_interstitial", targets: [ "csj-103260324", "ylh-4080298282218338", "bd-2403633", "ks-4000000276" ], options: { }                       },
-    { tag: "task_banner",          targets: [ "csj-103256315", "ylh-4080052898050840", "bd-2015351"                  ], options: { width: 320, height: 50} },
-    { tag: "report_reward_video",  targets: [ "csj-103256483", "ylh-9011264358826997", "bd-5989414", "ks-90009001"   ], options: { }                       }
+    { tag: "app_splash",           targets: [ "csj-103256285", "ylh-2001447730515391", "bd-2058622", "ks-4000000042" ], options: { showLater: true, showLogo: false } },
+    { tag: "project_interstitial", targets: [ "csj-103260324", "ylh-4080298282218338", "bd-2403633", "ks-4000000276" ], options: { }                                  },
+    { tag: "task_banner",          targets: [ "csj-103256315", "ylh-4080052898050840", "bd-2015351"                  ], options: { width: 320, height: 50}            },
+    { tag: "report_reward_video",  targets: [ "csj-103256483", "ylh-9011264358826997", "bd-5989414", "ks-90009001"   ], options: { }                                  }
   ]
 }
 ```
 
+#### Options
+
+| 属性            | 类型                        | 说明                                        |
+| --------------- | -------------------------- | ------------------------------------------ |    
+| **`showLater`** | <code>string</code>        | 适用于: 所有广告，随后调用show(...)展示广告     |
+| **`showLogo`**  | <code>string</code>        | 适用于: 开屏广告(iOS)                        |     
+| **`width`**     | <code>Integer</code>       | 适用于: 横幅广告                             |     
+| **`height`**    | <code>Integer</code>       | 适用于: 横幅广告                             |     
+
 #### Exception
 
-| Prop          | Type                                      |
+| 属性          | 类型                                       |
 | ------------- | ----------------------------------------- |
 | **`code`**    | <code>string</code>                       |
 | **`message`** | <code>string</code>                       |
 | **`data`**    | <code>Object</code>                       |
 
+
+### 接口
 
 ### 初始化插件
 
@@ -215,6 +226,22 @@ load({ type: string, tag: string }) => Promise<Result>
 | ---------- | ------------------- | --------------
 | **`type`** | <code>string</code> | 广告类型：splash / banner / interstitial / reward / fullscreen
 | **`tag`**  | <code>string</code> | 广告位名称（对应Config内的tag名），如：app_splash
+
+**Returns:** <code>Promise&lt;{ callId: string }&gt;</code>
+
+**Throw:** <code><a href="#result">Exception</a></code>
+
+
+
+### 展示广告
+
+```typescript
+show({ callId: string }) => Promise<Result>
+```
+
+| 参数          | 类型                 | 说明
+| ------------- | ------------------- | --------------
+| **`callId`**  | <code>string</code> | 广告callId，如：14912745，仅在Options设置为`showLater: true`时才有效！
 
 **Returns:** <code>Promise&lt;{ callId: string }&gt;</code>
 
