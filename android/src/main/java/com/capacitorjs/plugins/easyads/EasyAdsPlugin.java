@@ -95,7 +95,7 @@ public class EasyAdsPlugin extends Plugin {
         call.resolve(new JSObject().put("callId", call.getCallbackId()));
     }
 
-
+    // Permission implementation ===============================
     @PluginMethod
     public void permission(PluginCall call) {
         //获取参数
