@@ -1,6 +1,6 @@
 # capacitor-plugin-easyads
 
-[EasyAds](https://github.com/bayescom/EasyAds) 的Capacitor插件，未完全开发完成！！！
+[EasyAds](https://github.com/bayescom/EasyAds) 的Capacitor插件!
 
 ## 1. 支持的SDK平台
 
