@@ -117,19 +117,19 @@ Gradle会自动整合所有子项目的AndroidManifest.xml，因此无需手动�
 ```javascript
 
 // 初始化 - 可在用户首次确认隐私前调用
-await window.EasyAdsPlugin.init({ config: CONFIG.ads });
+await window.EasyAds.init({ config: CONFIG.ads });
 
 // 加载广告
-const adRes = await window.EasyAdsPlugin.load({type: "splash", tag: "app_splash"});
+const adRes = await window.EasyAds.load({type: "splash", tag: "splash-app-port"});
 
 // 销毁广告
-await window.EasyAdsPlugin.destroy({callId: adRes.callId });
+await window.EasyAds.destroy({callId: adRes.callId });
 
 // 检查权限
-const permRes = await window.EasyAdsPlugin.checkPermission({ name: "location" });
+const permRes = await window.EasyAds.checkPermission({ name: "location" });
 
 // 请求权限 - 所有权限都不是必须的，如涉及权限必须在隐私说明中提及此权限应用于广告，否则影响上架审核
-if(permRes !== "granted") await window.EasyAdsPlugin.requestPermission({ name: "location" });
+if(permRes !== "granted") await window.EasyAds.requestPermission({ name: "location" });
 
 ```
 
@@ -173,10 +173,10 @@ if(permRes !== "granted") await window.EasyAdsPlugin.requestPermission({ name: "
     { tag: "bd",  appId: "e866cfb0",   index: 4 }
   ],
   adspots: [
-    { tag: "app_splash",           targets: [ "csj-103256285", "ylh-2001447730515391", "bd-2058622", "ks-4000000042" ], options: { showLater: true, showLogo: false } },
-    { tag: "project_interstitial", targets: [ "csj-103260324", "ylh-4080298282218338", "bd-2403633", "ks-4000000276" ], options: { }                                  },
-    { tag: "task_banner",          targets: [ "csj-103256315", "ylh-4080052898050840", "bd-2015351"                  ], options: { width: 320, height: 50}            },
-    { tag: "report_reward_video",  targets: [ "csj-103256483", "ylh-9011264358826997", "bd-5989414", "ks-90009001"   ], options: { }                                  }
+    { tag: "splash-app-port",        targets: [ "csj-103256285", "ylh-2001447730515391", "bd-2058622", "ks-4000000042" ], options: { showLater: true, showLogo: false } },
+    { tag: "interhalf-project-port", targets: [ "csj-103260324", "ylh-4080298282218338", "bd-2403633", "ks-4000000276" ], options: { }                                  },
+    { tag: "banner-task-320x50",     targets: [ "csj-103256315", "ylh-4080052898050840", "bd-2015351"                  ], options: { width: 320, height: 50}            },
+    { tag: "reward-report-port",     targets: [ "csj-103256483", "ylh-9011264358826997", "bd-5989414", "ks-90009001"   ], options: { }                                  }
   ]
 }
 ```
