@@ -45,7 +45,7 @@
     self.easyAdSplash = [[EasyAdSplash alloc] initWithJsonDic:[self.setting easyAd_modelToJSONObject] viewController:self.viewController];
     self.easyAdSplash.showLogoRequire = self.option.showLogo;
     self.easyAdSplash.logoImage = [LayoutUtils getAppIcon];
-    self.easyAdSplash.backgroundImage = [UIImage imageNamed:@"LaunchImage_img"];
+    self.easyAdSplash.backgroundImage = [LayoutUtils getAppIcon];
     self.easyAdSplash.timeout = 5;
     //设置代理
     self.easyAdSplash.delegate = self;

@@ -92,7 +92,6 @@
 }
 
 - (void)splashAdRenderSuccess:(nonnull BUSplashAd *)splashAd {
-//    NSLog(@"2222222222");
     if (_adspot.showLogoRequire) {
         // 添加Logo
         NSAssert(_adspot.logoImage != nil, @"showLogoRequire = YES时, 必须设置logoImage");
