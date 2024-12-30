@@ -21,6 +21,10 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -358,8 +362,8 @@ public class UIUtils {
         if (window == null) { show.run(); return; }
         dismissPadding(window);
         focusNotAle(window);
+        dismissBars(window);
         show.run();
-        hideNavigationBar(window);
         clearFocusNotAle(window);
     }
 
@@ -376,29 +380,27 @@ public class UIUtils {
     }
 
     /**
-     * 隐藏导航条
+     * 隐藏状态栏和导航条
      * @param window
      * @return
      */
-    public static void hideNavigationBar(Window window) {
-        window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-        int uiOptions =
-                //隐藏导航栏
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                //页面布局占用导航栏空间
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                //隐藏状态栏
-                View.SYSTEM_UI_FLAG_FULLSCREEN |
-                //页面布局占用状态栏空间
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                //确保在用户交互时切换状态栏的可见性时不会出现突然变化
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-        if (Build.VERSION.SDK_INT >= 19) {
-            uiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+    public static void dismissBars(Window window) {
+        //透明状态栏颜色
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            WindowCompat.setDecorFitsSystemWindows(window, false);
+            window.setNavigationBarColor(Color.TRANSPARENT);
+            window.setNavigationBarContrastEnforced(false);
         } else {
-            uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
-        window.getDecorView().setSystemUiVisibility(uiOptions);
+        //忽略摄像头孔占位
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            window.getAttributes().layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        }
+        //隐藏状态栏和导航栏并占具位置
+        WindowInsetsControllerCompat windowInsetsControllerCompat = WindowCompat.getInsetsController(window, window.getDecorView());
+        windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.navigationBars());
+        windowInsetsControllerCompat.hide(WindowInsetsCompat.Type.statusBars());
     }
 
     /**
@@ -418,5 +420,32 @@ public class UIUtils {
     public static void clearFocusNotAle(Window window) {
         window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
     }
+
+
+//    /**
+//     * 旧的隐藏导航条和状态条的方法
+//     * @param window
+//     * @return
+//     */
+//    public static void hideNavigationBar(Window window) {
+//        //window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+//        int uiOptions =
+//                //隐藏导航栏
+//                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+//                //页面布局占用导航栏空间
+//                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+//                //隐藏状态栏
+//                View.SYSTEM_UI_FLAG_FULLSCREEN |
+//                //页面布局占用状态栏空间
+//                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+//                //确保在用户交互时切换状态栏的可见性时不会出现突然变化
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+//        if (Build.VERSION.SDK_INT >= 19) {
+//            uiOptions |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//        } else {
+//            uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+//        }
+//        window.getDecorView().setSystemUiVisibility(uiOptions);
+//    }
 
 }
