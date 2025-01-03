@@ -29,7 +29,25 @@ npx cap sync
 
 ### Android
 
-Gradle会自动整合所有子项目的AndroidManifest.xml，因此无需手动配置。
+Gradle会自动整合所有子项目的AndroidManifest.xml，因此无需手动配置AndroidManifest.xml。
+
+* 第一步：在主项目build.gradle中添加需要的仓库
+```gradle
+buildscript {
+
+    repositories {
+        google()
+        mavenCentral()
+        ...
+        
+        maven { url "https://jitpack.io" }                                     //EasyAds依赖
+        maven { url "https://artifact.bytedance.com/repository/pangle" }       //GroMoreSDK依赖
+        maven { url "https://developer.huawei.com/repo/" }                     //HuaweiAdsSDK依赖
+    }
+
+  ...
+}
+```
 
 ### iOS
 
