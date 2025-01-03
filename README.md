@@ -116,14 +116,27 @@ Gradle会自动整合所有子项目的AndroidManifest.xml，因此无需手动�
 
 ```javascript
 
+
+
 // 初始化 - 可在用户首次确认隐私前调用
 await window.EasyAds.init({ config: CONFIG.ads });
 
+// 监听事件 
+window.EasyAds.addListener('fail', ({ error }) => { /*业务逻辑*/ });
+window.EasyAds.addListener('ready', ({ event, adType, adTag, callId }) => { /*业务逻辑*/ });
+window.EasyAds.addListener('start', ({ event, adType, adTag, callId }) => { /*业务逻辑*/ });
+window.EasyAds.addListener('end', ({ event, adType, adTag, callId }) => { /*业务逻辑*/ });
+window.EasyAds.addListener('did-click', ({ event, adType, adTag, callId }) => { /*业务逻辑*/ });
+window.EasyAds.addListener('did-cache', ({ event, adType, adTag, callId }) => { /*业务逻辑*/ });
+window.EasyAds.addListener('did-skip', ({ event, adType, adTag, callId }) => { /*业务逻辑*/ });
+window.EasyAds.addListener('did-play', ({ event, adType, adTag, callId }) => { /*业务逻辑*/ });
+window.EasyAds.addListener('did-rewardable', ({ event, adType, adTag, callId }) => { /*业务逻辑*/ });
+
 // 加载广告
-const adRes = await window.EasyAds.load({type: "splash", tag: "splash-app-port"});
+const { callId } = await window.EasyAds.load({ type: "splash", tag: "splash-app-port" });
 
 // 销毁广告
-await window.EasyAds.destroy({callId: adRes.callId });
+await window.EasyAds.destroy({ callId });
 
 // 检查权限
 const permRes = await window.EasyAds.checkPermission({ name: "location" });
@@ -138,6 +151,7 @@ if(permRes !== "granted") await window.EasyAds.requestPermission({ name: "locati
 <docgen-index>
 
 * [`init(...)`](#初始化插件)
+* [`addListener(...)`](#监听事件)
 * [`load(...)`](#加载广告)
 * [`show(...)`](#展示广告)
 * [`destroy(...)`](#销毁广告)
@@ -214,6 +228,24 @@ init({ config: Config }) => Promise<Result>
 **Returns:** <code>Promise&lt;{ callId: string }&gt;</code>
 
 **Throw:** <code><a href="#result">Exception</a></code>
+
+
+
+### 监听事件
+
+```typescript
+addListener(event: string, callback: function) => void
+```
+
+| 参数            | 类型                                      | 说明  
+| -------------- | ----------------------------------------- | ------------ 
+| **`event`**    | <code>string</code> | 事件类型：fail / ready / start / end / did-click / did-cache / did-skip / did-play / did-rewardable
+| **`callback`** | <code>(info) => {...}</code> | info结构：{ event, adType, adTag, callId } / { error }
+
+**Returns:** void
+
+**Throw:** <code><a href="#result">Exception</a></code>
+
 
 
 ### 加载广告
